@@ -1,0 +1,19 @@
+{
+  "name": "weky",
+  "version": "1.4.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "weky",
+    "wek"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ms": "^2.1.3",
+    "node-fetch": "^2.6.1"
+  }
+}
