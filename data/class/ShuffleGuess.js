@@ -64,8 +64,9 @@ const {MessageButton} = require('discord-buttons')
         gameCollector.on('collect', async msg => {
           if(msg.author.bot) return;
 
-
+if(msg.author.id !== this.message.author.id) return
 this.client.on('clickButton', async btn => {
+  if(btn.clicker.member.id !== this.message.author.id) return
   if(btn.id === this.idReshuffleButton){
     btn.defer()
 const ress = await (await (fetch(`https://api.monkedev.com/fun/shuffle?content=${encodeURIComponent(this.word)}&uid=${uuid}`))).json();
