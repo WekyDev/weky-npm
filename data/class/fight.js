@@ -72,7 +72,7 @@ class fight {
                   if (gameData[tempPlayer].lastAttack === 'heal') randNumb = Math.floor(randNumb / 2);
                   gameData[tempPlayer].health -= randNumb;
                   gameData[player].lastAttack = 'attack';
-                  this.message.channel.send(`${gameData[player].member} — ${gameData[player].health} HP, has attacked you and dealt **${randNumb} damange**`);
+                  this.message.channel.send(`${gameData[player].member} — ${gameData[player].health} HP, has attacked you and dealt **${randNumb} damage**`);
                   this.message.channel.send(`${gameData[tempPlayer].member} — ${gameData[tempPlayer].health} HP, Please choose: \`attack\`, \`heal\`, \`hp\`, \`cancel\`.`);
                   player = (player + 1) % 2;
                 } else if (selection === 'heal') {

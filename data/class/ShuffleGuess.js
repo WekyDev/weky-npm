@@ -1,49 +1,120 @@
 class ShuffleGuess {
-        /**
-         * @name ShuffleGuess
-         * @kind constructor
-         * @param {Object} options options
-         * @param {any} [options.message] message
-         * @param {any} [options.word] word
-         * @param {any} [options.winMessage] win message
-         */
-        constructor(options) {
-            if(!options.word) throw new TypeError('Missing argument: word')
-            if(typeof options.word !== 'string') throw new TypeError('Word must be in a string')
-            if(!options.winMessage) throw new TypeError('Missing argument: winMessage')
-            if(typeof options.winMessage !== 'string') throw new TypeError('winMessage must be in a string')
-            if(!options.message) throw new TypeError('Missing argument: message')
-        
-            this.message = options.message;
-            this.word = options.word
-            this.winMessage = options.winMessage
+
+  constructor(options) {
+      if(!options.word) throw new TypeError('Missing argument: word')
+      if(typeof options.word !== 'string') throw new TypeError('Word must be in a string')
+      
+      if(!options.colorReshuffleButton) throw new TypeError('Missing argument: colorReshuffleButton')
+      if(typeof options.colorReshuffleButton !== 'string') throw new TypeError('colorReshuffleButton must be in a string')
+      
+      if(!options.messageReshuffleButton) throw new TypeError('Missing argument: messageReshuffleButton')
+      if(typeof options.messageReshuffleButton !== 'string') throw new TypeError('messageReshuffleButton must be in a string')
+                  
+      if(!options.colorCancelButton) throw new TypeError('Missing argument: colorCancelButton')
+      if(typeof options.colorCancelButton !== 'string') throw new TypeError('colorCancelButton must be in a string')
+      
+      if(!options.messageCancelButton) throw new TypeError('Missing argument: messageCancelButton')
+      if(typeof options.messageCancelButton !== 'string') throw new TypeError('messageCancelButton must be in a string')
+      
+      
+      if(!options.client) throw new TypeError('Missing argument: client')
+      
+      if(!options.message) throw new TypeError('Missing argument: message')
+      function getRandomString(length) {
+        var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        var result = '';
+        for ( var i = 0; i < length; i++ ) {
+            result += randomChars.charAt(Math.floor(Math.random() * randomChars.length))
         }
-        async start() {
-            const uuid = '0101'
-            const fetch = require('node-fetch')
-            const res = await (await (fetch(`https://api.monkedev.com/fun/shuffle?content=${encodeURIComponent(this.word)}&uid=${uuid}`))).json();
-            await this.message.channel.send(`I shuffled a word, it is \`${res.result}\`\nOptions: \`cancel\`,\`reshuffle\`, \`real word\``)
-              const gameFilter = m => m.author.id
-              const gameCollector = this.message.channel.createMessageCollector(gameFilter);
-          
-              gameCollector.on('collect', async msg => {
-                if(msg.author.bot) return
-                    const selection = msg.content.toLowerCase();
-        if (selection === this.word) {
-        this.message.reply(this.winMessage)
-        gameCollector.stop()
-                    } else if (selection === 'cancel') {
-                      this.message.channel.send(`Successfully stopped the game.`)
-                      gameCollector.stop();
-                    } else if(selection === 'reshuffle'){
-                        const ress = await (await (fetch(`https://api.monkedev.com/fun/shuffle?content=${encodeURIComponent(this.word)}&uid=${uuid}`))).json();
-                        this.message.channel.send(`I reflushed , it is \`${ress.result}\`\nOptions: \`cancel\`,\`reshuffle\`, \`real word\``)
-                    } else if (selection !== this.word) {
-                      this.message.reply(`Wrong\nOptions: \`cancel\`,\`reshuffle\`, \`real word\``)
-                    }
-              });
-        }
+        return result
     }
-    
-    module.exports = ShuffleGuess;
-    
+    let id1 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
+    let id2 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
+      this.message = options.message;
+      this.word = options.word
+      this.winMessage = options.winMessage
+      this.colorReshuffleButton = options.colorReshuffleButton
+      this.messageReshuffleButton = options.messageReshuffleButton
+      this.idReshuffleButton = id1
+      this.idCancelButton = id2
+      this.messageCancelButton = options.messageCancelButton
+      this.colorCancelButton = options.colorCancelButton
+      this.client = options.client
+  }
+  async start() {
+
+      const uuid = '0101'
+      const fetch = require('node-fetch')
+      const res = await (await (fetch(`https://api.monkedev.com/fun/shuffle?content=${encodeURIComponent(this.word)}&uid=${uuid}`))).json();
+const {MessageButton} = require('discord-buttons')
+        const gameFilter = m => m.author.id
+        const gameCollector = this.message.channel.createMessageCollector(gameFilter);
+           let disbut = new MessageButton()
+          .setLabel(this.messageReshuffleButton)
+          .setID(this.idReshuffleButton)
+          .setStyle(this.colorReshuffleButton)
+          let cancel = new MessageButton()
+          .setLabel(this.messageCancelButton)
+          .setID(this.idCancelButton)
+          .setStyle(this.colorCancelButton)
+          let v = await this.message.channel.send(
+          `I shuffled a word, it is \`${res.result}\``,
+          {buttons: [disbut, cancel]}
+          )
+        gameCollector.on('collect', async msg => {
+          if(msg.author.bot) return;
+
+
+this.client.on('clickButton', async btn => {
+  if(btn.id === this.idReshuffleButton){
+    btn.defer()
+const ress = await (await (fetch(`https://api.monkedev.com/fun/shuffle?content=${encodeURIComponent(this.word)}&uid=${uuid}`))).json();
+v.edit(`I **re**flushed , it is \`${ress.result}\``, {buttons: [disbut, cancel]})
+  }
+  if(btn.id === this.idCancelButton){
+    btn.defer()
+    gameCollector.stop()
+      disbut = new MessageButton()
+     .setLabel(this.messageReshuffleButton)
+     .setID(this.idReshuffleButton)
+     .setStyle(this.colorReshuffleButton)
+     .setDisabled()
+      cancel = new MessageButton()
+     .setLabel(this.messageCancelButton)
+     .setID(this.idCancelButton)
+     .setStyle(this.colorCancelButton)
+     .setDisabled()
+     v.edit(
+       `Successfully stopped the game. Word was \`${this.word}\``,
+       {buttons: [disbut, cancel]}
+       )
+
+  }
+})
+  const selection = msg.content.toLowerCase();
+  if (selection === this.word) {
+  msg.reply(this.winMessage)
+  gameCollector.stop()
+     disbut = new MessageButton()
+    .setLabel(this.messageReshuffleButton)
+    .setID(this.idReshuffleButton)
+    .setStyle(this.colorReshuffleButton)
+    .setDisabled()
+     cancel = new MessageButton()
+    .setLabel(this.messageCancelButton)
+    .setID(this.idCancelButton)
+    .setStyle(this.colorCancelButton)
+    .setDisabled()
+    v.edit(
+      `I shuffled a word, it is \`${res.result}\``,
+      {buttons: [disbut, cancel]}
+      )
+  } else if (selection !== this.word) {
+  msg.reply(`Wrong`).then((me) => me.delete({ timeout: 2000 }))
+  }
+        });
+  }
+
+}
+
+module.exports = ShuffleGuess;

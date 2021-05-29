@@ -1,6 +1,6 @@
 {
   "name": "weky",
-  "version": "1.4.1",
+  "version": "1.6.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,11 +8,15 @@
   },
   "keywords": [
     "weky",
-    "wek"
+    "wek",
+    "fight",
+    "games",
+"fasttype"
   ],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "discord-buttons": "^2.4.1",
     "ms": "^2.1.3",
     "node-fetch": "^2.6.1"
   }
