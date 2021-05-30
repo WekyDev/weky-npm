@@ -58,7 +58,7 @@ const {MessageButton} = require('discord-buttons')
           .setID(this.idCancelButton)
           .setStyle(this.colorCancelButton)
           let v = await this.message.channel.send(
-          `I shuffled a word, it is \`${res.result}\``,
+          `I shuffled a word, it is \`${res.result}\`\nType something to unlock the buttons!`,
           {buttons: [disbut, cancel]}
           )
         gameCollector.on('collect', async msg => {

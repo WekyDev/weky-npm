@@ -12,24 +12,28 @@ This is my first npm package, small things, big fun xd im working on it.
 ===
 
 ```js
-const { fight } = require('weky');
-const Discord = require('discord.js');
-const bot = new Discord.Client();
-bot.on('message', async message => {
-    if(message.content.startsWith('mom!fight')){
-        if(!message.mentions.users.first()) return message.reply('Ping someone dad');
-        const x = new fight({
-            client: bot,
-            message: message,
-            acceptMessage: 'Click to fight with ' + message.author,
-            challenger: message.author,
-            opponent: message.mentions.users.first()
-        });
-        x.start();
-    }
+const oppenent = message.mentions.users.first();
+if (!oppenent) return message.channel.send(`Please mention who you want to fight`);
+const { fight } = require('weky')
+const x = new fight({
+    client: client,
+    message: message,
+    acceptMessage: 'Click to fight with <@' + message.author + '>', //message sent to see if opponent accepts
+    challenger: message.author, //NOT CHANGEABLE
+    opponent: message.mentions.users.first(),  //NOT CHANGEABLE
+    hitButtonText: 'HIT', //Hit button text (Custom)
+    hitButtonColor: 'red', //Hit button color (Custom)
+    healButtonText: 'HEAL', //Heal button text (Custom)
+    healButtonColor:  'green', //Heal button color (Custom)
+    cancelButtonText: 'CANCEL', //Cancel button text (Custom)
+    cancelButtonColor: 'blurple', //Cancel button color (Custom)
 })
+x.start()
 ```
-![Output](https://cdn.discordapp.com/attachments/830003681402683419/831536735334170675/unknown.png)
+Win:
+![](https://cdn.discordapp.com/attachments/812590454821355543/848508219872903178/win.gif)
+Lose:
+![](https://cdn.discordapp.com/attachments/812590454821355543/848510360179965972/lose.gif)
 
 
 **Fast Type ⌨️**
