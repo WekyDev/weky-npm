@@ -53,31 +53,32 @@ const letters = {
     Y: "⅄",
     Z: "Z",
 }
-module.exports={
-    randomizeNumber: function(start,end){
-        if(!start) throw new TypeError("A minimum number was not specified.")
-        if(!end) throw new TypeError("A maximum number was not specified.")
-        let res = Math.floor(Math.random() * (end - start + 1) + start)
-        return res
+module.exports = {
+    randomizeNumber: (start, end) => {
+        if(!start) throw new TypeError("A minimum number was not specified.");
+        if(!end) throw new TypeError("A maximum number was not specified.");
+        let res = Math.floor(Math.random() * (end - start + 1) + start);
+        return res;
     },
-    randomizeString: function(array){
-        if(!array) throw new TypeError("A array was not specified.")
-        let res = Math.floor(Math.random() * array.length)
-        return array[res]
+    randomizeString: (array) => {
+        if(!array) throw new TypeError("A array was not specified.");
+        let res = Math.floor(Math.random() * array.length);
+        return array[res];
     },
-    flip: function (str) {
-            if(!str) throw new TypeError("A string was not specified.")
-                let newStr = '';
-                for (let i = str.length - 1; i  >= 0; i--) {
-                    if(str[i] === " ") newStr += " "
-                    for (const letter of Object.keys(letters)){
-                        var flipped = letters[letter]
-                        if(str[i] === letter) newStr += flipped					
-                    }
+    flip: (str) => {
+            if(!str) throw new TypeError("A string was not specified.");
+            let newStr = '';
+            for (let i = str.length - 1; i  >= 0; i--) {
+                if(str[i] === " ") newStr += " ";
+                for (const letter of Object.keys(letters)) {
+                    var flipped = letters[letter];
+                    if(str[i] === letter) newStr += flipped;					
                 }
-                return (newStr)
+            }
+            return (newStr);
     }
 }
+
 module.exports.fight = require("./data/class/fight");
 
 module.exports.sudo = require("./data/class/sudo");
