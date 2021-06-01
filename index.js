@@ -85,3 +85,5 @@ module.exports.sudo = require("./data/class/sudo");
 module.exports.ShuffleGuess = require("./data/class/ShuffleGuess");
 
 module.exports.FastType = require("./data/class/fasttype");
+
+module.exports.ChaosWords = require("./data/class/ChaosWords");

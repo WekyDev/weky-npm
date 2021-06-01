@@ -60,14 +60,10 @@ for (i = 0; i < 25; i++) {
         break
     } else if (msg.first().content.toLowerCase().trim() === this.sentence.toLowerCase()) {
         this.message.channel.send(this.winMessage+`\nIt took you ${ms(Date.now() - time, {long: true})}!`)
+        
         break;
     } else {
         this.message.channel.send(this.loseMessage)
-        inGame.delete(this.message.author.id)
-        break
-    }
-    if (i === 25) {
-        this.message.reply(this.winMessage)
         inGame.delete(this.message.author.id)
         break
     }

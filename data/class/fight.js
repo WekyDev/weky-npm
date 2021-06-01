@@ -29,14 +29,7 @@ class fight {
     if(!options.challenger) throw new Error('Missing argument: challenger')
     
     if(!options.opponent) throw new Error('Weky Error: Missing argument opponent')
-      function getRandomString(length) {
-        var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        var result = '';
-        for ( var i = 0; i < length; i++ ) {
-            result += randomChars.charAt(Math.floor(Math.random() * randomChars.length))
-        }
-        return result
-    }
+
     let id1 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
     let id2 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
     let id3 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
@@ -59,6 +52,9 @@ class fight {
   async start() {
       const challenger = this.challenger
       const oppenent = this.opponent
+          if(oppenent.bot) return this.message.channel.send("You can't fight bots.")
+    if(oppenent.id === challenger.id) return this.message.channel.send("You can't fight yourself.")
+  
       const question = await this.message.channel.send(this.acceptMessage);
     
       ['✅', '❌'].forEach(async el => await question.react(el));
@@ -66,10 +62,10 @@ class fight {
       const filter = (reaction, user) => ['✅', '❌'].includes(reaction.emoji.name) && user.id === this.opponent.id;
     
       const response = await question.awaitReactions(filter, { max: 1, time: 60000 });
+
       const reaction = response.first();
-    if(oppenent.bot) return this.message.channel.send("You can't fight bots.")
-    if(oppenent.id === challenger.id) return this.message.channel.send("You can't fight yourself.")
-      if (reaction.emoji.name === '❌') { return question.edit("Cancelled this fight."); } else {
+      try {
+    if (reaction.emoji.name === '❌') { return question.edit("Cancelled this fight."); } else {
         const challengerHealth = 100;
         const oppenentHealth = 100;
     
@@ -210,8 +206,12 @@ class fight {
 }
           }
         });
-      }   
+      }  
+}catch(e){
+  this.message.channel.send('Since the opponent didnt answered, imma end this.')
+      }
   }
+
 }
 
 module.exports = fight;
