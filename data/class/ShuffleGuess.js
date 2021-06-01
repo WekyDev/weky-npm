@@ -46,8 +46,8 @@ class ShuffleGuess {
       const uuid = '0101'
       const fetch = require('node-fetch')
       const res = await (await (fetch(`https://api.monkedev.com/fun/shuffle?content=${encodeURIComponent(this.word)}&uid=${uuid}`))).json();
-const {MessageButton} = require('discord-buttons')
-        const gameFilter = m => m.author.id
+      const { MessageButton, MessageActionRow } = require('discord-buttons')
+      const gameFilter = m => m.author.id
         const gameCollector = this.message.channel.createMessageCollector(gameFilter);
            let disbut = new MessageButton()
           .setLabel(this.messageReshuffleButton)
@@ -57,9 +57,12 @@ const {MessageButton} = require('discord-buttons')
           .setLabel(this.messageCancelButton)
           .setID(this.idCancelButton)
           .setStyle(this.colorCancelButton)
+          let row = new MessageActionRow()
+          .addComponent(disbut)
+          .addComponent(cancel)
           let v = await this.message.channel.send(
           `I shuffled a word, it is \`${res.result}\`\nType something to unlock the buttons!`,
-          {buttons: [disbut, cancel]}
+          {component: row}
           )
         gameCollector.on('collect', async msg => {
           if(msg.author.bot) return;
@@ -70,7 +73,7 @@ this.client.on('clickButton', async btn => {
   if(btn.id === this.idReshuffleButton){
     btn.defer()
 const ress = await (await (fetch(`https://api.monkedev.com/fun/shuffle?content=${encodeURIComponent(this.word)}&uid=${uuid}`))).json();
-v.edit(`I **re**flushed , it is \`${ress.result}\``, {buttons: [disbut, cancel]})
+v.edit(`I **re**flushed , it is \`${ress.result}\``,{component: row})
   }
   if(btn.id === this.idCancelButton){
     btn.defer()
@@ -87,7 +90,7 @@ v.edit(`I **re**flushed , it is \`${ress.result}\``, {buttons: [disbut, cancel]}
      .setDisabled()
      v.edit(
        `Successfully stopped the game. Word was \`${this.word}\``,
-       {buttons: [disbut, cancel]}
+       {component: row}
        )
 
   }
@@ -108,7 +111,7 @@ v.edit(`I **re**flushed , it is \`${ress.result}\``, {buttons: [disbut, cancel]}
     .setDisabled()
     v.edit(
       `I shuffled a word, it is \`${res.result}\``,
-      {buttons: [disbut, cancel]}
+      {component: row}
       )
   } else if (selection !== this.word) {
   msg.reply(`Wrong`).then((me) => me.delete({ timeout: 2000 }))

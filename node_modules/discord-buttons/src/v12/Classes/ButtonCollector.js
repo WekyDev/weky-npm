@@ -39,11 +39,7 @@ class ButtonCollector extends Collector {
 
   collect(button) {
     if (button.message.id !== this.message.id) return null;
-    return ButtonCollector.key(button);
-  }
-
-  dispose() {
-    return null;
+    return button.id;
   }
 
   empty() {
@@ -55,6 +51,8 @@ class ButtonCollector extends Collector {
 
   endReason() {
     if (this.options.max && this.total >= this.options.max) return 'limit';
+    if (this.options.maxButtons && this.collected.size >= this.options.maxButtons) return 'buttonLimit';
+    if (this.options.maxUsers && this.users.size >= this.options.maxUsers) return 'userLimit';
     return null;
   }
 
@@ -74,10 +72,6 @@ class ButtonCollector extends Collector {
     if (this.message.guild && guild.id === this.message.guild.id) {
       this.stop('guildDelete');
     }
-  }
-
-  static key(button) {
-    return button.id;
   }
 }
 

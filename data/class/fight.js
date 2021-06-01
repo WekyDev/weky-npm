@@ -29,7 +29,14 @@ class fight {
     if(!options.challenger) throw new Error('Missing argument: challenger')
     
     if(!options.opponent) throw new Error('Weky Error: Missing argument opponent')
-
+    function getRandomString(length) {
+      var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      var result = '';
+      for ( var i = 0; i < length; i++ ) {
+          result += randomChars.charAt(Math.floor(Math.random() * randomChars.length))
+      }
+      return result
+  }
     let id1 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
     let id2 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
     let id3 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
@@ -83,7 +90,7 @@ class fight {
           if (gameData[member].health <= 0) return true;
           else return false;
         };
-        const { MessageButton } = require('discord-buttons')
+        const { MessageButton, MessageActionRow } = require('discord-buttons')
         let btn1 = new MessageButton()
         .setLabel(this.hitButtonText)
         .setID(this.hit)
@@ -96,8 +103,11 @@ class fight {
         .setLabel(this.cancelButtonText)
         .setID(this.cancel)
         .setStyle(this.cancelButtonColor)
-
-       let DaBaby = await this.message.channel.send(`${challenger}, you go first`, {buttons: [btn1, btn2, btn3]});
+        let row = new MessageActionRow()
+        .addComponent(btn1)
+        .addComponent(btn2)
+        .addComponent(btn3)
+       let DaBaby = await this.message.channel.send(`${challenger}, you go first`, {component: row});
         const gameFilter = m => m.clicker.user.id === challenger.id || m.clicker.user.id === oppenent.id;
         const gameCollector = DaBaby.createButtonCollector(gameFilter);
     
@@ -116,9 +126,9 @@ class fight {
                 gameData[tempPlayer].health -= randNumb;
                 gameData[player].lastAttack = 'attack';
                 if(gameData[player].member.id == this.message.author.id){
-                  DaBaby.edit(`(:punch:) ${gameData[player].member.username} — ${gameData[player].health} HP                     VS                     **${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health}`, {buttons: [btn1, btn2, btn3]});
+                  DaBaby.edit(`(:punch:) ${gameData[player].member.username} — ${gameData[player].health} HP                     VS                     **${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health}`, {component: row});
                 }else if(gameData[player].member.id == this.opponent.id){
-                  DaBaby.edit(`**${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health} HP                              VS                              **${gameData[player].member.username}** — ${gameData[player].health} (:punch:)`, {buttons: [btn1, btn2, btn3]});
+                  DaBaby.edit(`**${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health} HP                              VS                              **${gameData[player].member.username}** — ${gameData[player].health} (:punch:)`, {component: row});
                 }
                 player = (player + 1) % 2;
               } else if (msg.id === this.heal) {
@@ -132,9 +142,9 @@ class fight {
                 gameData[player].health += randrNumb;
                 gameData[player].lastAttack = 'attack';
                 if(gameData[player].member.id == this.message.author.id){
-                  DaBaby.edit(`(:hearts:) ${gameData[player].member.username} — ${gameData[player].health} HP                     VS                     **${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health}`, {buttons: [btn1, btn2, btn3]});
+                  DaBaby.edit(`(:hearts:) ${gameData[player].member.username} — ${gameData[player].health} HP                     VS                     **${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health}`, {component: row});
                 }else if(gameData[player].member.id == this.opponent.id){
-                  DaBaby.edit(`**${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health} HP                              VS                              **${gameData[player].member.username}** — ${gameData[player].health} (:hearts:)`, {buttons: [btn1, btn2, btn3]});
+                  DaBaby.edit(`**${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health} HP                              VS                              **${gameData[player].member.username}** — ${gameData[player].health} (:hearts:)`, {component: row});
                 }
                 player = (player + 1) % 2;
               } else if (msg.id === this.cancel) {
@@ -157,7 +167,7 @@ class fight {
                 .setStyle(this.cancelButtonColor)
                 .setDisabled()
                 gameCollector.stop()
-                DaBaby.edit(`Game stopped.`, {buttons: [btn1, btn2, btn3]})
+                DaBaby.edit(`Game stopped.`, {component: row})
                 
               }
     
@@ -180,7 +190,7 @@ class fight {
                 .setDisabled()
                 gameCollector.stop();
                 const tempPlayer = (player + 1) % 2;
-                DaBaby.edit(`🏆 ${gameData[tempPlayer].member} has won the game!`, {buttons: [btn1, btn2, btn3]});
+                DaBaby.edit(`🏆 ${gameData[tempPlayer].member} has won the game!`,  {component: row});
               }
             } else {
 
@@ -202,13 +212,13 @@ class fight {
                 .setDisabled()
                 gameCollector.stop();
                 const tempPlayer = (player + 1) % 2;
-                DaBaby.edit(`🏆 ${gameData[tempPlayer].member} has won the game!`, {buttons: [btn1, btn2, btn3]});
+                DaBaby.edit(`🏆 ${gameData[tempPlayer].member} has won the game!`,  {component: row});
 }
           }
         });
       }  
 }catch(e){
-  this.message.channel.send('Since the opponent didnt answered, imma end this.')
+  this.message.channel.send('Since the opponent didnt answer, imma end this.')
       }
   }
 
