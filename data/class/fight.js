@@ -116,9 +116,9 @@ class fight {
                 gameData[tempPlayer].health -= randNumb;
                 gameData[player].lastAttack = 'attack';
                 if(gameData[player].member.id == this.message.author.id){
-                  DaBaby.edit(`(hitted) ${gameData[player].member.username} — ${gameData[player].health} HP                     VS                     **${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health}`, {buttons: [btn1, btn2, btn3]});
+                  DaBaby.edit(`(:punch:) ${gameData[player].member.username} — ${gameData[player].health} HP                     VS                     **${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health}`, {buttons: [btn1, btn2, btn3]});
                 }else if(gameData[player].member.id == this.opponent.id){
-                  DaBaby.edit(`**${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health} HP                              VS                              **${gameData[player].member.username}** — ${gameData[player].health} (hitted)`, {buttons: [btn1, btn2, btn3]});
+                  DaBaby.edit(`**${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health} HP                              VS                              **${gameData[player].member.username}** — ${gameData[player].health} (:punch:)`, {buttons: [btn1, btn2, btn3]});
                 }
                 player = (player + 1) % 2;
               } else if (msg.id === this.heal) {
@@ -132,9 +132,9 @@ class fight {
                 gameData[player].health += randrNumb;
                 gameData[player].lastAttack = 'attack';
                 if(gameData[player].member.id == this.message.author.id){
-                  DaBaby.edit(`(healed) ${gameData[player].member.username} — ${gameData[player].health} HP                     VS                     **${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health}`, {buttons: [btn1, btn2, btn3]});
+                  DaBaby.edit(`(:hearts:) ${gameData[player].member.username} — ${gameData[player].health} HP                     VS                     **${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health}`, {buttons: [btn1, btn2, btn3]});
                 }else if(gameData[player].member.id == this.opponent.id){
-                  DaBaby.edit(`**${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health} HP                              VS                              **${gameData[player].member.username}** — ${gameData[player].health} (healed)`, {buttons: [btn1, btn2, btn3]});
+                  DaBaby.edit(`**${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health} HP                              VS                              **${gameData[player].member.username}** — ${gameData[player].health} (:hearts:)`, {buttons: [btn1, btn2, btn3]});
                 }
                 player = (player + 1) % 2;
               } else if (msg.id === this.cancel) {
