@@ -14,7 +14,7 @@ This is my first npm package, small things, big fun xd im working on it.
 ```js
 const oppenent = message.mentions.users.first();
 if (!oppenent) return message.channel.send(`Please mention who you want to fight`);
-const { fight } = require('weky')
+const { fight } = require('weky');
 const x = new fight({
     client: client,
     message: message,
@@ -27,8 +27,8 @@ const x = new fight({
     healButtonColor:  'green', //Heal button color (Custom)
     cancelButtonText: 'CANCEL', //Cancel button text (Custom)
     cancelButtonColor: 'blurple', //Cancel button color (Custom)
-})
-x.start()
+});
+x.start();
 ```
 Win:
 ![](https://cdn.discordapp.com/attachments/812590454821355543/848508219872903178/win.gif)
