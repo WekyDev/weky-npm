@@ -1,25 +1,38 @@
 class ChaosWords {
 
+    /**
+     * @name ChaosWords
+     * @kind constructor
+     * @param {Object} options options
+     * @param {object} [options.words] words (array) => ['word'] 
+     * @param {any} [options.message] the discord message
+     * @param {number} [options.maxTries] the number of max tries
+     * @param {number} [options.charGenerated] length of the sentence (small lenght might cause errors) 
+     * @param {string} [options.embedFooter] footer of the embed 
+     * @param {string} [options.embedTitle] title of the embed
+     * @param {string} [options.embedColor] color of embed 
+    */
+
     constructor(options) {
-        if(!options.words) throw new TypeError('Missing argument: words')
-        if(typeof options.words !== 'object') throw new TypeError('words must be array')
+        if(!options.words) throw new TypeError('Weky Error: Missing argument words')
+        if(typeof options.words !== 'object') throw new TypeError('Weky Error: words must be an array')
         
-        if(!options.maxTries) throw new TypeError('Missing argument: maxTries')
-        if(typeof options.maxTries !== 'number') throw new TypeError('maxTries must be number')
+        if(!options.maxTries) throw new TypeError('Weky Error: Missing argument maxTries')
+        if(typeof options.maxTries !== 'number') throw new TypeError('Weky Error: maxTries must be a number')
 
-        if(!options.charGenerated) throw new TypeError('Missing argument: charGenerated')
-        if(typeof options.charGenerated !== 'number') throw new TypeError('charGenerated must be number')
+        if(!options.charGenerated) throw new TypeError('Weky Error: Missing argument charGenerated')
+        if(typeof options.charGenerated !== 'number') throw new TypeError('Weky Error: charGenerated must be a number')
 
-        if(!options.embedFooter) throw new TypeError('Missing argument: embedFooter')
-        if(typeof options.embedFooter !== 'string') throw new TypeError('embedFooter must be number')
+        if(!options.embedFooter) throw new TypeError('Weky Error: Missing argument embedFooter')
+        if(typeof options.embedFooter !== 'string') throw new TypeError('Weky Error: embedFooter must be a string')
 
-        if(!options.embedTitle) throw new TypeError('Missing argument: embedTitle')
-        if(typeof options.embedTitle !== 'string') throw new TypeError('embedTitle must be number')
+        if(!options.embedTitle) throw new TypeError('Weky Error: Missing argument embedTitle')
+        if(typeof options.embedTitle !== 'string') throw new TypeError('Weky Error: embedTitle must be a string')
 
-        if(!options.embedColor) throw new TypeError('Missing argument: embedColor')
-        if(typeof options.embedColor !== 'string') throw new TypeError('embedColor must be number')
+        if(!options.embedColor) throw new TypeError('Weky Error: Missing argument embedColor')
+        if(typeof options.embedColor !== 'string') throw new TypeError('Weky Error: embedColor must be a string')
 
-        if(!options.message) throw new TypeError('Missing argument: message')
+        if(!options.message) throw new TypeError('Weky Error: Missing argument message')
 
         this.message = options.message;
         this.words = options.words

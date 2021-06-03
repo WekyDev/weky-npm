@@ -3,24 +3,32 @@ class fasttype {
      * @name fasttype
      * @kind constructor
      * @param {Object} options options
-     * @param {String} [options.loseMessage] 
-     * @param {any} [options.message] 
-     * @param {any} [options.winMessage] 
-     * @param {any} [options.sentence] 
-     * @param {any} [options.time] 
-     * @param {any} [options.startMessage] 
+     * @param {String} [options.loseMessage] message sent when a user loses
+     * @param {any} [options.message] the discord message
+     * @param {String} [options.winMessage] message sent when a user wins 
+     * @param {String} [options.sentence] a setence to be typed
+     * @param {Number} [options.time] time the user has in ms
+     * @param {String} [options.startMessage] message sent when a user starts playing
      */
+
     constructor(options) {
-        if(!options.loseMessage) throw new TypeError('Missing argument: loseMessage');
-        if(typeof options.loseMessage !== 'string') throw new TypeError('Lose message must be in a string');
-        if(!options.message) throw new TypeError('Missing argument: message');
-        if(!options.winMessage) throw new TypeError('Missing argument: winMessage');
-        if(typeof options.winMessage !== 'string') throw new TypeError('Win message must be in a string');
-        if(!options.sentence) throw new TypeError('Missing argument: sentence');
-        if(typeof options.sentence !== 'string') throw new TypeError('Sentence must be in a string');
-        if(!options.sentence) throw new TypeError('Missing argument: time');
-        if(!options.startMessage) throw new TypeError('Missing argument: startMessage');
-        if(typeof options.startMessage !== 'string') throw new TypeError('startMessage must be in a string');
+        if(!options.loseMessage) throw new TypeError('Weky Error: Missing argument loseMessage');
+        if(typeof options.loseMessage !== 'string') throw new TypeError('Weky Error: loseMessage must be a string');
+
+        if(!options.message) throw new TypeError('Weky Error: Missing argument message');
+
+        if(!options.winMessage) throw new TypeError('Weky Error: Missing argument winMessage');
+        if(typeof options.winMessage !== 'string') throw new TypeError('Weky Error: winMessage must be a string');
+
+        if(!options.sentence) throw new TypeError('Weky Error: Missing argument sentence');
+        if(typeof options.sentence !== 'string') throw new TypeError('Weky Error: sentence must be a string');
+
+        if(!options.time) throw new TypeError('Weky Error: Missing argument time');
+        if(typeof options.time !== 'number') throw new TypeError('Weky Error: time must be a number')
+        
+        if(!options.startMessage) throw new TypeError('Weky Error: Missing argument startMessage');
+        if(typeof options.startMessage !== 'string') throw new TypeError('Weky Error: startMessage must be a string');
+
         this.message = options.message;
         this.winMessage = options.winMessage;
         this.sentence = options.sentence;

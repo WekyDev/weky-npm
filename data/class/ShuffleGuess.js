@@ -1,25 +1,42 @@
 class ShuffleGuess {
 
+        /**
+     * @name ShuffleGuess
+     * @kind constructor
+     * @param {Object} options options
+     * @param {String} [options.word] wordd to be guessed
+     * @param {String} [options.colorReshuffleButton] color of the reshuffle button
+     * @param {String} [options.messageReshuffleButton] text of the reshuffle button
+     * @param {any} [options.message] the discord message
+     * @param {any} [options.client] the discord client
+     * @param {String} [options.colorCancelButton] color of the cancle button
+     * @param {String} [options.messageCancelButton] text of the reshuffle button
+     * @param {String} [options.winMessage] message sent when a user wins
+    */
+
   constructor(options) {
-      if(!options.word) throw new TypeError('Missing argument: word')
-      if(typeof options.word !== 'string') throw new TypeError('Word must be in a string')
+      if(!options.word) throw new TypeError('Weky Error: Missing argument word')
+      if(typeof options.word !== 'string') throw new TypeError('Weky Error: word must be a string')
       
-      if(!options.colorReshuffleButton) throw new TypeError('Missing argument: colorReshuffleButton')
-      if(typeof options.colorReshuffleButton !== 'string') throw new TypeError('colorReshuffleButton must be in a string')
+      if(!options.colorReshuffleButton) throw new TypeError('Weky Error: Missing argument colorReshuffleButton')
+      if(typeof options.colorReshuffleButton !== 'string') throw new TypeError('Weky Error: colorReshuffleButton must be a string')
       
-      if(!options.messageReshuffleButton) throw new TypeError('Missing argument: messageReshuffleButton')
-      if(typeof options.messageReshuffleButton !== 'string') throw new TypeError('messageReshuffleButton must be in a string')
+      if(!options.messageReshuffleButton) throw new TypeError('Weky Error: Missing argument messageReshuffleButton')
+      if(typeof options.messageReshuffleButton !== 'string') throw new TypeError('Weky Error: messageReshuffleButton must be a string')
                   
-      if(!options.colorCancelButton) throw new TypeError('Missing argument: colorCancelButton')
-      if(typeof options.colorCancelButton !== 'string') throw new TypeError('colorCancelButton must be in a string')
+      if(!options.colorCancelButton) throw new TypeError('Weky Error: Missing argument colorCancelButton')
+      if(typeof options.colorCancelButton !== 'string') throw new TypeError('Weky Error: colorCancelButton must be a string')
       
-      if(!options.messageCancelButton) throw new TypeError('Missing argument: messageCancelButton')
-      if(typeof options.messageCancelButton !== 'string') throw new TypeError('messageCancelButton must be in a string')
+      if(!options.messageCancelButton) throw new TypeError('Weky Error: Missing argument messageCancelButton')
+      if(typeof options.messageCancelButton !== 'string') throw new TypeError('Weky Error: messageCancelButton must be a string')
+
+      if(!options.winMessage) throw new TypeError('Weky Error: Missing argument winMessage')
+      if(typeof options.winMessage !== 'string') throw new TypeError('Weky Error: winMessage must be a string')
       
+      if(!options.client) throw new TypeError('Weky Error: Missing argument client')
       
-      if(!options.client) throw new TypeError('Missing argument: client')
+      if(!options.message) throw new TypeError('Weky Error: Missing argument message')
       
-      if(!options.message) throw new TypeError('Missing argument: message')
       function getRandomString(length) {
         var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         var result = '';
