@@ -787,7 +787,13 @@
                         gameCollector.stop()
                       midDuel.delete(author)
                       midDuel.delete(member.id)
-                      }                  }catch(e){
+                      }else if(a1 !== '⬜' && a2 !== '⬜' && a3 !== '⬜' && b1 !== '⬜' && b2 !== '⬜' && b3 !== '⬜' && c1 !== '⬜' && c2 !== '⬜' && c3 !== '⬜'){
+                        this.message.channel.send(`Tie!`)
+                        gameCollector.stop()
+                      midDuel.delete(author)
+                      midDuel.delete(member.id)
+                      }
+                     }catch(e){
                     console.log(e)
                   }
                   player = (player + 1) % 2;

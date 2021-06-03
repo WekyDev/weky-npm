@@ -166,6 +166,10 @@ class fight {
                 .setID(this.cancel)
                 .setStyle(this.cancelButtonColor)
                 .setDisabled()
+                let row = new MessageActionRow()
+                .addComponent(btn1)
+                .addComponent(btn2)
+                .addComponent(btn3)
                 gameCollector.stop()
                 DaBaby.edit(`Game stopped.`, {component: row})
                 
@@ -188,6 +192,10 @@ class fight {
                 .setID(this.cancel)
                 .setStyle(this.cancelButtonColor)
                 .setDisabled()
+                let row = new MessageActionRow()
+                .addComponent(btn1)
+                .addComponent(btn2)
+                .addComponent(btn3)
                 gameCollector.stop();
                 const tempPlayer = (player + 1) % 2;
                 DaBaby.edit(`🏆 ${gameData[tempPlayer].member} has won the game!`,  {component: row});

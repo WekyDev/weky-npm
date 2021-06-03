@@ -1,6 +1,6 @@
 {
   "name": "weky",
-  "version": "1.7.8",
+  "version": "1.8.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,10 @@
     "wek",
     "fight",
     "games",
-    "fasttype"
+    "fasttype",
+    "tictactoe",
+    "ttt",
+    "discord.js-games"
   ],
   "author": "",
   "license": "ISC",
