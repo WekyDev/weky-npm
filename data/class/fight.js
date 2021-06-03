@@ -218,6 +218,7 @@ class fight {
         });
       }  
 }catch(e){
+  
   this.message.channel.send('Since the opponent didnt answer, imma end this.')
       }
   }

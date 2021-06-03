@@ -12,15 +12,15 @@ This is my first npm package, small things, big fun xd im working on it.
 ===
 
 ```js
-const oppenent = message.mentions.users.first();
-if (!oppenent) return message.channel.send(`Please mention who you want to fight`);
+const opponent = message.mentions.users.first();
+if (!opponent) return message.channel.send(`Please mention who you want to fight`);
 const { fight } = require('weky');
 const x = new fight({
     client: client,
     message: message,
     acceptMessage: 'Click to fight with <@' + message.author + '>', //message sent to see if opponent accepts
     challenger: message.author, //NOT CHANGEABLE
-    opponent: message.mentions.users.first(),  //NOT CHANGEABLE
+    opponent: opponent,  //NOT CHANGEABLE
     hitButtonText: 'HIT', //Hit button text (Custom)
     hitButtonColor: 'red', //Hit button color (Custom)
     healButtonText: 'HEAL', //Heal button text (Custom)
@@ -53,6 +53,26 @@ await new ChaosWords({
   }).start()
 ```
 ![](https://cdn.discordapp.com/attachments/812590454821355543/849197554092605460/chaoswords.gif)
+
+**Tic Tac Toe ❌**
+=== 
+
+```js
+const opponent = message.mentions.users.first();
+if (!opponent) return message.channel.send(`Please mention who you want to challenge at tictactoe.`);
+const { TicTacToe } = require('weky')
+const game = new TicTacToe({
+    message: message,
+    opponent: opponent,
+    xColor: 'red',
+    oColor: 'blurple',
+    xEmoji: '❌',
+    oEmoji: '0️⃣',
+})
+game.start()
+```
+![](https://cdn.discordapp.com/attachments/812590454821355543/849988887686414346/ttt.gif)
+
 **Fast Type ⌨️**
 ===
 
