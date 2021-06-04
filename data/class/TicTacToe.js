@@ -83,12 +83,7 @@ class TicTacToe {
         { member: this.message.author, em: this.xEmoji, color: this.xColor },
         { member: member, em: this.oEmoji, color: this.oColor }
       ];
-      const gameFilter = m => 
-      {
-        m.clicker.user.id === this.message.author.id; m.clicker.fetch()
-        ||
-        m.clicker.user.id === member.id; m.clicker.fetch()
-      }
+      const gameFilter = m => m.clicker.user.id === this.message.author.id || m.clicker.user.id === member.id
       const Discord = require('discord.js')
       let Embed = new Discord.MessageEmbed()
       .setDescription(`🎮 ${authorName} VS ${this.opponent.username} 🎮`)
@@ -151,7 +146,6 @@ class TicTacToe {
 
       
               gameCollector.on('collect', async btn => {
-                await btn.clicker.fetch();
                 if(btn.id == a11 && gameData[player].member.id === btn.clicker.user.id){
                   btn.defer()
                   if (btn.label == this.oEmoji || btn.label == this.xEmoji) { // User tries to place at an already claimed spot
