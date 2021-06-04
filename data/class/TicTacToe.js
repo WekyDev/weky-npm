@@ -83,7 +83,6 @@ class TicTacToe {
         { member: this.message.author, em: this.xEmoji, color: this.xColor },
         { member: member, em: this.oEmoji, color: this.oColor }
       ];
-      const gameFilter = m => m.clicker.user.id === this.message.author.id || m.clicker.user.id === member.id
       const Discord = require('discord.js')
       let Embed = new Discord.MessageEmbed()
       .setDescription(`🎮 ${authorName} VS ${this.opponent.username} 🎮`)
@@ -138,10 +137,12 @@ class TicTacToe {
       C1, C2, C3
             ]},
         ]
-      }).then( async (message) => {
+      }).then( async (msg) => {
       midDuel.add(author)
       midDuel.add(member.id)
-      const gameCollector = message.createButtonCollector(gameFilter);
+      const gameFilter = m => m.clicker.user.id === this.message.author.id || m.clicker.user.id === this.opponent.id
+
+      const gameCollector = msg.createButtonCollector(gameFilter);
 
 
       
@@ -205,7 +206,7 @@ class TicTacToe {
                     .setStyle(gameData[player].color)
                     .setEmoji(gameData[player].em)
                     .setDisabled()
-                    message.edit({
+                    msg.edit({
                       embed: Embed,
                       components: [
                           {type: 1, components: [
@@ -280,7 +281,7 @@ class TicTacToe {
                     .setStyle(gameData[player].color)
                     .setEmoji(gameData[player].em)
                     .setDisabled()
-                    message.edit({
+                    msg.edit({
                       embed: Embed,
                       components: [
                           {type: 1, components: [
@@ -355,7 +356,7 @@ class TicTacToe {
                     .setStyle(gameData[player].color)
                     .setEmoji(gameData[player].em)
                     .setDisabled()
-                    message.edit({
+                    msg.edit({
                       embed: Embed,
                       components: [
                           {type: 1, components: [
@@ -431,7 +432,7 @@ class TicTacToe {
                     .setStyle(gameData[player].color)
                     .setEmoji(gameData[player].em)
                     .setDisabled()
-                    message.edit({
+                    msg.edit({
                       embed: Embed,
                       components: [
                           {type: 1, components: [
@@ -506,7 +507,7 @@ class TicTacToe {
                     .setStyle(gameData[player].color)
                     .setEmoji(gameData[player].em)
                     .setDisabled()
-                    message.edit({
+                    msg.edit({
                       embed: Embed,
                       components: [
                           {type: 1, components: [
@@ -581,7 +582,7 @@ class TicTacToe {
                     .setStyle(gameData[player].color)
                     .setEmoji(gameData[player].em)
                     .setDisabled()
-                    message.edit({
+                    msg.edit({
                       embed: Embed,
                       components: [
                           {type: 1, components: [
@@ -656,7 +657,7 @@ class TicTacToe {
                     .setStyle(gameData[player].color)
                     .setEmoji(gameData[player].em)
                     .setDisabled()
-                    message.edit({
+                    msg.edit({
                       embed: Embed,
                       components: [
                           {type: 1, components: [
@@ -731,7 +732,7 @@ class TicTacToe {
                     .setStyle(gameData[player].color)
                     .setEmoji(gameData[player].em)
                     .setDisabled()
-                    message.edit({
+                    msg.edit({
                       embed: Embed,
                       components: [
                           {type: 1, components: [
@@ -812,7 +813,7 @@ class TicTacToe {
                     .setStyle(gameData[player].color)
                     .setEmoji(gameData[player].em)
                     .setDisabled()
-      message.edit({
+                    msg.edit({
                       embed: Embed,
                       components: [
                           {type: 1, components: [
