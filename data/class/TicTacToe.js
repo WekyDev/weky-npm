@@ -1,22 +1,33 @@
+class TicTacToe {
 
-  class TicTacToe {
+      /**
+     * @name TicTacToe
+     * @kind constructor
+     * @param {Object} options options
+     * @param {String} [options.xEmoji] x emoji
+     * @param {any} [options.message] the discord message
+     * @param {String} [options.xColor] x button color
+     * @param {String} [options.oEmoji] o emoji
+     * @param {String} [options.oColor] o button color
+     * @param {any} [options.opponent] const opponent = <Message>.mentions.members.first() (NOT CHANGEABLE)
+     */
 
     constructor(options) {
       if(!options.xEmoji) throw new TypeError('Missing argument: xEmoji')
-      if(typeof options.xEmoji !== 'string') throw new TypeError('xEmoji must be number')
+      if(typeof options.xEmoji !== 'string') throw new TypeError('Weky Error: xEmoji must be a string')
 
       if(!options.oEmoji) throw new TypeError('Missing argument: oEmoji')
-      if(typeof options.oEmoji !== 'string') throw new TypeError('oEmoji must be number')
+      if(typeof options.oEmoji !== 'string') throw new TypeError('Weky Error: oEmoji must be a string')
 
       if(!options.xColor) throw new TypeError('Missing argument: xColor')
-      if(typeof options.xColor !== 'string') throw new TypeError('xColor must be number')
+      if(typeof options.xColor !== 'string') throw new TypeError('Weky Error: xColor must be a string')
 
       if(!options.oColor) throw new TypeError('Missing argument: oColor')
-      if(typeof options.oColor !== 'string') throw new TypeError('oColor must be number')
+      if(typeof options.oColor !== 'string') throw new TypeError('Weky Error: oColor must be a string')
 
-      if(!options.opponent) throw new TypeError('Missing argument: opponent')
+      if(!options.opponent) throw new TypeError('Weky Error: Missing argument opponent')
 
-      if(!options.message) throw new TypeError('Missing argument: message')
+      if(!options.message) throw new TypeError('Weky Error: Missing argument message')
 
       this.message = options.message;
       this.xEmoji = options.xEmoji
