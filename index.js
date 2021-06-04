@@ -89,3 +89,5 @@ module.exports.FastType = require("./data/class/fasttype");
 module.exports.ChaosWords = require("./data/class/ChaosWords");
 
 module.exports.TicTacToe = require("./data/class/TicTacToe");
+
+module.exports.Calculator = require('./data/functions/calculator');

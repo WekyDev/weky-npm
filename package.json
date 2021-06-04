@@ -1,6 +1,6 @@
 {
   "name": "weky",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "discord-buttons": "^3.0.1",
+    "mathjs": "^9.4.1",
     "ms": "^2.1.3",
     "node-fetch": "^2.6.1"
   }
