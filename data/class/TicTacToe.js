@@ -83,7 +83,12 @@ class TicTacToe {
         { member: this.message.author, em: this.xEmoji, color: this.xColor },
         { member: member, em: this.oEmoji, color: this.oColor }
       ];
-      const gameFilter = m => m.clicker.user.id === this.message.author.id || m.clicker.user.id === member.id
+      const gameFilter = m => 
+      {
+        m.clicker.user.id === this.message.author.id; m.clicker.fetch()
+        ||
+        m.clicker.user.id === member.id; m.clicker.fetch()
+      }
       const Discord = require('discord.js')
       let Embed = new Discord.MessageEmbed()
       .setDescription(`🎮 ${authorName} VS ${this.opponent.username} 🎮`)
