@@ -11,7 +11,7 @@ module.exports = async (message) => {
    }
     let str = ' '
     let stringify = '```\n' + str + '\n```'
-    let calculator_clear = i(20)
+    let calculator_ac = i(20)
     let calculator_e1 = i(20)
     let calculator_e2 = i(20)
     let calculator_uppercase = i(20)
@@ -31,7 +31,7 @@ module.exports = async (message) => {
     let calculator_6 = i(20)
     let calculator_dot = i(20)
     let calculator_equal = i(20)
-    let clear = new MessageButton().setLabel('Clear').setID(calculator_clear).setStyle('red')
+    let ac = new MessageButton().setLabel('AC').setID(calculator_ac).setStyle('red')
     let e1 = new MessageButton().setLabel('(').setID(calculator_e1).setStyle('blurple')
     let e2 = new MessageButton().setLabel(')').setID(calculator_e2).setStyle('blurple')
     let uppercase = new MessageButton().setLabel('^').setID(calculator_uppercase).setStyle('blurple')
@@ -52,7 +52,7 @@ module.exports = async (message) => {
     let equal = new MessageButton().setLabel('=').setID(calculator_equal).setStyle('green')
     let plus = new MessageButton().setLabel('+').setID(calculator_plus).setStyle('blurple')
     //Lock
-    let qclear = new MessageButton().setLabel('Clear').setID(calculator_clear).setStyle('red').setDisabled()
+    let qac = new MessageButton().setLabel('AC').setID(calculator_ac).setStyle('red').setDisabled()
     let qe1 = new MessageButton().setLabel('(').setID(calculator_e1).setStyle('blurple').setDisabled()
     let qe2 = new MessageButton().setLabel(')').setID(calculator_e2).setStyle('blurple').setDisabled()
     let quppercase = new MessageButton().setLabel('^').setID(calculator_uppercase).setStyle('blurple').setDisabled()
@@ -77,7 +77,7 @@ module.exports = async (message) => {
     message.channel.send(stringify, {
       components: [
      {type: 1, components: [
-   clear, e1, e2, uppercase
+   ac, e1, e2, uppercase
      ]},
      {type: 1, components: [
    seven, eight, nine, slash
@@ -98,7 +98,7 @@ module.exports = async (message) => {
      msg.edit(stringify, {
        components: [
       {type: 1, components: [
-    clear, e1, e2, uppercase
+    ac, e1, e2, uppercase
       ]},
       {type: 1, components: [
     seven, eight, nine, slash
@@ -120,7 +120,7 @@ module.exports = async (message) => {
      msg.edit(stringify, {
        components: [
       {type: 1, components: [
-    qclear, qe1, qe2, quppercase
+    qac, qe1, qe2, quppercase
       ]},
       {type: 1, components: [
     qseven, qeight, qnine, qslash
@@ -206,7 +206,7 @@ module.exports = async (message) => {
        str += '.'
        stringify = '```\n' + str + '\n```'
        edit()
-     }else if(btn.id === calculator_clear){
+     }else if(btn.id === calculator_ac){
        str = ' '
        stringify = '```\n' + str + '\n```'
        edit()
@@ -226,10 +226,9 @@ module.exports = async (message) => {
        str = ''
        stringify = '```\n' + str + '\n```'
        }catch(e){
-         calc.stop()
-         lock()
-         message.channel.send('Error while executing calculation. Canceling to prevent bugs...')
-         str = ''
+
+         message.channel.send(' An invalid equation was entered!').then((m) => m.delete({ timeout: 2000 }))
+
          stringify = '```\n' + str + '\n```'
        }
      }
