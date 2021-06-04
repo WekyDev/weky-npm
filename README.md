@@ -71,7 +71,16 @@ const game = new TicTacToe({
 })
 game.start()//start da game
 ```
-![](https://cdn.discordapp.com/attachments/812590454821355543/849988887686414346/ttt.gif)
+
+**Calculator 🤔**
+=== 
+
+```js
+  const { Calculator } = require('weky')
+  await Calculator(message)
+```
+
+![](https://cdn.discordapp.com/attachments/812590454821355543/850290125593772042/calc.gif)
 
 **Fast Type ⌨️**
 ===
