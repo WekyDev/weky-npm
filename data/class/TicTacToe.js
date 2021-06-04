@@ -146,7 +146,7 @@ class TicTacToe {
 
       
               gameCollector.on('collect', async btn => {
-                await button.clicker.fetch();
+                await btn.clicker.fetch();
                 if(btn.id == a11 && gameData[player].member.id === btn.clicker.user.id){
                   btn.defer()
                   if (btn.label == this.oEmoji || btn.label == this.xEmoji) { // User tries to place at an already claimed spot
