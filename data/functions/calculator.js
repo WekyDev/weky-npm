@@ -1,5 +1,5 @@
 module.exports = async (message) => {
-  if (!message) throw new TypeError("Missing argument message");
+  if (!message) throw new TypeError("Weky Error: Missing argument message");
   const { MessageButton: btn } = require("discord-buttons");
   function s(len) {
     for (var rChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", res = "", i = 0; i < len; i++) res += rChar.charAt(Math.floor(Math.random() * rChar.length));
