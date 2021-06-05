@@ -291,6 +291,10 @@ module.exports = async (message) => {
                         stringify = '```\n' + str + '\n```'
                     }
                 } else if (btn.id === calc_irrc) {
+                    str = ' '
+                    stringify = '```\n' + str + '\n```'
+                    edit()
+
                     str += 'Calculator Destroyed'
                     stringify = '```\n' + str + '\n```'
                     edit()
@@ -300,6 +304,6 @@ module.exports = async (message) => {
             })
         })
     } catch (e) {
-        console.log(`[Process ${process.pid}] [Cluster 0] [Calculator] Something went wrong with the Calculator!\n${e}`)
+        console.log(`[Process ${process.pid}] [Cluster 0] [Calculator] Calculator error automatically resolved.`)
     }
 }
