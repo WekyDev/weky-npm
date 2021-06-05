@@ -14,7 +14,9 @@ class fight {
      * @param {String} [options.healButtonText] text of the heal button
      * @param {String} [options.healButtonColor] color of the heal button
      * @param {String} [options.cancelButtonText] text of the cancel button 
-     * @param {String} [options.cancelButtonColor] color of the cancel button
+     * @param {Number} [options.damage] damage points added when hit button is pressed (DEFAULT => Math.floor(Math.random() * (20 - 12) + 12))
+     * @param {Number} [options.heal] heal points added when heal button is pressed (DEFAULT => Math.floor(Math.random() * (20 - 12) + 12))
+     * @param {Boolean} [options.tookHalfIfRepeat] if user heal 2 times devide parameter heal by two
     */
 
   constructor(options) {
@@ -47,6 +49,27 @@ class fight {
     
     if(!options.opponent) throw new Error('Weky Error: Missing argument opponent')
     
+    if(!options.damage){
+      this.damage = Math.floor(Math.random() * (60 - 12) + 12);
+      //                                        max  min  min
+    }else{
+      this.damage = options.damage
+    }
+
+    if(!options.heal){
+      this.heal = Math.floor(Math.random() * (20 - 12) + 12);
+      //                                      max  min  min
+    }else{
+      this.heal = options.heal
+    }
+
+    if(!options.tookHalfIfRepeat){
+      this.tookHalfIfRepeat = true
+    } else if(typeof options.tookHalfIfRepeat !== 'boolean'){
+     return new Error('Weky Error: tookHalfIfRepeat must be boolean')
+    } else {
+      this.tookHalfIfRepeat = options.tookHalfIfRepeat
+    }
     function getRandomString(length) {
       var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       var result = '';
@@ -141,9 +164,8 @@ class fight {
               if (msg.id === this.hit) {
                 msg.defer()
                 if(btn.id !== gameData[player].member.id) return msg.reply.send(gameData[player].member + 'please wait for enemy\'s move...', true)
-                let randNumb = Math.floor(Math.random() * (60 - 12) + 12);
+                let randNumb = this.damage
                 const tempPlayer = (player + 1) % 2;
-                if (gameData[tempPlayer].lastAttack === 'heal') randNumb = Math.floor(randNumb / 2);
                 gameData[tempPlayer].health -= randNumb;
                 gameData[player].lastAttack = 'attack';
                 if(gameData[player].member.id == this.message.author.id){
@@ -157,9 +179,9 @@ class fight {
                 msg.defer()
                 if(btn.id !== gameData[player].member.id) return msg.reply.send(gameData[player].member + 'please wait for enemy\'s move...', true)
 
-                let randrNumb = Math.floor(Math.random() * (20 - 12) + 12);
+                let randrNumb = this.heal
                 const tempPlayer = (player + 1) % 2;
-                if (gameData[tempPlayer].lastAttack === 'heal') randrNumb = Math.floor(randrNumb / 2);
+                if (gameData[tempPlayer].lastAttack === 'heal' && this.tookHalfIfRepeat === true) randrNumb = Math.floor(randrNumb / 2);
                 gameData[player].health += randrNumb;
                 gameData[player].lastAttack = 'heal';
                 if(gameData[player].member.id == this.message.author.id){
