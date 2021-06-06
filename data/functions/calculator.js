@@ -1,133 +1,151 @@
 module.exports = async (message) => {
-  if (!message) throw new TypeError("Weky Error: Missing argument message");
-  const { MessageButton: btn } = require("discord-buttons");
-  function s(len) {
-    for (var rChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", res = "", i = 0; i < len; i++) res += rChar.charAt(Math.floor(Math.random() * rChar.length));
-    return res;
-  }
-  let str = " ",
-    strf = "```\n" + str + "\n```",
-    ac = s(20),
-    e1 = s(20),
-    e2 = s(20),
-    up = s(20),
-    b7 = s(20),
-    b8 = s(20),
-    b9 = s(20),
-    add = s(20),
-    sub = s(20),
-    mul = s(20),
-    div = s(20),
-    b1 = s(20),
-    b2 = s(20),
-    b3 = s(20),
-    b4 = s(20),
-    b5 = s(20),
-    b0 = s(20),
-    b6 = s(20),
-    dot = s(20),
-    eql = s(20),
-    BAC = new btn().setLabel("AC").setID(ac).setStyle("red"),
-    BE1 = new btn().setLabel("(").setID(e1).setStyle("blurple"),
-    BE2 = new btn().setLabel(")").setID(e2).setStyle("blurple"),
-    BUP = new btn().setLabel("^").setID(up).setStyle("blurple"),
-    BT7 = new btn().setLabel("7️").setID(b7).setStyle("gray"),
-    BT8 = new btn().setLabel("8️").setID(b8).setStyle("gray"),
-    BT9 = new btn().setLabel("9️").setID(b9).setStyle("gray"),
-    DIV = new btn().setLabel("÷").setID(div).setStyle("blurple"),
-    BT4 = new btn().setLabel("4️").setID(b4).setStyle("gray"),
-    BT5 = new btn().setLabel("5️").setID(b5).setStyle("gray"),
-    BT6 = new btn().setLabel("6️").setID(b6).setStyle("gray"),
-    MUL = new btn().setLabel("×").setID(mul).setStyle("blurple"),
-    BT1 = new btn().setLabel("1️").setID(b1).setStyle("gray"),
-    BT2 = new btn().setLabel("2️").setID(b2).setStyle("gray"),
-    BT3 = new btn().setLabel("3️").setID(b3).setStyle("gray"),
-    SUB = new btn().setLabel("-").setID(sub).setStyle("blurple"),
-    BT0 = new btn().setLabel("0️").setID(b0).setStyle("gray"),
-    DOT = new btn().setLabel(".").setID(dot).setStyle("blurple"),
-    EQL = new btn().setLabel("=").setID(eql).setStyle("green"),
-    ADD = new btn().setLabel("+").setID(add).setStyle("blurple"),
-    LAC = new btn().setLabel("AC").setID(ac).setStyle("red").setDisabled(),
-    LE1 = new btn().setLabel("(").setID(e1).setStyle("blurple").setDisabled(),
-    LE2 = new btn().setLabel(")").setID(e2).setStyle("blurple").setDisabled(),
-    LUP = new btn().setLabel("^").setID(up).setStyle("blurple").setDisabled(),
-    LB7 = new btn().setLabel("7️").setID(b7).setStyle("gray").setDisabled(),
-    LB8 = new btn().setLabel("8️").setID(b8).setStyle("gray").setDisabled(),
-    LB9 = new btn().setLabel("9️").setID(b9).setStyle("gray").setDisabled(),
-    LDV = new btn().setLabel("÷").setID(div).setStyle("blurple").setDisabled(),
-    LB4 = new btn().setLabel("4️").setID(b4).setStyle("gray").setDisabled(),
-    LB5 = new btn().setLabel("5️").setID(b5).setStyle("gray").setDisabled(),
-    LB6 = new btn().setLabel("6️").setID(b6).setStyle("gray").setDisabled(),
-    LML = new btn().setLabel("×").setID(mul).setStyle("blurple").setDisabled(),
-    LB1 = new btn().setLabel("1️").setID(b1).setStyle("gray").setDisabled(),
-    LB2 = new btn().setLabel("2️").setID(b2).setStyle("gray").setDisabled(),
-    LB3 = new btn().setLabel("3️").setID(b3).setStyle("gray").setDisabled(),
-    LSB = new btn().setLabel("-").setID(sub).setStyle("blurple").setDisabled(),
-    LB0 = new btn().setLabel("0️").setID(b0).setStyle("gray").setDisabled(),
-    LDT = new btn().setLabel(".").setID(dot).setStyle("blurple").setDisabled(),
-    LEQ = new btn().setLabel("=").setID(eql).setStyle("green").setDisabled(),
-    LAD = new btn().setLabel("+").setID(add).setStyle("blurple").setDisabled();
-  const filter = (t) => t.clicker.user.id == message.author.id;
-  message.channel
-    .send(strf, {
-      components: [
-        { type: 1, components: [BAC, BE1, BE2, BUP] },
-        { type: 1, components: [BT7, BT8, BT9, DIV] },
-        { type: 1, components: [BT4, BT5, BT6, MUL] },
-        { type: 1, components: [BT1, BT2, BT3, SUB] },
-        { type: 1, components: [DOT, BT0, EQL, ADD] },
-      ],
-    })
-    .then(async (msg) => {
-      async function edit() {
-        msg.edit(strf, {
-          components: [
-            { type: 1, components: [BAC, BE1, BE2, BUP] },
-            { type: 1, components: [BT7, BT8, BT9, DIV] },
-            { type: 1, components: [BT4, BT5, BT6, MUL] },
-            { type: 1, components: [BT1, BT2, BT3, SUB] },
-            { type: 1, components: [DOT, BT0, EQL, ADD] },
-          ],
-        });
-      }
-      async function lock() {
-        msg.edit(strf, {
-          components: [
-            { type: 1, components: [LAC, LE1, LE2, LUP] },
-            { type: 1, components: [LB7, LB8, LB9, LDV] },
-            { type: 1, components: [LB4, LB5, LB6, LML] },
-            { type: 1, components: [LB1, LB2, LB3, LSB] },
-            { type: 1, components: [LDT, LB0, LEQ, LAD] },
-          ],
-        });
-      }
-      msg.createButtonCollector(filter).on("collect", async (btn) => {
-        btn.defer()
-        if (btn.id === b1) (strf = "```\n" + (str += "1") + "\n```"), edit();
-        else if (btn.id === b2) (strf = "```\n" + (str += "2") + "\n```"), edit();
-        else if (btn.id === b3) (strf = "```\n" + (str += "3") + "\n```"), edit();
-        else if (btn.id === b4) (strf = "```\n" + (str += "4") + "\n```"), edit();
-        else if (btn.id === b5) (strf = "```\n" + (str += "5") + "\n```"), edit();
-        else if (btn.id === b6) (strf = "```\n" + (str += "6") + "\n```"), edit();
-        else if (btn.id === b7) (strf = "```\n" + (str += "7") + "\n```"), edit();
-        else if (btn.id === b8) (strf = "```\n" + (str += "8") + "\n```"), edit();
-        else if (btn.id === b9) (strf = "```\n" + (str += "9") + "\n```"), edit();
-        else if (btn.id === b0) (strf = "```\n" + (str += "0") + "\n```"), edit();
-        else if (btn.id === add) (strf = "```\n" + (str += "+") + "\n```"), edit();
-        else if (btn.id === sub) (strf = "```\n" + (str += "-") + "\n```"), edit();
-        else if (btn.id === div) (strf = "```\n" + (str += "÷") + "\n```"), edit();
-        else if (btn.id === up) (strf = "```\n" + (str += "^") + "\n```"), edit();
-        else if (btn.id === mul) (strf = "```\n" + (str += "×") + "\n```"), edit();
-        else if (btn.id === dot) (strf = "```\n" + (str += ".") + "\n```"), edit();
-        else if (btn.id === ac) (strf = "```\n" + (str = " ") + "\n```"), edit();
-        else if (btn.id === e1) (strf = "```\n" + (str += "(") + "\n```"), edit();
-        else if (btn.id === e2) (strf = "```\n" + (str += ")") + "\n```"), edit();
-        else if (btn.id === eql)
-          try {
-            (str += " = " + require("mathjs").evaluate(str.replace(/×/g, '*').replace(/÷/g, '/'))), (strf = "```\n" + str + "\n```"), edit(), (strf = "```\n" + (str = "") + "\n```");
-          } catch (t) {
-            message.channel.send(" An invalid equation was entered!").then((e) => e.delete({ timeout: 2e3 })), (strf = "```\n" + str + "\n```");
-          }
-      });
-    });
+    if (!message) throw new TypeError("Weky Error: Missing argument message");
+    const { MessageButton: mBtn } = require("discord-buttons");
+    function s(len) {
+        for (var rChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", res = "", i = 0; i < len; i++) res += rChar.charAt(Math.floor(Math.random() * rChar.length));
+        return res;
+    }
+    let str = " ",
+        strfy = "```\n" + str + "\n```",
+        // Button ID generator
+        clr = s(20),
+        be1 = s(20),
+        be2 = s(20),
+        bup = s(20),
+        bt7 = s(20),
+        bt8 = s(20),
+        bt9 = s(20),
+        add = s(20),
+        sub = s(20),
+        mul = s(20),
+        div = s(20),
+        bt1 = s(20),
+        bt2 = s(20),
+        bt3 = s(20),
+        bt4 = s(20),
+        bt5 = s(20),
+        bt0 = s(20),
+        bt6 = s(20),
+        dot = s(20),
+        eql = s(20),
+        del = s(20),
+        bdc = s(20),
+        emp = s(20),
+        // Buttons
+        CLR = new mBtn().setLabel("AC").setID(clr).setStyle("red"),
+        BE1 = new mBtn().setLabel("(").setID(be1).setStyle("gray"),
+        BE2 = new mBtn().setLabel(")").setID(be2).setStyle("gray"),
+        BUP = new mBtn().setLabel("^").setID(bup).setStyle("gray"),
+        BT7 = new mBtn().setLabel("7️").setID(bt7).setStyle("gray"),
+        BT8 = new mBtn().setLabel("8️").setID(bt8).setStyle("gray"),
+        BT9 = new mBtn().setLabel("9️").setID(bt9).setStyle("gray"),
+        DIV = new mBtn().setLabel("÷").setID(div).setStyle("gray"),
+        BT4 = new mBtn().setLabel("4️").setID(bt4).setStyle("gray"),
+        BT5 = new mBtn().setLabel("5️").setID(bt5).setStyle("gray"),
+        BT6 = new mBtn().setLabel("6️").setID(bt6).setStyle("gray"),
+        MUL = new mBtn().setLabel("×").setID(mul).setStyle("gray"),
+        BT1 = new mBtn().setLabel("1️").setID(bt1).setStyle("gray"),
+        BT2 = new mBtn().setLabel("2️").setID(bt2).setStyle("gray"),
+        BT3 = new mBtn().setLabel("3️").setID(bt3).setStyle("gray"),
+        SUB = new mBtn().setLabel("-").setID(sub).setStyle("gray"),
+        BT0 = new mBtn().setLabel("0️").setID(bt0).setStyle("gray"),
+        DOT = new mBtn().setLabel(".").setID(dot).setStyle("gray"),
+        EQL = new mBtn().setLabel("=").setID(eql).setStyle("green"),
+        ADD = new mBtn().setLabel("+").setID(add).setStyle("gray"),
+        DEL = new mBtn().setLabel("Del").setID(del).setStyle("blurple"),
+        BDC = new mBtn().setLabel("DC").setID(bdc).setStyle("red"),
+        EMP = new mBtn().setLabel("​").setID(emp).setStyle("gray").setDisabled(),
+        // Lock
+        LCLR = new mBtn().setLabel("AC").setID(clr).setStyle("red").setDisabled(),
+        LBE1 = new mBtn().setLabel("(").setID(be1).setStyle("gray").setDisabled(),
+        LBE2 = new mBtn().setLabel(")").setID(be2).setStyle("gray").setDisabled(),
+        LBUP = new mBtn().setLabel("^").setID(bup).setStyle("gray").setDisabled(),
+        LBT7 = new mBtn().setLabel("7️").setID(bt7).setStyle("gray").setDisabled(),
+        LBT8 = new mBtn().setLabel("8️").setID(bt8).setStyle("gray").setDisabled(),
+        LBT9 = new mBtn().setLabel("9️").setID(bt9).setStyle("gray").setDisabled(),
+        LDIV = new mBtn().setLabel("÷").setID(div).setStyle("gray").setDisabled(),
+        LBT4 = new mBtn().setLabel("4️").setID(bt4).setStyle("gray").setDisabled(),
+        LBT5 = new mBtn().setLabel("5️").setID(bt5).setStyle("gray").setDisabled(),
+        LBT6 = new mBtn().setLabel("6️").setID(bt6).setStyle("gray").setDisabled(),
+        LMUL = new mBtn().setLabel("×").setID(mul).setStyle("gray").setDisabled(),
+        LBT1 = new mBtn().setLabel("1️").setID(bt1).setStyle("gray").setDisabled(),
+        LBT2 = new mBtn().setLabel("2️").setID(bt2).setStyle("gray").setDisabled(),
+        LBT3 = new mBtn().setLabel("3️").setID(bt3).setStyle("gray").setDisabled(),
+        LSUB = new mBtn().setLabel("-").setID(sub).setStyle("gray").setDisabled(),
+        LBT0 = new mBtn().setLabel("0️").setID(bt0).setStyle("gray").setDisabled(),
+        LDOT = new mBtn().setLabel(".").setID(dot).setStyle("gray").setDisabled(),
+        LEQL = new mBtn().setLabel("=").setID(eql).setStyle("green").setDisabled(),
+        LADD = new mBtn().setLabel("+").setID(add).setStyle("gray").setDisabled(),
+        LDEL = new mBtn().setLabel("Del").setID(del).setStyle("blurple").setDisabled(),
+        LBDC = new mBtn().setLabel("DC").setID(bdc).setStyle("red").setDisabled();
+    //----------------------------------------------------------------------
+    try {
+        const filter = (btn) => btn.clicker.user.id === message.author.id;
+        message.channel
+            .send(strfy, {
+                components: [
+                    { type: 1, components: [BE1, BE2, BUP, DEL, CLR] },
+                    { type: 1, components: [BT7, BT8, BT9, DIV, BDC] },
+                    { type: 1, components: [BT4, BT5, BT6, MUL, EMP] },
+                    { type: 1, components: [BT1, BT2, BT3, SUB, EMP] },
+                    { type: 1, components: [DOT, BT0, EQL, ADD, EMP] },
+                ],
+            })
+            .then(async (msg) => {
+                async function edit() {
+                    msg.edit(strfy, {
+                        components: [
+                            { type: 1, components: [BE1, BE2, BUP, DEL, CLR] },
+                            { type: 1, components: [BT7, BT8, BT9, DIV, BDC] },
+                            { type: 1, components: [BT4, BT5, BT6, MUL, EMP] },
+                            { type: 1, components: [BT1, BT2, BT3, SUB, EMP] },
+                            { type: 1, components: [DOT, BT0, EQL, ADD, EMP] },
+                        ],
+                    });
+                }
+                async function lock() {
+                    msg.edit(strfy, {
+                        components: [
+                            { type: 1, components: [LBE1, LBE2, LBUP, LDEL, LCLR] },
+                            { type: 1, components: [LBT7, LBT8, LBT9, LDIV, LBDC] },
+                            { type: 1, components: [LBT4, LBT5, LBT6, LMUL, EMP] },
+                            { type: 1, components: [LBT1, LBT2, LBT3, LSUB, EMP] },
+                            { type: 1, components: [LDOT, LBT0, LEQL, LADD, EMP] },
+                        ],
+                    });
+                }
+                const pe = msg.createButtonCollector(filter);
+                pe.on("collect", async (btn) => {
+                    if ((btn.clicker.user.id !== message.author.id && btn.defer(), btn.defer(), btn.id === bt1)) (strfy = "```\n" + (n += "1") + "\n```"), edit();
+                    else if (btn.id === bt2) (strfy = "```\n" + (str += "2") + "\n```"), edit();
+                    else if (btn.id === bt3) (strfy = "```\n" + (str += "3") + "\n```"), edit();
+                    else if (btn.id === bt4) (strfy = "```\n" + (str += "4") + "\n```"), edit();
+                    else if (btn.id === bt5) (strfy = "```\n" + (str += "5") + "\n```"), edit();
+                    else if (btn.id === bt6) (strfy = "```\n" + (str += "6") + "\n```"), edit();
+                    else if (btn.id === bt7) (strfy = "```\n" + (str += "7") + "\n```"), edit();
+                    else if (btn.id === bt8) (strfy = "```\n" + (str += "8") + "\n```"), edit();
+                    else if (btn.id === bt9) (strfy = "```\n" + (str += "9") + "\n```"), edit();
+                    else if (btn.id === bt0) (strfy = "```\n" + (str += "0") + "\n```"), edit();
+                    else if (btn.id === add) (strfy = "```\n" + (str += "+") + "\n```"), edit();
+                    else if (btn.id === sub) (strfy = "```\n" + (str += "-") + "\n```"), edit();
+                    else if (btn.id === div) (strfy = "```\n" + (str += "÷") + "\n```"), edit();
+                    else if (btn.id === bup) (strfy = "```\n" + (str += "^") + "\n```"), edit();
+                    else if (btn.id === mul) (strfy = "```\n" + (str += "×") + "\n```"), edit();
+                    else if (btn.id === dot) (strfy = "```\n" + (str += ".") + "\n```"), edit();
+                    else if (btn.id === clr) (strfy = "```\n" + (str = " ") + "\n```"), edit();
+                    else if (btn.id === be1) (strfy = "```\n" + (str += "(") + "\n```"), edit();
+                    else if (btn.id === be2) (strfy = "```\n" + (str += ")") + "\n```"), edit();
+                    else if (btn.id === del) (str = str.split("")).pop(), (str = str.join("")), (strfy = "```\n" + str + "\n```"), edit();
+                    else if (btn.id === eql)
+                        try {
+                            (str += " = " + require("mathjs").evaluate(str.replace(/×/g, '*').replace(/÷/g, '/'))), (strfy = "```\n" + str + "\n```" || "```\n"), E(), (strfy = "```\n" + (str = "") + "\n```");
+                        } catch (e) {
+                            (strfy = "```\n" + (str = "Invalid Question Entered") + "\n```"), edit(), (strfy = "```\n" + (str = "") + "\n```");
+                        }
+                    else if (btn.id === bdc) ((strfy = "```\n" + (str += "Calculator Destroyed") + "\n```"), edit(), pe.stop(), lock());
+                });
+            });
+    } catch (e) {
+        console.log(`[Process ${process.pid}] [Cluster 0] [Calculator] Something went wrong with the Calculator!\n${e}`);
+    }
 };
