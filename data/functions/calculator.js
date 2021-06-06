@@ -138,7 +138,7 @@ module.exports = async (message) => {
                     else if (btn.id === del) (str = str.split("")).pop(), (str = str.join("")), (strfy = "```\n" + str + "\n```"), edit();
                     else if (btn.id === eql)
                         try {
-                            (str += " = " + require("mathjs").evaluate(str.replace(/×/g, '*').replace(/÷/g, '/'))), (strfy = "```\n" + str + "\n```" || "```\n"), E(), (strfy = "```\n" + (str = "") + "\n```");
+                            (str += " = " + require("mathjs").evaluate(str.replace(/×/g, '*').replace(/÷/g, '/'))), (strfy = "```\n" + str + "\n```" || "```\n"), edit(), (strfy = "```\n" + (str = "") + "\n```");
                         } catch (e) {
                             (strfy = "```\n" + (str = "Invalid Question Entered") + "\n```"), edit(), (strfy = "```\n" + (str = "") + "\n```");
                         }
