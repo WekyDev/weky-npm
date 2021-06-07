@@ -111,7 +111,7 @@ new Snake({
 ```
 **This function requires [discord-buttons](https://www.npmjs.com/package/discord-buttons)**
 
-![Snake Showcase](https://i.imgur.com/GKN38AR.gif)
+![Snake Showcase](https://cdn.discordapp.com/attachments/830003681402683415/851392057641009172/snake.gif)
 
 
 # FastType
