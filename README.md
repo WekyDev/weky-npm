@@ -19,6 +19,7 @@
 - [Fight](#fight)
 - [FastType](#fasttype)
 - [ChaosWords](#chaoswords)
+- [Snake](#snake)
 - [ShuffleGuess](#shuffleguess)
 - [Sudo](#sudo)
 - [Randomize String](#randomizestring)
@@ -85,6 +86,33 @@ battle.start(); // start da battle
 ![Fight Showcase Win](https://i.imgur.com/GKN38AR.gif)
 
 ![Fight Showcase Cancel](https://i.imgur.com/nfElWHj.gif)
+
+# Snake
+```js
+const { Snake } = require('weky');
+new Snake({
+    message: message,
+    embed: {
+    title: 'Snake', //embed title
+    color: "#gt4668", //embed color
+    gameOverTitle: "Game Over", //game over embed title
+    },
+    emojis: {
+      empty: '⬛', //zone emoji
+      snakeBody: '♿', //snake
+      food: '💩', //food emoji
+      //control
+      up: '⬆️', 
+      right: '⬅️',
+      down: '⬇️',
+      left: '➡️',
+      },
+    }).start()
+```
+**This function requires [discord-buttons](https://www.npmjs.com/package/discord-buttons)**
+
+![Snake Showcase](https://i.imgur.com/GKN38AR.gif)
+
 
 # FastType
 ```js
