@@ -18,37 +18,6 @@ function getRandomString(length) {
   let d1 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
   let stop1 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
   
-let lock1 = new MessageButton()
-.setLabel('\u200b')
-.setStyle('gray')
-.setID('saybye')
-.setDisabled()
-
-let w = new MessageButton()
-.setEmoji(this.options.emojis.up)
-.setStyle('blurple')
-.setID(w1)
-
-let lock2 = new MessageButton()
-.setLabel('\u200b')
-.setStyle('gray')
-.setID('h')
-.setDisabled()
-
-let a = new MessageButton()
-.setEmoji(this.options.emojis.right)
-.setStyle('blurple')
-.setID(a1)
-
-let s = new MessageButton()
-.setEmoji(this.options.emojis.down)
-.setStyle('blurple')
-.setID(s1)
-
-let d = new MessageButton()
-.setEmoji(this.options.emojis.left)
-.setStyle('blurple')
-.setID(d1)
 
 class Snake {
     constructor(options = {}) {
@@ -59,6 +28,7 @@ class Snake {
         this.inGame = false;
         this.emojis = options.emojis;
         this.options = options;
+        this.message = options.message;
         for (let y = 0; y < HEIGHT; y++) {
             for (let x = 0; x < WIDTH; x++) {
                 gameBoard[y * WIDTH + x] = this.emojis.empty
@@ -122,7 +92,41 @@ class Snake {
             .setDescription(this.gameBoardToString());
 
         if (this.options.timestamp) embed.setTimestamp();
-
+        let lock1 = new MessageButton()
+        .setLabel('\u200b')
+        .setStyle('gray')
+        .setID('saybye')
+        .setDisabled()
+        
+        let w = new MessageButton()
+        .setEmoji(this.options.emojis.up)
+        .setStyle('blurple')
+        .setID(w1)
+        
+        let lock2 = new MessageButton()
+        .setLabel('\u200b')
+        .setStyle('gray')
+        .setID('h')
+        .setDisabled()
+        
+        let a = new MessageButton()
+        .setEmoji(this.options.emojis.right)
+        .setStyle('blurple')
+        .setID(a1)
+        
+        let s = new MessageButton()
+        .setEmoji(this.options.emojis.down)
+        .setStyle('blurple')
+        .setID(s1)
+        
+        let d = new MessageButton()
+        .setEmoji(this.options.emojis.left)
+        .setStyle('blurple')
+        .setID(d1)
+        let stopy = new MessageButton()
+        .setLabel('Stop')
+        .setStyle('red')
+        .setID(stop1)
         this.message.channel.send({ embed: embed, components: 
     [
         {
@@ -195,7 +199,41 @@ collector.on('collect', async btn => {
             .setTitle(this.options.embed.title || "Snake Game")
             .setDescription(this.gameBoardToString())
             .setTimestamp();
-
+            let lock1 = new MessageButton()
+            .setLabel('\u200b')
+            .setStyle('gray')
+            .setID('saybye')
+            .setDisabled()
+            
+            let w = new MessageButton()
+            .setEmoji(this.options.emojis.up)
+            .setStyle('blurple')
+            .setID(w1)
+            
+            let lock2 = new MessageButton()
+            .setLabel('\u200b')
+            .setStyle('gray')
+            .setID('h')
+            .setDisabled()
+            
+            let a = new MessageButton()
+            .setEmoji(this.options.emojis.right)
+            .setStyle('blurple')
+            .setID(a1)
+            
+            let s = new MessageButton()
+            .setEmoji(this.options.emojis.down)
+            .setStyle('blurple')
+            .setID(s1)
+            
+            let d = new MessageButton()
+            .setEmoji(this.options.emojis.left)
+            .setStyle('blurple')
+            .setID(d1)
+            let stopy = new MessageButton()
+            .setLabel('Stop')
+            .setStyle('red')
+            .setID(stop1)
         msg.edit({ embed: editEmbed, components: 
             [
                 {
@@ -211,7 +249,18 @@ collector.on('collect', async btn => {
     }
 
     gameOver(m) {
+        let lock1 = new MessageButton()
+        .setLabel('\u200b')
+        .setStyle('gray')
+        .setID('saybye')
+        .setDisabled()
 
+        
+        let lock2 = new MessageButton()
+        .setLabel('\u200b')
+        .setStyle('gray')
+        .setID('h')
+        .setDisabled()
 let w = new MessageButton()
 .setEmoji(this.options.emojis.up)
 .setStyle('blurple')
@@ -248,6 +297,7 @@ let stopy = new MessageButton()
             .setTitle(this.options.embed.gameOverTitle || "Game Over")
             .setDescription("Points: " + this.score)
             .setTimestamp()
+            
         m.edit({ embed: editEmbed, components: 
             [
                 {
