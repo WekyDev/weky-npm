@@ -36,7 +36,7 @@ module.exports = async (message) => {
       const calculator_dot = i(20);
       const calculator_equal = i(20);
       const calculator_backspace = i(20);
-      const calc_irrc = i(20);
+      const calc_percent = i(20)
       const empty_irrc = i(20);
 
       //Setup Buttonstyle
@@ -121,13 +121,13 @@ module.exports = async (message) => {
         .setID(calculator_plus)
         .setStyle("blurple");
       const backspace = new MessageButton()
-        .setLabel("Del")
+        .setLabel("⌫")
         .setID(calculator_backspace)
         .setStyle("red");
-      const destroy = new MessageButton()
-        .setLabel("DC")
-        .setID(calc_irrc)
-        .setStyle("red");
+      const percent = new MessageButton()
+        .setLabel("%")
+        .setID(calc_percent)
+        .setStyle('blurple')
       const empty = new MessageButton()
         .setLabel("\u200b")
         .setID(empty_irrc)
@@ -236,14 +236,14 @@ module.exports = async (message) => {
         .setStyle("blurple")
         .setDisabled();
       const qbackspace = new MessageButton()
-        .setLabel("Del")
+        .setLabel("⌫")
         .setID(calculator_backspace)
         .setStyle("red")
         .setDisabled();
-      const qdestroy = new MessageButton()
-        .setLabel("DC")
-        .setID(calc_irrc)
-        .setStyle("red")
+      const qpercent = new MessageButton()
+        .setLabel("%")
+        .setID(calc_percent)
+        .setStyle('blurple')
         .setDisabled();
       const qempty = new MessageButton()
         .setLabel("\u200b")
@@ -256,36 +256,36 @@ module.exports = async (message) => {
       message.channel
         .send(stringify, {
           components: [
-            { type: 1, components: [e1, e2, uppercase, backspace, c] },
-            { type: 1, components: [seven, eight, nine, slash, destroy] },
+            { type: 1, components: [e1, e2, percent, backspace, c] },
+            { type: 1, components: [seven, eight, nine, slash, uppercase] },
             { type: 1, components: [four, five, six, star, empty] },
             { type: 1, components: [one, two, three, minus, empty] },
-            { type: 1, components: [dot, zero, equal, plus, empty] },
+            { type: 1, components: [zero, dot, equal, plus, empty] },
           ],
         })
         .then(async (msg) => {
           async function edit() {
             msg.edit(stringify, {
               components: [
-                { type: 1, components: [e1, e2, uppercase, backspace, c] },
-                { type: 1, components: [seven, eight, nine, slash, destroy] },
+                { type: 1, components: [e1, e2, percent, backspace, c] },
+                { type: 1, components: [seven, eight, nine, slash, uppercase] },
                 { type: 1, components: [four, five, six, star, empty] },
                 { type: 1, components: [one, two, three, minus, empty] },
-                { type: 1, components: [dot, zero, equal, plus, empty] },
+                { type: 1, components: [zero, dot, equal, plus, empty] },
               ],
             });
           }
           async function lock() {
             msg.edit(stringify, {
               components: [
-                { type: 1, components: [qe1, qe2, quppercase, qbackspace, qc] },
+                { type: 1, components: [qe1, qe2, qpercent, qbackspace, qc] },
                 {
                   type: 1,
-                  components: [qseven, qeight, qnine, qslash, qdestroy],
+                  components: [qseven, qeight, qnine, qslash, quppercase],
                 },
                 { type: 1, components: [qfour, qfive, qsix, qstar, qempty] },
                 { type: 1, components: [qone, qtwo, qthree, qminus, qempty] },
-                { type: 1, components: [qdot, qzero, qequal, qplus, qempty] },
+                { type: 1, components: [qzero, qdot, qequal, qplus, qempty] },
               ],
             });
           }
@@ -359,6 +359,9 @@ module.exports = async (message) => {
                 str.pop();
                 str = str.join("");
                 break;
+              case calc_percent:
+                str += "%";
+                break;
             }
 
             stringify = "```\n" + str + "\n```";
@@ -379,14 +382,6 @@ module.exports = async (message) => {
                 str = ' '
                 stringify = '```\n' + str + '\n```'
               }
-            }
-            if (btn.id === calc_irrc) {
-              str = "Calculator Destroyed";
-              stringify = "```\n" + str + "\n```";
-              edit();
-              calc.stop();
-              lock();
-              return;
             }
           });
         });
