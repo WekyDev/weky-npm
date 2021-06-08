@@ -369,15 +369,15 @@ module.exports = async (message) => {
                 str += " = " + require("mathjs").evaluate(str) + "";
                 stringify = "```\n" + str + "\n```";
                 edit();
-                str = "";
+                str = " ";
                 stringify = "```\n" + str + "\n```";
                 return;
               } catch (e) {
-                message.channel
-                  .send("Please mention an valid calculation!")
-                  .then((m) => m.delete({ timeout: 2000 }));
-
-                stringify = "```\n" + str + "\n```";
+                str = 'Invalid Question Entered'
+                stringify = '```\n' + str + '\n```'
+                edit()
+                str = ' '
+                stringify = '```\n' + str + '\n```'
               }
             }
             if (btn.id === calc_irrc) {
