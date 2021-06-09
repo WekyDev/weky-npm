@@ -20,6 +20,7 @@
 - [FastType](#fasttype)
 - [ChaosWords](#chaoswords)
 - [Snake](#snake)
+- [RockPaperScissors](#rockpaperscissors)
 - [ShuffleGuess](#shuffleguess)
 - [Sudo](#sudo)
 - [Randomize String](#randomizestring)
@@ -113,6 +114,20 @@ new Snake({
 
 ![Snake Showcase](https://cdn.discordapp.com/attachments/830003681402683415/851392057641009172/snake.gif)
 
+# RockPaperScissors
+```js
+const opponent = message.mentions.users.first();
+if(!opponent) return message.channel.send(`Please mention who you want to fight`);
+const { RPS } = require('weky')
+const game = new RPS({
+    message: message,
+    opponent: opponent, // NOT CHANGEABLE
+    challenger: message.author, // NOT CHANGEABLE
+    acceptMessage: "Click to fight with <@" + message.author + '>', // message sent to see if opponent accepts
+})
+game.start() // start the game
+```
+**This function requires [discord-buttons](https://www.npmjs.com/package/discord-buttons)**
 
 # FastType
 ```js
