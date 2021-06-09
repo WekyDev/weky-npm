@@ -44,7 +44,7 @@ module.exports = async (message) => {
     let empty_irrc = i(20)
     let calc_percent = i(20)
     // Buttons
-    let ac = new MessageButton().setLabel('C').setID(calculator_clear).setStyle('red')
+    let ac = new MessageButton().setLabel('AC').setID(calculator_clear).setStyle('red')
     let e1 = new MessageButton().setLabel('(').setID(calculator_e1).setStyle('blurple')
     let e2 = new MessageButton().setLabel(')').setID(calculator_e2).setStyle('blurple')
     let uppercase = new MessageButton().setLabel('^').setID(calculator_uppercase).setStyle('blurple')
@@ -69,7 +69,7 @@ module.exports = async (message) => {
     let empty = new MessageButton().setLabel('\u200b').setID(empty_irrc).setStyle('gray').setDisabled()
     let percent = new MessageButton().setLabel('%').setID(calc_percent).setStyle('blurple')
     // Lock
-    let qac = new MessageButton().setLabel('C').setID(calculator_clear).setStyle('red').setDisabled()
+    let qac = new MessageButton().setLabel('AC').setID(calculator_clear).setStyle('red').setDisabled()
     let qe1 = new MessageButton().setLabel('(').setID(calculator_e1).setStyle('blurple').setDisabled()
     let qe2 = new MessageButton().setLabel(')').setID(calculator_e2).setStyle('blurple').setDisabled()
     let quppercase = new MessageButton().setLabel('^').setID(calculator_uppercase).setStyle('blurple').setDisabled()
