@@ -105,6 +105,9 @@ v.edit(`I **re**flushed , it is \`${ress.result}\``,{component: row})
      .setID(this.idCancelButton)
      .setStyle(this.colorCancelButton)
      .setDisabled()
+      row = new MessageActionRow()
+     .addComponent(disbut)
+     .addComponent(cancel)
      v.edit(
        `Successfully stopped the game. Word was \`${this.word}\``,
        {component: row}
@@ -126,6 +129,9 @@ v.edit(`I **re**flushed , it is \`${ress.result}\``,{component: row})
     .setID(this.idCancelButton)
     .setStyle(this.colorCancelButton)
     .setDisabled()
+     row = new MessageActionRow()
+    .addComponent(disbut)
+    .addComponent(cancel)
     v.edit(
       `I shuffled a word, it is \`${res.result}\``,
       {component: row}
