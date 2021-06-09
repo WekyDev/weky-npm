@@ -3,6 +3,9 @@ module.exports = async (message) => {
     const {
         MessageButton
     } = require('discord-buttons')
+    const {
+        MessageEmbed
+    } = require('discord.js')
 
     function i(length) {
         var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -41,7 +44,7 @@ module.exports = async (message) => {
     let empty_irrc = i(20)
     let calc_percent = i(20)
     // Buttons
-    let ac = new MessageButton().setLabel('AC').setID(calculator_clear).setStyle('red')
+    let ac = new MessageButton().setLabel('C').setID(calculator_clear).setStyle('red')
     let e1 = new MessageButton().setLabel('(').setID(calculator_e1).setStyle('blurple')
     let e2 = new MessageButton().setLabel(')').setID(calculator_e2).setStyle('blurple')
     let uppercase = new MessageButton().setLabel('^').setID(calculator_uppercase).setStyle('blurple')
@@ -61,12 +64,12 @@ module.exports = async (message) => {
     let dot = new MessageButton().setLabel('.').setID(calculator_dot).setStyle('blurple')
     let equal = new MessageButton().setLabel('=').setID(calculator_equal).setStyle('green')
     let plus = new MessageButton().setLabel('+').setID(calculator_plus).setStyle('blurple')
-    let backspace = new MessageButton().setLabel('⌫').setID(calculator_backspace).setStyle('blurple')
+    let backspace = new MessageButton().setLabel('Del').setID(calculator_backspace).setStyle('red')
     let destroy = new MessageButton().setLabel('DC').setID(calc_irrc).setStyle('red')
     let empty = new MessageButton().setLabel('\u200b').setID(empty_irrc).setStyle('gray').setDisabled()
     let percent = new MessageButton().setLabel('%').setID(calc_percent).setStyle('blurple')
     // Lock
-    let qac = new MessageButton().setLabel('AC').setID(calculator_clear).setStyle('red').setDisabled()
+    let qac = new MessageButton().setLabel('C').setID(calculator_clear).setStyle('red').setDisabled()
     let qe1 = new MessageButton().setLabel('(').setID(calculator_e1).setStyle('blurple').setDisabled()
     let qe2 = new MessageButton().setLabel(')').setID(calculator_e2).setStyle('blurple').setDisabled()
     let quppercase = new MessageButton().setLabel('^').setID(calculator_uppercase).setStyle('blurple').setDisabled()
@@ -86,12 +89,21 @@ module.exports = async (message) => {
     let qdot = new MessageButton().setLabel('.').setID(calculator_dot).setStyle('blurple').setDisabled()
     let qequal = new MessageButton().setLabel('=').setID(calculator_equal).setStyle('green').setDisabled()
     let qplus = new MessageButton().setLabel('+').setID(calculator_plus).setStyle('blurple').setDisabled()
-    let qbackspace = new MessageButton().setLabel('⌫').setID(calculator_backspace).setStyle('blurple').setDisabled()
+    let qbackspace = new MessageButton().setLabel('Del').setID(calculator_backspace).setStyle('red').setDisabled()
     let qdestroy = new MessageButton().setLabel('DC').setID(calc_irrc).setStyle('red').setDisabled()
     let qpercent = new MessageButton().setLabel('%').setID(calc_percent).setStyle('blurple').setDisabled()
     //----------------------------------------------------------------------
     const filter = m => m.clicker.user.id === message.author.id;
-    message.channel.send(stringify, {
+
+    message.channel.send({
+        embed: new MessageEmbed()
+            .setAuthor(message.author.tag, message.author.displayAvatarURL({
+                dynamic: true
+            }))
+            .setTitle('Button Calculator')
+            .setDescription(stringify)
+            .setColor('BLURPLE')
+            .setTimestamp(),
         components: [{
                 type: 1,
                 components: [
@@ -125,7 +137,15 @@ module.exports = async (message) => {
         ]
     }).then(async (msg) => {
         async function edit() {
-            msg.edit(stringify, {
+            msg.edit({
+                embed: new MessageEmbed()
+                    .setAuthor(message.author.tag, message.author.displayAvatarURL({
+                        dynamic: true
+                    }))
+                    .setTitle('Button Calculator')
+                    .setDescription(stringify)
+                    .setColor('BLURPLE')
+                    .setTimestamp(),
                 components: [{
                         type: 1,
                         components: [
@@ -160,7 +180,15 @@ module.exports = async (message) => {
             })
         }
         async function lock() {
-            msg.edit(stringify, {
+            msg.edit({
+                embed: new MessageEmbed()
+                    .setAuthor(message.author.tag, message.author.displayAvatarURL({
+                        dynamic: true
+                    }))
+                    .setTitle('Button Calculator')
+                    .setDescription(stringify)
+                    .setColor('RED')
+                    .setTimestamp(),
                 components: [{
                         type: 1,
                         components: [
@@ -300,21 +328,28 @@ module.exports = async (message) => {
                     edit();
                     break;
                 case calculator_backspace:
-                    str = str.split("");
-                    str.pop();
-                    str = str.join("");
+                    if (str === " " || str === "" || str === null | str === undefined) {
+                        return
+                    } else {
+                        str = str.split("");
+                        str.pop();
+                        str = str.join("");
 
-                    stringify = "```\n" + str + "\n```";
-                    edit();
-                    break;
-                case: calc_percent:
-                    str += "%";
-                    stringify = "```\n" + str + "\n```";
-                    edit();
-                    break;
+                        stringify = "```\n" + str + "\n```";
+                        edit();
+                        break;
+                    }
+                    case calc_percent:
+                        str += "%";
+                        stringify = "```\n" + str + "\n```";
+                        edit();
+                        break;
             }
 
             if (btn.id === calculator_equal) {
+                if (str === " " || str === "" || str === null || str === undefined) {
+                    return;
+                } else {
                     try {
                         str += ' = ' + require('mathjs').evaluate(str)
                         stringify = '```\n' + str + '\n```'
@@ -328,6 +363,7 @@ module.exports = async (message) => {
                         str = ' '
                         stringify = '```\n' + str + '\n```'
                     }
+                }
             } else if (btn.id === calc_irrc) {
                 str = 'Calculator Disabled'
                 stringify = '```\n' + str + '\n```'
