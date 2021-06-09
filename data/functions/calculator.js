@@ -328,7 +328,7 @@ module.exports = async (message) => {
                     edit();
                     break;
                 case calculator_backspace:
-                    if (str === " " || str === "" || str === null | str === undefined) {
+                    if (str === " " || str === "" || str === null || str === undefined) {
                         return
                     } else {
                         str = str.split("");
