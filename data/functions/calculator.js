@@ -64,7 +64,7 @@ module.exports = async (message) => {
     let dot = new MessageButton().setLabel('.').setID(calculator_dot).setStyle('blurple')
     let equal = new MessageButton().setLabel('=').setID(calculator_equal).setStyle('green')
     let plus = new MessageButton().setLabel('+').setID(calculator_plus).setStyle('blurple')
-    let backspace = new MessageButton().setLabel('Del').setID(calculator_backspace).setStyle('red')
+    let backspace = new MessageButton().setLabel('⌫').setID(calculator_backspace).setStyle('red')
     let destroy = new MessageButton().setLabel('DC').setID(calc_irrc).setStyle('red')
     let empty = new MessageButton().setLabel('\u200b').setID(empty_irrc).setStyle('gray').setDisabled()
     let percent = new MessageButton().setLabel('%').setID(calc_percent).setStyle('blurple')
@@ -89,7 +89,7 @@ module.exports = async (message) => {
     let qdot = new MessageButton().setLabel('.').setID(calculator_dot).setStyle('blurple').setDisabled()
     let qequal = new MessageButton().setLabel('=').setID(calculator_equal).setStyle('green').setDisabled()
     let qplus = new MessageButton().setLabel('+').setID(calculator_plus).setStyle('blurple').setDisabled()
-    let qbackspace = new MessageButton().setLabel('Del').setID(calculator_backspace).setStyle('red').setDisabled()
+    let qbackspace = new MessageButton().setLabel('⌫').setID(calculator_backspace).setStyle('red').setDisabled()
     let qdestroy = new MessageButton().setLabel('DC').setID(calc_irrc).setStyle('red').setDisabled()
     let qpercent = new MessageButton().setLabel('%').setID(calc_percent).setStyle('blurple').setDisabled()
     //----------------------------------------------------------------------
