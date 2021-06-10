@@ -93,3 +93,5 @@ module.exports.TicTacToe = require("./data/class/TicTacToe");
 module.exports.Calculator = require('./data/functions/calculator');
 
 module.exports.Snake = require('./data/class/Snake');
+
+module.exports.RPS = require('./data/class/rockpaperscissors');
