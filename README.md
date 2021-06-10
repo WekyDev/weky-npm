@@ -123,7 +123,7 @@ const game = new RPS({
     message: message,
     opponent: opponent, // NOT CHANGEABLE
     challenger: message.author, // NOT CHANGEABLE
-    acceptMessage: "Click to fight with <@" + message.author + '>', // message sent to see if opponent accepts
+    acceptMessage: "Click to fight with <@" + message.author + '> at RPS!', // message sent to see if opponent accepts
 })
 game.start() // start the game
 ```
