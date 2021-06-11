@@ -78,20 +78,20 @@ module.exports={
                 return (newStr)
     }
 }
-module.exports.fight = require("./data/class/Fight");
+module.exports.fight = require("./src/class/Fight");
 
-module.exports.sudo = require("./data/class/Sudo");
+module.exports.sudo = require("./src/class/Sudo");
 
-module.exports.ShuffleGuess = require("./data/class/ShuffleGuess");
+module.exports.ShuffleGuess = require("./src/class/ShuffleGuess");
 
-module.exports.FastType = require("./data/class/FastType");
+module.exports.FastType = require("./src/class/FastType");
 
-module.exports.ChaosWords = require("./data/class/ChaosWords");
+module.exports.ChaosWords = require("./src/class/ChaosWords");
 
-module.exports.TicTacToe = require("./data/class/TicTacToe");
+module.exports.TicTacToe = require("./src/class/TicTacToe");
 
-module.exports.Calculator = require('./data/functions/calculator');
+module.exports.Calculator = require('./src/functions/calculator');
 
-module.exports.Snake = require('./data/class/Snake');
+module.exports.Snake = require('./src/class/Snake');
 
-module.exports.RPS = require('./data/class/RockPaperScissors');
+module.exports.RPS = require('./src/class/RockPaperScissors');
