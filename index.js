@@ -95,3 +95,5 @@ module.exports.Calculator = require('./src/functions/calculator');
 module.exports.Snake = require('./src/class/Snake');
 
 module.exports.RPS = require('./src/class/RockPaperScissors');
+
+module.exports.WouldYouRather = require('./src/functions/WouldYouRather');

@@ -15,6 +15,7 @@
 - [Installation](#installation)
 - [Examples](#examples)
 - [Calculator](#calculator)
+- [WouldYouRather](#wouldyourather)
 - [TicTacToe](#tictactoe)
 - [Fight](#fight)
 - [FastType](#fasttype)
@@ -87,6 +88,14 @@ battle.start(); // start da battle
 ![Fight Showcase Win](https://i.imgur.com/GKN38AR.gif)
 
 ![Fight Showcase Cancel](https://i.imgur.com/nfElWHj.gif)
+
+# Would You Rather
+```js
+	const { WouldYouRather } = require('weky')
+	await WouldYouRather(message)
+```
+**This function requires [discord-buttons](https://www.npmjs.com/package/discord-buttons)**
+![Would You Rather Showcase](https://cdn.discordapp.com/attachments/812590454821355543/853171935684722708/wyr.gif)
 
 # Snake
 ```js
