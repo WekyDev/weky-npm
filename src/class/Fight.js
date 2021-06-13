@@ -103,8 +103,8 @@ async start() {
       { member: challenger, health: challengerHealth, lastAttack: challengerLastAttack },
       { member: oppenent, health: oppenentHealth, lastAttack: oppenentLastAttack }
     ];
-
-    let player = 0;
+let xd = Math.floor(Math.random() * gameData.length)
+    let player = xd;
 
     const checkHealth = (member) => {
       if (gameData[member].health <= 0) return true;
@@ -129,7 +129,7 @@ async start() {
     .addComponent(btn2)
     .addComponent(btn3)
 
-    let DaBaby = await this.message.channel.send(`${challenger}, you go first`, {component: row});
+    let DaBaby = await this.message.channel.send(`${gameData[xd].member}, you go first`, {component: row});
     const gameFilter = m => m.clicker.user.id === challenger.id || m.clicker.user.id === oppenent.id;
     const gameCollector = DaBaby.createButtonCollector(gameFilter);
 

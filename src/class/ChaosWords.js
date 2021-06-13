@@ -47,6 +47,7 @@ class ChaosWords {
         let r = 0
         let tries = 0
         let b = this.words
+        let guessed = []
             var array = []
                     var randomChars = 'abcdefghijklmnopqrstuvwxyz';
                 for ( var i = 0; i < this.charGenerated; i++ ) {
@@ -71,11 +72,12 @@ class ChaosWords {
             var game = await this.message.channel.createMessageCollector(filter)
             game.on('collect', async msg => {
                 
-            if(b.includes(msg.content.toLowerCase())){
+            if(b.includes(msg.content.toLowerCase()) && !guessed.includes(msg.content.toLowerCase())){
                 r++
     let pos = array.indexOf(msg.content.toLowerCase())
     array.splice(pos, 1)
     array.splice(pos, 0, '**'+msg.content.toLowerCase()+'**')
+    guessed.push(msg.content.toLowerCase())
                 mes.edit((new dicord.MessageEmbed()
                 .setTitle(this.embedTitle)
                 .setDescription(array.join(''))

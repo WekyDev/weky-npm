@@ -65,7 +65,8 @@ class TicTacToe {
       let c22 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
       let c33 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
       
-      let player = 0;
+      let xd = Math.floor(Math.random() * gameData.length)
+      let player = xd;
       const author = this.message.author.id 
       const member = this.opponent
       const authorName = this.message.author.username 
@@ -77,7 +78,7 @@ class TicTacToe {
       } else if (midDuel.has(member.id)) { 
           return this.message.channel.send(`<@${member.id}> is currently in a duel`)
       } if (member.id === this.message.client.user.id) { 
-          return this.message.channel.send("You can't duel me lmfao")
+          return this.message.channel.send("You can't duel me.")
       }
       const gameData = [
         { member: this.message.author, em: this.xEmoji, color: this.xColor },
@@ -201,6 +202,15 @@ class TicTacToe {
                     console.log(e)
                   }
                   player = (player + 1) % 2;
+                  if(player == 0){
+                  Embed = new Discord.MessageEmbed()
+                  .setDescription(`🎮 **${authorName}** VS ${this.opponent.username} 🎮`)
+                  .setColor(3426654)
+                  }else{
+                  Embed = new Discord.MessageEmbed()
+                  .setDescription(`🎮 ${authorName} VS **${this.opponent.username}** 🎮`)
+                  .setColor(3426654)
+                  }
                     A1 = new dis.MessageButton()
                     .setID(a11)
                     .setStyle(gameData[player].color)
@@ -276,6 +286,15 @@ class TicTacToe {
                     console.log(e)
                   }     
                   player = (player + 1) % 2;
+                  if(player == 0){
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 **${authorName}** VS ${this.opponent.username} 🎮`)
+                    .setColor(3426654)
+                    }else{
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 ${authorName} VS **${this.opponent.username}** 🎮`)
+                    .setColor(3426654)
+                    }
                  A2 = new dis.MessageButton()
                     .setID(a22)
                     .setStyle(gameData[player].color)
@@ -350,7 +369,16 @@ class TicTacToe {
                       }                  }catch(e){
                     console.log(e)
                   }  
-                  player = (player + 1) % 2;             
+                  player = (player + 1) % 2;     
+                  if(player == 0){
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 **${authorName}** VS ${this.opponent.username} 🎮`)
+                    .setColor(3426654)
+                    }else{
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 ${authorName} VS **${this.opponent.username}** 🎮`)
+                    .setColor(3426654)
+                    }        
                    A3 = new dis.MessageButton()
                     .setID(a33)
                     .setStyle(gameData[player].color)
@@ -427,6 +455,15 @@ class TicTacToe {
                     console.log(e)
                   }
                   player = (player + 1) % 2;
+                  if(player == 0){
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 **${authorName}** VS ${this.opponent.username} 🎮`)
+                    .setColor(3426654)
+                    }else{
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 ${authorName} VS **${this.opponent.username}** 🎮`)
+                    .setColor(3426654)
+                    }
                     B1 = new dis.MessageButton()
                     .setID(b11)
                     .setStyle(gameData[player].color)
@@ -502,6 +539,15 @@ class TicTacToe {
                     console.log(e)
                   }
                   player = (player + 1) % 2;
+                  if(player == 0){
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 **${authorName}** VS ${this.opponent.username} 🎮`)
+                    .setColor(3426654)
+                    }else{
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 ${authorName} VS **${this.opponent.username}** 🎮`)
+                    .setColor(3426654)
+                    }
                     B2 = new dis.MessageButton()
                     .setID(b22)
                     .setStyle(gameData[player].color)
@@ -577,6 +623,15 @@ class TicTacToe {
                     console.log(e)
                   }
                   player = (player + 1) % 2;
+                  if(player == 0){
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 **${authorName}** VS ${this.opponent.username} 🎮`)
+                    .setColor(3426654)
+                    }else{
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 ${authorName} VS **${this.opponent.username}** 🎮`)
+                    .setColor(3426654)
+                    }
                     B3 = new dis.MessageButton()
                     .setID(b33)
                     .setStyle(gameData[player].color)
@@ -652,6 +707,15 @@ class TicTacToe {
                     console.log(e)
                   }
                   player = (player + 1) % 2;
+                  if(player == 0){
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 **${authorName}** VS ${this.opponent.username} 🎮`)
+                    .setColor(3426654)
+                    }else{
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 ${authorName} VS **${this.opponent.username}** 🎮`)
+                    .setColor(3426654)
+                    }
                     C1 = new dis.MessageButton()
                     .setID(c11)
                     .setStyle(gameData[player].color)
@@ -727,6 +791,15 @@ class TicTacToe {
                     console.log(e)
                   }
                   player = (player + 1) % 2;
+                  if(player == 0){
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 **${authorName}** VS ${this.opponent.username} 🎮`)
+                    .setColor(3426654)
+                    }else{
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 ${authorName} VS **${this.opponent.username}** 🎮`)
+                    .setColor(3426654)
+                    }
                     C2 = new dis.MessageButton()
                     .setID(c22)
                     .setStyle(gameData[player].color)
@@ -808,6 +881,15 @@ class TicTacToe {
                     console.log(e)
                   }
                   player = (player + 1) % 2;
+                  if(player == 0){
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 **${authorName}** VS ${this.opponent.username} 🎮`)
+                    .setColor(3426654)
+                    }else{
+                    Embed = new Discord.MessageEmbed()
+                    .setDescription(`🎮 ${authorName} VS **${this.opponent.username}** 🎮`)
+                    .setColor(3426654)
+                    }
                     C3 = new dis.MessageButton()
                     .setID(c33)
                     .setStyle(gameData[player].color)
