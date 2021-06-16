@@ -55,6 +55,7 @@ class TicTacToe {
         }
         return result
       }
+
       let a11 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
       let a22 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
       let a33 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
@@ -64,12 +65,16 @@ class TicTacToe {
       let c11 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
       let c22 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
       let c33 = (getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4)+'-'+getRandomString(4))
-      
-      let xd = Math.floor(Math.random() * gameData.length)
-      let player = xd;
       const author = this.message.author.id 
       const member = this.opponent
       const authorName = this.message.author.username 
+      const gameData = [
+        { member: this.message.author, em: this.xEmoji, color: this.xColor },
+        { member: member, em: this.oEmoji, color: this.oColor }
+      ];
+      let xd = Math.floor(Math.random() * gameData.length)
+      let player = xd;
+
       
       const midDuel = new Set()
                 
@@ -80,14 +85,18 @@ class TicTacToe {
       } if (member.id === this.message.client.user.id) { 
           return this.message.channel.send("You can't duel me.")
       }
-      const gameData = [
-        { member: this.message.author, em: this.xEmoji, color: this.xColor },
-        { member: member, em: this.oEmoji, color: this.oColor }
-      ];
+
       const Discord = require('discord.js')
-      let Embed = new Discord.MessageEmbed()
-      .setDescription(`🎮 ${authorName} VS ${this.opponent.username} 🎮`)
-      .setColor(3426654)
+      let Embed;
+      if(player == 0){
+        Embed = new Discord.MessageEmbed()
+        .setDescription(`🎮 **${authorName}** VS ${this.opponent.username} 🎮`)
+        .setColor(3426654)
+        }else{
+        Embed = new Discord.MessageEmbed()
+        .setDescription(`🎮 ${authorName} VS **${this.opponent.username}** 🎮`)
+        .setColor(3426654)
+        }
       const dis = require('discord-buttons')
       let A1 = new dis.MessageButton()
       .setID(a11)
