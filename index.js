@@ -97,3 +97,5 @@ module.exports.Snake = require('./src/class/Snake');
 module.exports.RPS = require('./src/class/RockPaperScissors');
 
 module.exports.WouldYouRather = require('./src/functions/WouldYouRather');
+
+module.exports.Slots = require("./src/class/slots")
