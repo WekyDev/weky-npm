@@ -42,9 +42,9 @@ class slots {
         const slotThree = slots[Math.floor(Math.random() * slots.length)];
 
         if(slotOne === slotTwo && slotOne === slotThree) {
-            message.channel.send(`**>** ${slotOne} | ${slotTwo} | ${slotThree} **<**\n${this.winMessage}`)
+            this.message.channel.send(`**>** ${slotOne} | ${slotTwo} | ${slotThree} **<**\n${this.winMessage}`)
         } else {
-            message.channel.send(`**>** ${slotOne} | ${slotTwo} | ${slotThree} **<**\n${this.loseMessage}`)
+            this.message.channel.send(`**>** ${slotOne} | ${slotTwo} | ${slotThree} **<**\n${this.loseMessage}`)
         }
     }
 }
