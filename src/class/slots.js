@@ -38,11 +38,13 @@ class slots {
         const slots = [this.emojiOne, this.emojiTwo, this.emojiThree]
 
         const slotOne = slots[Math.floor(Math.random() * slots.length)];
+        const slotTwo = slots[Math.floor(Math.random() * slots.length)];
+        const slotThree = slots[Math.floor(Math.random() * slots.length)];
 
-        if(slotOne) {
-            message.channel.send(this.winMessage)
+        if(slotOne === slotTwo && slotOne === slotThree) {
+            message.channel.send(`**>** ${slotOne} | ${slotTwo} | ${slotThree} **<**\n${this.winMessage}`)
         } else {
-            message.channel.send(this.loseMessage)
+            message.channel.send(`**>** ${slotOne} | ${slotTwo} | ${slotThree} **<**\n${this.loseMessage}`)
         }
     }
 }
