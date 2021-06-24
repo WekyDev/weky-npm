@@ -99,3 +99,7 @@ module.exports.RPS = require('./src/class/RockPaperScissors');
 module.exports.WouldYouRather = require('./src/functions/WouldYouRather');
 
 module.exports.Slots = require("./src/class/slots")
+
+module.exports.ButtonPages = require("./src/functions/ButtonPages")
+
+module.exports.convert = require("./src/functions/convert")
