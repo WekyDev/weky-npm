@@ -35,6 +35,29 @@ $ npm i weky
 ```
 If you want to use functions with buttons, you have to install [discord-buttons](https://www.npmjs.com/package/discord-buttons) too
 
+# License
+
+Weky NPM is licensed under the terms of [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://github.com/WekyDev/weky-npm/edit/main/LICENSE.md) ("CC-BY-NC-SA-4.0"). Commercial use is not allowed under this license. This includes any kind of revenue made with or based upon the software, even donations.
+
+The CC-BY-NC-SA-4.0 allows you to:
+
+ Share
+ ==
+-- copy and redistribute the material in any medium or format.
+ Adapt 
+ ==
+-- remix, transform, and build upon the material.
+--------------------------------------------------------------
+
+Under the following terms:
+
+- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+- **NonCommercial** — You may not use the material for commercial purposes.
+- **ShareAlike** — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
+- 
+--------------------------------------------------------------
+More information can be found [here](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+
 # Examples
 
 # Calculator
