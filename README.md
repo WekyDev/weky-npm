@@ -48,6 +48,7 @@ The CC-BY-NC-SA-4.0 allows you to:
  Adapt 
  ==
 -- remix, transform, and build upon the material.
+
 --------------------------------------------------------------
 
 Under the following terms:
