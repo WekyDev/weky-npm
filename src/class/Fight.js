@@ -87,7 +87,7 @@ async start() {
   const component = new MessageActionRow().addComponent([acceptbutton, denybutton]);
   const question = await this.message.channel.send(this.acceptMessage, { component: component });
 
-  const filter = async (button) => await button.clicker.user.id === this.challenger.id;
+  const filter = async (button) => await button.clicker.user.id === this.opponent.id;
   const Collector = await question.createButtonCollector(filter, { max: 1, time: 60000 });
   Collector.on('end', async (msg, reason) => {
     if(reason === 'time') return this.message.channel.send('Since the opponent didnt answer, imma end this.')
