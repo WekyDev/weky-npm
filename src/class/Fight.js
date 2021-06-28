@@ -1,3 +1,4 @@
+const { MessageButton, MessageActionRow } = require('discord-buttons')
 class fight {
 
   /**
@@ -81,18 +82,20 @@ async start() {
 
   if(oppenent.bot) return this.message.channel.send("You can't fight bots.")
   if(oppenent.id === challenger.id) return this.message.channel.send("You can't fight yourself.")
+  const acceptbutton = new MessageButton().setStyle('green').setLabel('accept').setID('accept');
+  const denybutton = new MessageButton().setStyle('red').setLabel('deny').setID('deny')
+  const component = new MessageActionRow().addComponent([acceptbutton, denybutton]);
+  const question = await this.message.channel.send(this.acceptMessage, { component: component });
 
-  const question = await this.message.channel.send(this.acceptMessage);
-
-  ['✅', '❌'].forEach(async el => await question.react(el));
-
-  const filter = (reaction, user) => ['✅', '❌'].includes(reaction.emoji.name) && user.id === this.opponent.id;
-
-  const response = await question.awaitReactions(filter, { max: 1, time: 60000 });
-
-  const reaction = response.first();
-  try {
-    if (reaction.emoji.name === '❌') { return question.edit("Cancelled this fight."); } else {
+  const filter = async (button) => await button.clicker.user.id === this.challenger.id;
+  const Collector = await question.createButtonCollector(filter, { max: 1, time: 60000 });
+  Collector.on('end', async (msg, reason) => {
+    if(reason === 'time') return this.message.channel.send('Since the opponent didnt answer, imma end this.')
+  });
+  Collector.on('collect', async (b) => {
+    b.defer();
+    if(b.id === 'deny') {return question.edit("Cancelled this fight.");}
+ else {
     const challengerHealth = 100;
     const oppenentHealth = 100;
 
@@ -111,7 +114,6 @@ let xd = Math.floor(Math.random() * gameData.length)
       else return false;
     };
 
-    const { MessageButton, MessageActionRow } = require('discord-buttons')
     let btn1 = new MessageButton()
     .setLabel(this.hitButtonText)
     .setID(this.hit)
@@ -246,11 +248,8 @@ let xd = Math.floor(Math.random() * gameData.length)
         }
       }
     });
-  }  
-} catch {
-  this.message.channel.send('Since the opponent didnt answer, imma end this.')
-}
-}
-}
+  }
+});
+}};
 
 module.exports = fight;
