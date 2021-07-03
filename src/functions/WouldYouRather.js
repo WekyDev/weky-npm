@@ -62,7 +62,7 @@ module.exports = async (message, apikey) => {
       const gameFilter = (me) => me.clicker.user.id === message.author.id;
       const gameCollector = m.createButtonCollector(gameFilter);
       gameCollector.on("collect", (ae) => {
-        ae.defer();
+        ae.reply.defer();
         if (ae.id === id1) {
           btn = new disbut.MessageButton()
             .setStyle("blurple")

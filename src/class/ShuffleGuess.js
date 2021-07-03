@@ -88,12 +88,12 @@ if(msg.author.id !== this.message.author.id) return
 this.client.on('clickButton', async btn => {
   if(btn.clicker.member.id !== this.message.author.id) return
   if(btn.id === this.idReshuffleButton){
-    btn.defer()
+    btn.reply.defer()
 const ress = await (await (fetch(`https://api.monkedev.com/fun/shuffle?content=${encodeURIComponent(this.word)}&uid=${uuid}`))).json();
 v.edit(`I **re**flushed , it is \`${ress.result}\``,{component: row})
   }
   if(btn.id === this.idCancelButton){
-    btn.defer()
+    btn.reply.defer()
     gameCollector.stop()
       disbut = new MessageButton()
      .setLabel(this.messageReshuffleButton)

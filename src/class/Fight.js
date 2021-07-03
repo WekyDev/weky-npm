@@ -96,6 +96,7 @@ async start() {
     const challengerHealth = 100;
     const oppenentHealth = 100;
 
+
     const challengerLastAttack = 'heal';
     const oppenentLastAttack = 'heal';
 
@@ -140,8 +141,8 @@ let xd = Math.floor(Math.random() * gameData.length)
           const btn = msg.clicker.member;
 
           if (msg.id === this.hit) {
-            msg.defer()
-            if(btn.id !== gameData[player].member.id) return msg.reply.send(gameData[player].member + 'please wait for enemy\'s move...', true)
+            msg.reply.defer()
+            if(btn.id !== gameData[player].member.id) return msg.message.update(gameData[player].member + 'please wait for enemy\'s move...', true)
             let randNumb = Math.floor(Math.random() * (this.options.dmgMax - this.options.dmgMin) + this.options.dmgMin) || Math.floor(Math.random() * (60 - 12) + 12);
             const tempPlayer = (player + 1) % 2;
             if (gameData[tempPlayer].lastAttack === 'heal') randNumb = Math.floor(randNumb / 2);
@@ -155,8 +156,8 @@ let xd = Math.floor(Math.random() * gameData.length)
             player = (player + 1) % 2;
           } else if (msg.id === this.heal) {
             
-            msg.defer()
-            if(btn.id !== gameData[player].member.id) return msg.reply.send(gameData[player].member + 'please wait for enemy\'s move...', true)
+            msg.reply.defer()
+            if(btn.id !== gameData[player].member.id) return msg.message.update(gameData[player].member + 'please wait for enemy\'s move...', true)
 
             let randrNumb = Math.floor(Math.random() * (this.options.healMax - this.options.healMin) + this.options.healMin) || Math.floor(Math.random() * (20 - 12) + 12);
             const tempPlayer = (player + 1) % 2;
@@ -171,8 +172,8 @@ let xd = Math.floor(Math.random() * gameData.length)
             player = (player + 1) % 2;
           } else if (msg.id === this.cancel) {
 
-            msg.defer()
-            if(btn.id !== gameData[player].member.id) return msg.reply.send(gameData[player].member + 'please wait for enemy\'s move...', true)
+            msg.reply.defer()
+            if(btn.id !== gameData[player].member.id) return msg.message.update(gameData[player].member + 'please wait for enemy\'s move...', true)
             btn1 = new MessageButton()
             .setLabel(this.hitButtonText)
             .setID(this.hit)
@@ -198,7 +199,7 @@ let xd = Math.floor(Math.random() * gameData.length)
           }
 
           if (checkHealth(player)) {
-            msg.defer()
+            msg.reply.defer()
             btn1 = new MessageButton()
             .setLabel(this.hitButtonText)
             .setID(this.hit)
@@ -224,7 +225,7 @@ let xd = Math.floor(Math.random() * gameData.length)
           }
         } else {
 
-            msg.defer()
+            msg.reply.defer()
             btn1 = new MessageButton()
             .setLabel(this.hitButtonText)
             .setID(this.hit)

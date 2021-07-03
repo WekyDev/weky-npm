@@ -141,7 +141,7 @@ class Snake {
     const filter = m => m.clicker.user.id == this.options.message.author.id
 const collector = m.createButtonCollector(filter)
 collector.on('collect', async btn => {
-    btn.defer()
+    btn.reply.defer()
                 const snakeHead = this.snake[0];
                 const nextPos = { x: snakeHead.x, y: snakeHead.y };
                 if (btn.id === a1) {

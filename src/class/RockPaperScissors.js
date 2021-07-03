@@ -96,7 +96,7 @@ class RPS {
                             cllChose = true
                             if(button.id === this.rock) {
                                 cllChoice = "🤜"
-                                button.reply.send("You chose 🤜", { ephemeral: true })
+                                button.message.update("You chose 🤜", { ephemeral: true })
 
                                 if(cllChose && oppChose === true) {
                                     
@@ -134,7 +134,7 @@ class RPS {
 
                             } else if(button.id === this.paper) {
                                 cllChoice = "✋"
-                                button.reply.send("You chose ✋", { ephemeral: true })
+                                button.message.update("You chose ✋", { ephemeral: true })
 
                                 if(cllChose && oppChose === true) {
                                     
@@ -172,7 +172,7 @@ class RPS {
 
                             } else if(button.id === this.scissors) {
                                 cllChoice = "✌️"
-                                button.reply.send("You chose ✌️", { ephemeral: true })
+                                button.message.update("You chose ✌️", { ephemeral: true })
 
                                 if(cllChose && oppChose === true) {
                                     
@@ -214,7 +214,7 @@ class RPS {
                             oppChose = true
                             if(button.id === this.rock) {
                                 oppChoice = "🤜"
-                                button.reply.send("You chose 🤜", { ephemeral: true })
+                                button.message.update("You chose 🤜", { ephemeral: true })
 
                                 if(cllChose && oppChose === true) {
                                     
@@ -252,7 +252,7 @@ class RPS {
 
                             } else if(button.id === this.paper) {
                                 oppChoice = "✋"
-                                button.reply.send("You chose ✋", { ephemeral: true })
+                                button.message.update("You chose ✋", { ephemeral: true })
 
                                 if(cllChose && oppChose === true) {
                                     
@@ -290,7 +290,7 @@ class RPS {
 
                             } else if(button.id === this.scissors) {
                                 oppChoice = "✌️"
-                                button.reply.send("You chose ✌️", { ephemeral: true })
+                                button.message.update("You chose ✌️", { ephemeral: true })
 
                                 if(cllChose && oppChose === true) {
                                     

@@ -158,9 +158,9 @@ class TicTacToe {
       
               gameCollector.on('collect', async btn => {
                 if(btn.id == a11 && gameData[player].member.id === btn.clicker.user.id){
-                  btn.defer()
+                  btn.reply.defer()
                   if (btn.label == this.oEmoji || btn.label == this.xEmoji) { // User tries to place at an already claimed spot
-                    btn.reply.send('That spot is already occupied.')
+                    btn.message.update('That spot is already occupied.')
                   } else {
                   try{
                     a1 = gameData[player].em
@@ -242,9 +242,9 @@ class TicTacToe {
       
                 }
                 }else if(btn.id == a22 && gameData[player].member.id === btn.clicker.user.id){
-                  btn.defer()
+                  btn.reply.defer()
                   if (btn.label == this.oEmoji || btn.label == this.xEmoji) { // User tries to place at an already claimed spot
-                    btn.reply.send('That spot is already occupied.')
+                    btn.message.update('That spot is already occupied.')
                   } else {
                   try{
                     a2 = gameData[player].em
@@ -326,9 +326,9 @@ class TicTacToe {
       
                 }
                 }else if(btn.id == a33 && gameData[player].member.id === btn.clicker.user.id){
-                  btn.defer()
+                  btn.reply.defer()
                   if (btn.label == this.oEmoji || btn.label == this.xEmoji) { // User tries to place at an already claimed spot
-                    btn.reply.send('That spot is already occupied.')
+                    btn.message.update('That spot is already occupied.')
                   } else {
                   try{
                     a3 = gameData[player].em
@@ -410,9 +410,9 @@ class TicTacToe {
       
                 }
                 }else if(btn.id == b11 && gameData[player].member.id === btn.clicker.user.id){
-                  btn.defer()
+                  btn.reply.defer()
                   if (btn.label == this.oEmoji || btn.label == this.xEmoji) { // User tries to place at an already claimed spot
-                    btn.reply.send('That spot is already occupied.')
+                    btn.message.update('That spot is already occupied.')
                   } else {
       
                   try{
@@ -495,9 +495,9 @@ class TicTacToe {
       
                 }
                 }else if(btn.id == b22 && gameData[player].member.id === btn.clicker.user.id){
-                  btn.defer()
+                  btn.reply.defer()
                   if (btn.label == this.oEmoji || btn.label == this.xEmoji) { // User tries to place at an already claimed spot
-                    btn.reply.send('That spot is already occupied.')
+                    btn.message.update('That spot is already occupied.')
                   } else {
                   try{
                     b2 = gameData[player].em
@@ -579,9 +579,9 @@ class TicTacToe {
       
                 }
                 }else if(btn.id == b33 && gameData[player].member.id === btn.clicker.user.id){
-                  btn.defer()
+                  btn.reply.defer()
                   if (btn.label == this.oEmoji || btn.label == this.xEmoji) { // User tries to place at an already claimed spot
-                    btn.reply.send('That spot is already occupied.')
+                    btn.message.update('That spot is already occupied.')
                   } else {
                   try{
                     b3 = gameData[player].em
@@ -663,9 +663,9 @@ class TicTacToe {
       
                 }
                 }else if(btn.id == c11 && gameData[player].member.id === btn.clicker.user.id){
-                  btn.defer()
+                  btn.reply.defer()
                   if (btn.label == this.oEmoji || btn.label == this.xEmoji) { // User tries to place at an already claimed spot
-                    btn.reply.send('That spot is already occupied.')
+                    btn.message.update('That spot is already occupied.')
                   } else {
                   try{
                     c1 = gameData[player].em
@@ -747,9 +747,9 @@ class TicTacToe {
       
                 }
                 }else if(btn.id == c22 && gameData[player].member.id === btn.clicker.user.id){
-                  btn.defer()
+                  btn.reply.defer()
                   if (btn.label == this.oEmoji || btn.label == this.xEmoji) { // User tries to place at an already claimed spot
-                    btn.reply.send('That spot is already occupied.')
+                    btn.message.update('That spot is already occupied.')
                   } else {
                   try{
                     c2 = gameData[player].em
@@ -831,9 +831,9 @@ class TicTacToe {
                   
                 }
                 }else if(btn.id == c33 && gameData[player].member.id === btn.clicker.user.id){
-                  btn.defer()
+                  btn.reply.defer()
                   if (btn.label == this.oEmoji || btn.label == this.xEmoji) { // User tries to place at an already claimed spot
-                    btn.reply.send('That spot is already occupied.')
+                    btn.message.update('That spot is already occupied.')
                   } else {
                   try{
                     c3 = gameData[player].em
@@ -920,7 +920,7 @@ class TicTacToe {
                   })
                 }
               }else {
-                return btn.reply.send('Wait for opponent.', true)
+                return btn.message.update('Wait for opponent.', true)
               }
                 
       

@@ -226,10 +226,10 @@ module.exports = async (message) => {
 
         calc.on('collect', async btn => {
             if (btn.clicker.user.id !== message.author.id) {
-                return btn.defer()
+                return btn.reply.defer()
             }
 
-            btn.defer()
+            btn.reply.defer()
 
             switch (btn.id) {
                 case calculator_0:
