@@ -1,6 +1,6 @@
 {
   "name": "weky",
-  "version": "2.0.9",
+  "version": "2.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "discord.js-games"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
     "discord-buttons": "^3.0.1",
     "mathjs": "^9.4.2",
