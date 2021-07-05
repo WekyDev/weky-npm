@@ -1,99 +1,117 @@
-const letters = {
-    a: "ɐ",
-    b: "q",
-    c: "ɔ",
-    d: "p",
-    e: "ǝ",
-    f: "ɟ",
-    g: "ƃ",
-    h: "ɥ",
-    i: "ᴉ",
-    j: "ɾ",
-    k: "ʞ",
-    l: "l",
-    m: "ɯ",
-    n: "u",
-    o: "o",
-    p: "d",
-    q: "b",
-    r: "ɹ",
-    s: "s",
-    t: "ʇ",
-    u: "n",
-    v: "ʌ",
-    w: "ʍ",
-    x: "x",
-    y: "ʎ",
-    z: "z",
-    ////////////////
-    A: "∀",
-    B: "q",
-    C: "Ɔ",
-    D: "p",
-    E: "Ǝ",
-    F: "Ⅎ",
-    G: "פ",
-    H: "H",
-    I: "I",
-    J: "ſ",
-    K: "ʞ",
-    L: "˥",
-    M: "W",
-    N: "N",
-    O: "O",
-    P: "Ԁ",
-    Q: "Q",
-    R: "ɹ",
-    S: "S",
-    T: "┴",
-    U: "∩",
-    V: "Λ",
-    W: "M",
-    X: "X",
-    Y: "⅄",
-    Z: "Z",
-}
-module.exports={
-    randomizeNumber: function(start,end){
-        if(!start) throw new TypeError("A minimum number was not specified.")
-        if(!end) throw new TypeError("A maximum number was not specified.")
-        let res = Math.floor(Math.random() * (end - start + 1) + start)
-        return res
-    },
-    randomizeString: function(array){
-        if(!array) throw new TypeError("A array was not specified.")
-        let res = Math.floor(Math.random() * array.length)
-        return array[res]
-    },
-    flip: function (str) {
-            if(!str) throw new TypeError("A string was not specified.")
-                let newStr = '';
-                for (let i = str.length - 1; i  >= 0; i--) {
-                    if(str[i] === " ") newStr += " "
-                    for (const letter of Object.keys(letters)){
-                        var flipped = letters[letter]
-                        if(str[i] === letter) newStr += flipped					
-                    }
-                }
-                return (newStr)
-    }
-}
-module.exports.fight = require("./src/class/Fight");
+/* eslint-disable no-useless-escape */
+const flip = require('./data/flip.js');
+const tiny = require('./data/tiny.js');
+const bent = require('./data/bent.js');
+const copy = require('./data/copy.js');
 
-module.exports.sudo = require("./src/class/Sudo");
+module.exports = {
+	bent: function(str) {
+		let c = '';
+		for (let a, d = 0, e = str.length; d < e; d++) {
+			(a = bent[str.charAt(d)]),
+			typeof a == 'undefined' && (a = str.charAt(d)),
+			(c += a);
+		}
+		return c;
+	},
+	flip: function(str) {
+		const c = [];
+		for (let a, d = 0, e = str.length; d < e; d++) {
+			(a = str.charAt(d)),
+			d > 0 &&
+				(a == '\u0324' || a == '\u0317' || a == '\u0316' || a == '\u032e')
+				? ((a = flip[str.charAt(d - 1) + a]), c.pop())
+				: ((a = flip[a]), typeof a == 'undefined' && (a = str.charAt(d))),
+			c.push(a);
+		}
+		return c.reverse().join('');
+	},
+	mirror: function(str) {
+		let c = [];
+		const d = [];
+		for (let a, e = 0, f = str.length; e < f; e++) {
+			(a = str.charAt(e)),
+			e > 0 &&
+				(a == '\u0308' || a == '\u0300' || a == '\u0301' || a == '\u0302')
+				? ((a = copy[str.charAt(e - 1) + a]), c.pop())
+				: ((a = copy[a]), typeof a == 'undefined' && (a = str.charAt(e))),
+			a == '\n' ? (d.push(c.reverse().join('')), (c = [])) : c.push(a);
+		}
+		d.push(c.reverse().join(''));
+		return d.join('\n');
+	},
+	randomCase: function(string) {
+		let result = '';
+		if (!string) throw new TypeError('Weky Error: A string was not specified.');
+		if (typeof string !== 'string') {
+			throw new TypeError('Weky Error: Provided string is Invalid.');
+		}
+		for (const i in string) {
+			const Random = Math.floor(Math.random() * 2);
+			result += Random == 1 ? string[i].toLowerCase() : string[i].toUpperCase();
+		}
+		return result;
+	},
+	randomHexColor: function() {
+		return (
+			'#' +
+			('000000' + Math.floor(Math.random() * 16777215).toString(16)).slice(-6)
+		);
+	},
+	randomizeNumber: function(start, end) {
+		if (!start) throw new TypeError('Weky Error: A number was not specified.');
+		if (!end) throw new TypeError('Weky Error: A number was not specified.');
+		if (typeof start !== 'number' && typeof end !== 'number') {
+			throw new TypeError('Weky Error: Provided number data is Invalid');
+		}
+		const res = Math.floor(Math.random() * (end - start + 1) + start);
+		return res;
+	},
+	randomizeString: function(array) {
+		if (!array) throw new TypeError('Weky Error: A array was not specified.');
+		if (typeof array !== 'object') {
+			throw new TypeError('Weky Error: The provided array is invalid.');
+		}
+		const res = Math.floor(Math.random() * array.length);
+		return array[res];
+	},
+	reverseText: function(string) {
+		return string.split('').reverse().join('');
+	},
+	tinyCaptial: function(str) {
+		let c = '',
+			a;
+		str = str.toUpperCase();
+		for (let d = 0, e = str.length; d < e; d++) {
+			(a = tiny[str.charAt(d)]),
+			typeof a == 'undefined' && (a = str.charAt(d)),
+			(c += a);
+		}
+		return c;
+	},
+	vaporwave: function(string) {
+		return string
+			.replace(/[a-zA-Z0-9!\?\.'";:\]\[}{\)\(@#\$%\^&\*\-_=\+`~><]/g, (char) =>
+				String.fromCharCode(0xfee0 + char.charCodeAt(0)),
+			)
+			.replace(/ /g, '　');
+	},
+};
 
-module.exports.ShuffleGuess = require("./src/class/ShuffleGuess");
-
-module.exports.FastType = require("./src/class/FastType");
-
-module.exports.ChaosWords = require("./src/class/ChaosWords");
-
-module.exports.TicTacToe = require("./src/class/TicTacToe");
-
-module.exports.Calculator = require('./src/functions/calculator');
-
-module.exports.Snake = require('./src/class/Snake');
-
-module.exports.RPS = require('./src/class/RockPaperScissors');
-
-module.exports.WouldYouRather = require('./src/functions/WouldYouRather');
+module.exports.Sudo = require('./src/Sudo');
+module.exports.Snake = require('./src/Snake');
+module.exports.Fight = require('./src/Fight');
+module.exports.Trivia = require('./src/Trivia');
+module.exports.FastType = require('./src/FastType');
+module.exports.TicTacToe = require('./src/TicTacToe');
+module.exports.QuickClick = require('./src/QuickClick');
+module.exports.ChaosWords = require('./src/ChaosWords');
+module.exports.LieSwatter = require('./src/LieSwatter');
+module.exports.Calculator = require('./src/Calculator');
+module.exports.ShuffleGuess = require('./src/ShuffleGuess');
+module.exports.GuessTheNumber = require('./src/GuessTheNumber');
+module.exports.NeverHaveIEver = require('./src/NeverHaveIEver');
+module.exports.WouldYouRather = require('./src/WouldYouRather');
+module.exports.GuessThePokemon = require('./src/GuessThePokemon');
+module.exports.RockPaperScissors = require('./src/RockPaperScissors');
+module.exports.WillYouPressTheButton = require('./src/WillYouPressTheButton');
