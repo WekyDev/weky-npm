@@ -103,7 +103,6 @@ module.exports.Snake = require('./src/Snake');
 module.exports.Fight = require('./src/Fight');
 module.exports.Trivia = require('./src/Trivia');
 module.exports.FastType = require('./src/FastType');
-module.exports.TicTacToe = require('./src/TicTacToe');
 module.exports.QuickClick = require('./src/QuickClick');
 module.exports.ChaosWords = require('./src/ChaosWords');
 module.exports.LieSwatter = require('./src/LieSwatter');

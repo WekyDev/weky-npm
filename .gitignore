@@ -4,6 +4,7 @@ json.sqlite
 src/Chess.js
 node_modules/
 src/Akinator.js
+src/TicTacToe.js
 test/config.json
 test/progress.txt
 package-lock.json
