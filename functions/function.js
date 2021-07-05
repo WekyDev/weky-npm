@@ -102,7 +102,7 @@ module.exports = {
 			});
 	},
 	checkForUpdates: async function() {
-		const package = require('../package.json');
+		const package = require('../../../package.json');
 		await fetch('https://registry.npmjs.com/weky')
 			.then((res) => res.json())
 			.then((res) => {

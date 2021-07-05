@@ -102,7 +102,7 @@ module.exports = async (options) => {
 		options.winMessage = 'GG, <@{{winner}}> won the fight!';
 	}
 	if (typeof options.winMessage !== 'string') {
-		throw new TypeError('Weky Error: winMessage must be an string.');
+		throw new TypeError('Weky Error: winMessage must be a string.');
 	}
 
 	if (!options.endMessage) {

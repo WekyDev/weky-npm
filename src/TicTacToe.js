@@ -1,9 +1,28 @@
-const midDuel = new Set();
+const data = new Set();
 const Discord = require('discord.js');
 const disbut = require('discord-buttons');
-const { randomHexColor, getRandomString } = require('../functions/function');
+const {
+	randomHexColor,
+	getRandomString,
+	checkForUpdates,
+} = require('../functions/function');
 
 module.exports = async (options) => {
+	checkForUpdates();
+	if (!options.message) {
+		throw new Error('Weky Error: message argument was not specified.');
+	}
+	if (!(options.message instanceof Discord.Message)) {
+		throw new TypeError('Weky Error: Invalid Discord Message was provided.');
+	}
+
+	if (!options.opponent) {
+		throw new Error('Weky Error: opponent argument was not specified.');
+	}
+	if (!(options.opponent instanceof Discord.User)) {
+		throw new TypeError('Weky Error: Invalid Discord User was provided.');
+	}
+
 	if (!options.xEmoji) {
 		options.xEmoji = '❌';
 	}
@@ -18,28 +37,26 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: oEmoji must be a string');
 	}
 
-	if (!options.opponent) {
-		throw new TypeError('Weky Error: Missing argument opponent');
-	}
-	if (typeof options.opponent !== 'object') {
-		throw new TypeError('Weky Error: Provided opponent data is Invalid');
-	}
-
-	if (!options.message) {
-		throw new TypeError('Weky Error: Missing argument message');
-	}
-	if (typeof options.message !== 'object') {
-		throw new TypeError('Weky Error: Provided message data is Invalid');
-	}
-
 	if (!options.embed) options.embed = {};
 	if (typeof options.embed !== 'object') {
 		throw new TypeError('Weky Error: embed must be an object.');
 	}
 
+	if (!options.embed.title) {
+		options.embed.title = 'Tic Tac Toe | Weky Development';
+	}
+	if (typeof options.embed.title !== 'string') {
+		throw new TypeError('Weky Error: title must be a string.');
+	}
+
 	if (!options.embed.color) options.embed.color = randomHexColor();
 	if (typeof options.embed.color !== 'string') {
 		throw new TypeError('Weky Error: embed color must be a string.');
+	}
+
+	if (!options.embed.timestamp) options.embed.timestamp = true;
+	if (typeof options.embed.timestamp !== 'boolean') {
+		throw new TypeError('Weky Error: timestamp must be a boolean.');
 	}
 
 	if (!options.buttons) options.buttons = {};
@@ -63,17 +80,24 @@ module.exports = async (options) => {
 
 	if (!options.acceptMessage) {
 		options.acceptMessage =
-			'<@{{challenger}}> has challenged <@{{opponent}}> for a fight!';
+			'<@{{challenger}}> has challenged <@{{opponent}}> for a game of Tic Tac Toe!';
 	}
 	if (typeof options.acceptMessage !== 'string') {
 		throw new Error('Weky Error: acceptMessage must be a string.');
 	}
 
 	if (!options.winMessage) {
-		options.winMessage = 'GG, <@{{winner}}> won the fight!';
+		options.winMessage = 'GG, {{winner}} won!';
 	}
 	if (typeof options.winMessage !== 'string') {
-		throw new TypeError('Weky Error: winMessage must be an string.');
+		throw new TypeError('Weky Error: winMessage must be a string.');
+	}
+
+	if (!options.drawMessage) {
+		options.drawMessage = 'This game is deadlock!';
+	}
+	if (typeof options.drawMessage !== 'string') {
+		throw new TypeError('Weky Error: drawMessage must be a string.');
 	}
 
 	if (!options.endMessage) {
@@ -85,7 +109,8 @@ module.exports = async (options) => {
 	}
 
 	if (!options.cancelMessage) {
-		options.cancelMessage = '<@{{opponent}}> refused to have a fight with you!';
+		options.cancelMessage =
+			'<@{{opponent}}> refused to have a game of Tic Tac Toe with you!';
 	}
 	if (typeof options.cancelMessage !== 'string') {
 		throw new TypeError('Weky Error: cancelMessage must be a string.');
@@ -98,12 +123,32 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: startMessage must be a string.');
 	}
 
+	if (!options.othersMessage) {
+		options.othersMessage = 'Only {{author}} can use the buttons!';
+	}
+	if (typeof options.othersMessage !== 'string') {
+		throw new TypeError('Weky Error: othersMessage must be a string.');
+	}
+
+	if (!options.opponentsTurnMessage) {
+		options.opponentsTurnMessage = 'Please wait for your opponents move!';
+	}
+	if (typeof options.opponentsTurnMessage !== 'string') {
+		throw new TypeError('Weky Error: opponentsTurnMessage must be a string.');
+	}
+
 	if (
 		options.opponent.bot ||
 		options.message.author.id === options.opponent.id
 	) {
 		return;
 	}
+
+	if (data.has(options.message.author.id) || data.has(options.opponent.id)) {
+		return;
+	}
+	data.add(options.opponent.id);
+	data.add(options.message.author.id);
 
 	let a1 = '⬜';
 	let a2 = '⬜';
@@ -196,18 +241,6 @@ module.exports = async (options) => {
 		'-' +
 		getRandomString(4);
 
-	const member = options.opponent;
-	const author = options.message.author.id;
-	const authorName = options.message.author.username;
-
-	if (midDuel.has(author)) {
-		return options.message.channel.send('You\'re currently in a duel');
-	} else if (midDuel.has(member.id)) {
-		return options.message.channel.send(
-			`<@${member.id}> is currently in a duel`,
-		);
-	}
-
 	const gameData = [
 		{
 			member: options.message.author,
@@ -215,7 +248,7 @@ module.exports = async (options) => {
 			color: 'red',
 		},
 		{
-			member: member,
+			member: options.opponent,
 			em: options.oEmoji,
 			color: 'blurple',
 		},
@@ -229,17 +262,17 @@ module.exports = async (options) => {
 		.setStyle('red')
 		.setLabel(options.buttons.deny)
 		.setID('deny');
-	let component = new disbut.MessageActionRow()
-		.addComponent([
-			acceptbutton,
-			denybutton,
-		]);
+	let component = new disbut.MessageActionRow().addComponent([
+		acceptbutton,
+		denybutton,
+	]);
+
 	const embed = new Discord.MessageEmbed()
 		.setTitle(options.embed.title)
 		.setDescription(
 			options.acceptMessage
-				.replace('{{challenger}}', author)
-				.replace('{{opponent}}', member.id),
+				.replace('{{challenger}}', options.message.author.id)
+				.replace('{{opponent}}', options.opponent.id),
 		)
 		.setFooter('©️ Weky Development')
 		.setColor(options.embed.color);
@@ -258,31 +291,35 @@ module.exports = async (options) => {
 	});
 
 	Collector.on('collect', async (_btn) => {
-		if (_btn.clicker.member.id !== member.id) {
+		if (_btn.clicker.member.id !== options.opponent.id) {
 			return _btn.reply.send(
-				options.othersMessage.replace('{{author}}', `<@${member.id}>`),
+				options.othersMessage.replace(
+					'{{author}}',
+					`<@${options.opponent.id}>`,
+				),
 				true,
 			);
 		}
 		_btn.reply.defer();
 		if (_btn.id === 'deny') {
 			acceptbutton = new disbut.MessageButton()
+				.setDisabled()
 				.setStyle('green')
 				.setLabel(options.buttons.accept)
 				.setID('accept');
 			denybutton = new disbut.MessageButton()
+				.setDisabled()
 				.setStyle('red')
 				.setLabel(options.buttons.deny)
 				.setID('deny');
-			component = new disbut.MessageActionRow()
-				.addComponent([
-					acceptbutton,
-					denybutton,
-				]);
+			component = new disbut.MessageActionRow().addComponent([
+				acceptbutton,
+				denybutton,
+			]);
 			const emd = new Discord.MessageEmbed()
 				.setTitle(options.embed.title)
 				.setDescription(
-					options.cancelMessage.replace('{{opponent}}', member.id),
+					options.cancelMessage.replace('{{opponent}}', options.opponent.id),
 				)
 				.setFooter('©️ Weky Development')
 				.setColor(options.embed.color);
@@ -290,6 +327,8 @@ module.exports = async (options) => {
 				emd.setTimestamp();
 			}
 			Collector.stop();
+			data.delete(options.opponent.id);
+			data.delete(options.message.author.id);
 			return question.edit({
 				embed: emd,
 				component,
@@ -297,16 +336,16 @@ module.exports = async (options) => {
 		} else if (_btn.id === 'accept') {
 			Collector.stop();
 			let player = Math.floor(Math.random() * gameData.length);
-			let Embed = new Discord.MessageEmbed();
-			player = (player + 1) % 2;
-			if (player == 0) {
-				Embed = new Discord.MessageEmbed()
-					.setDescription(options.startMessage.replace('{{player}}', authorName))
-					.setColor(options.embed.color);
-			} else {
-				Embed = new Discord.MessageEmbed()
-					.setDescription(options.startMessage.replace('{{player}}', options.opponent.username))
-					.setColor(options.embed.color);
+			let Embed = new Discord.MessageEmbed()
+				.setTitle(options.embed.title)
+				.setDescription(
+					options.startMessage.replace('{{player}}', gameData[player].member),
+				)
+				.setColor(options.embed.color)
+				.setTitle(options.embed.title)
+				.setFooter('©️ Weky Development');
+			if (options.embed.timestamp) {
+				Embed.setTimestamp();
 			}
 			let A1 = new disbut.MessageButton()
 				.setID(a11)
@@ -360,1502 +399,2590 @@ module.exports = async (options) => {
 						components: [C1, C2, C3],
 					},
 				],
-			})
-				.then(async (msg) => {
-					midDuel.add(author);
-					midDuel.add(member.id);
-					const gameFilter = (m) =>
-						m.clicker.user.id === options.message.author.id ||
-				m.clicker.user.id === options.opponent.id;
-					const gameCollector = msg.createButtonCollector(gameFilter);
-					gameCollector.on('collect', async (btn) => {
-						if (
-							btn.id == a11 &&
+			});
+			const gameCollector = question.createButtonCollector((fn) => fn);
+			gameCollector.on('collect', async (btn) => {
+				if (
+					btn.clicker.user.id !== options.message.author.id &&
+					btn.clicker.user.id !== options.opponent.id
+				) {
+					return btn.reply.send(
+						options.othersMessage.replace(
+							'{{author}}',
+							`<@${options.message.author.id}> and <@${options.opponent.id}>`,
+						),
+						true,
+					);
+				}
+				if (
+					btn.id == a11 &&
 					gameData[player].member.id === btn.clicker.user.id
-						) {
-							btn.reply.defer();
-							if (btn.label == options.oEmoji || btn.label == options.xEmoji) {
-								btn.reply.send('That spot is already occupied.');
-							} else {
-								try {
-									a1 = gameData[player].em;
-									if (
-										(a1 == options.xEmoji &&
-									b1 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b1 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a2 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c2 == options.xEmoji) ||
-								(a2 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c2 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b3 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b3 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									a2 == options.xEmoji &&
-									a3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									a2 == options.oEmoji &&
-									a3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(b1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									b3 == options.xEmoji) ||
-								(b1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									b3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(c1 == options.xEmoji &&
-									c2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(c1 == options.oEmoji &&
-									c2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									}
-								} catch (e) {
-									console.log(e);
-								}
-								player = (player + 1) % 2;
-								if (player == 0) {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 **${authorName}** VS ${options.opponent.username} 🎮`,
-										)
-										.setColor(options.embed.color);
-								} else {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 ${authorName} VS **${options.opponent.username}** 🎮`,
-										)
-										.setColor(options.embed.color);
-								}
-								A1 = new disbut.MessageButton()
-									.setID(a11)
-									.setStyle(gameData[player].color)
-									.setEmoji(gameData[player].em)
-									.setDisabled();
-								msg.edit({
-									embed: Embed,
-									components: [
-										{
-											type: 1,
-											components: [A1, A2, A3],
-										},
-										{
-											type: 1,
-											components: [B1, B2, B3],
-										},
-										{
-											type: 1,
-											components: [C1, C2, C3],
-										},
-									],
-								});
-							}
-						} else if (
-							btn.id == a22 &&
-					gameData[player].member.id === btn.clicker.user.id
-						) {
-							btn.reply.defer();
-							if (btn.label == options.oEmoji || btn.label == options.xEmoji) {
-								btn.reply.send('That spot is already occupied.');
-							} else {
-								try {
-									a2 = gameData[player].em;
-									if (
-										(a1 == options.xEmoji &&
-									b1 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b1 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a2 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c2 == options.xEmoji) ||
-								(a2 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c2 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b3 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b3 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									a2 == options.xEmoji &&
-									a3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									a2 == options.oEmoji &&
-									a3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(b1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									b3 == options.xEmoji) ||
-								(b1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									b3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(c1 == options.xEmoji &&
-									c2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(c1 == options.oEmoji &&
-									c2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									}
-								} catch (e) {
-									console.log(e);
-								}
-								player = (player + 1) % 2;
-								if (player == 0) {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 **${authorName}** VS ${options.opponent.username} 🎮`,
-										)
-										.setColor(options.embed.color);
-								} else {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 ${authorName} VS **${options.opponent.username}** 🎮`,
-										)
-										.setColor(options.embed.color);
-								}
-								A2 = new disbut.MessageButton()
-									.setID(a22)
-									.setStyle(gameData[player].color)
-									.setEmoji(gameData[player].em)
-									.setDisabled();
-								msg.edit({
-									embed: Embed,
-									components: [
-										{
-											type: 1,
-											components: [A1, A2, A3],
-										},
-										{
-											type: 1,
-											components: [B1, B2, B3],
-										},
-										{
-											type: 1,
-											components: [C1, C2, C3],
-										},
-									],
-								});
-							}
-						} else if (
-							btn.id == a33 &&
-					gameData[player].member.id === btn.clicker.user.id
-						) {
-							btn.reply.defer();
-							if (btn.label == options.oEmoji || btn.label == options.xEmoji) {
-								btn.reply.send('That spot is already occupied.');
-							} else {
-								try {
-									a3 = gameData[player].em;
-									if (
-										(a1 == options.xEmoji &&
-									b1 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b1 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a2 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c2 == options.xEmoji) ||
-								(a2 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c2 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b3 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b3 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									a2 == options.xEmoji &&
-									a3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									a2 == options.oEmoji &&
-									a3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(b1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									b3 == options.xEmoji) ||
-								(b1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									b3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(c1 == options.xEmoji &&
-									c2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(c1 == options.oEmoji &&
-									c2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									}
-								} catch (e) {
-									console.log(e);
-								}
-								player = (player + 1) % 2;
-								if (player == 0) {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 **${authorName}** VS ${options.opponent.username} 🎮`,
-										)
-										.setColor(options.embed.color);
-								} else {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 ${authorName} VS **${options.opponent.username}** 🎮`,
-										)
-										.setColor(options.embed.color);
-								}
-								A3 = new disbut.MessageButton()
-									.setID(a33)
-									.setStyle(gameData[player].color)
-									.setEmoji(gameData[player].em)
-									.setDisabled();
-								msg.edit({
-									embed: Embed,
-									components: [
-										{
-											type: 1,
-											components: [A1, A2, A3],
-										},
-										{
-											type: 1,
-											components: [B1, B2, B3],
-										},
-										{
-											type: 1,
-											components: [C1, C2, C3],
-										},
-									],
-								});
-							}
-						} else if (
-							btn.id == b11 &&
-					gameData[player].member.id === btn.clicker.user.id
-						) {
-							btn.reply.defer();
-							if (btn.label == options.oEmoji || btn.label == options.xEmoji) {
-								btn.reply.send('That spot is already occupied.');
-							} else {
-								try {
-									b1 = gameData[player].em;
-									if (
-										(a1 == options.xEmoji &&
-									b1 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b1 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a2 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c2 == options.xEmoji) ||
-								(a2 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c2 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b3 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b3 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									a2 == options.xEmoji &&
-									a3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									a2 == options.oEmoji &&
-									a3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(b1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									b3 == options.xEmoji) ||
-								(b1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									b3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(c1 == options.xEmoji &&
-									c2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(c1 == options.oEmoji &&
-									c2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									}
-								} catch (e) {
-									console.log(e);
-								}
-								player = (player + 1) % 2;
-								if (player == 0) {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 **${authorName}** VS ${options.opponent.username} 🎮`,
-										)
-										.setColor(options.embed.color);
-								} else {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 ${authorName} VS **${options.opponent.username}** 🎮`,
-										)
-										.setColor(options.embed.color);
-								}
-								B1 = new disbut.MessageButton()
-									.setID(b11)
-									.setStyle(gameData[player].color)
-									.setEmoji(gameData[player].em)
-									.setDisabled();
-								msg.edit({
-									embed: Embed,
-									components: [
-										{
-											type: 1,
-											components: [A1, A2, A3],
-										},
-										{
-											type: 1,
-											components: [B1, B2, B3],
-										},
-										{
-											type: 1,
-											components: [C1, C2, C3],
-										},
-									],
-								});
-							}
-						} else if (
-							btn.id == b22 &&
-					gameData[player].member.id === btn.clicker.user.id
-						) {
-							btn.reply.defer();
-							if (btn.label == options.oEmoji || btn.label == options.xEmoji) {
-								btn.reply.send('That spot is already occupied.');
-							} else {
-								try {
-									b2 = gameData[player].em;
-									if (
-										(a1 == options.xEmoji &&
-									b1 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b1 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a2 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c2 == options.xEmoji) ||
-								(a2 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c2 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b3 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b3 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									a2 == options.xEmoji &&
-									a3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									a2 == options.oEmoji &&
-									a3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(b1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									b3 == options.xEmoji) ||
-								(b1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									b3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(c1 == options.xEmoji &&
-									c2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(c1 == options.oEmoji &&
-									c2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									}
-								} catch (e) {
-									console.log(e);
-								}
-								player = (player + 1) % 2;
-								if (player == 0) {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 **${authorName}** VS ${options.opponent.username} 🎮`,
-										)
-										.setColor(options.embed.color);
-								} else {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 ${authorName} VS **${options.opponent.username}** 🎮`,
-										)
-										.setColor(options.embed.color);
-								}
-								B2 = new disbut.MessageButton()
-									.setID(b22)
-									.setStyle(gameData[player].color)
-									.setEmoji(gameData[player].em)
-									.setDisabled();
-								msg.edit({
-									embed: Embed,
-									components: [
-										{
-											type: 1,
-											components: [A1, A2, A3],
-										},
-										{
-											type: 1,
-											components: [B1, B2, B3],
-										},
-										{
-											type: 1,
-											components: [C1, C2, C3],
-										},
-									],
-								});
-							}
-						} else if (
-							btn.id == b33 &&
-					gameData[player].member.id === btn.clicker.user.id
-						) {
-							btn.reply.defer();
-							if (btn.label == options.oEmoji || btn.label == options.xEmoji) {
-								btn.reply.send('That spot is already occupied.');
-							} else {
-								try {
-									b3 = gameData[player].em;
-									if (
-										(a1 == options.xEmoji &&
-									b1 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b1 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a2 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c2 == options.xEmoji) ||
-								(a2 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c2 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b3 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b3 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									a2 == options.xEmoji &&
-									a3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									a2 == options.oEmoji &&
-									a3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(b1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									b3 == options.xEmoji) ||
-								(b1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									b3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(c1 == options.xEmoji &&
-									c2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(c1 == options.oEmoji &&
-									c2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									}
-								} catch (e) {
-									console.log(e);
-								}
-								player = (player + 1) % 2;
-								if (player == 0) {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 **${authorName}** VS ${options.opponent.username} 🎮`,
-										)
-										.setColor(options.embed.color);
-								} else {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 ${authorName} VS **${options.opponent.username}** 🎮`,
-										)
-										.setColor(options.embed.color);
-								}
-								B3 = new disbut.MessageButton()
-									.setID(b33)
-									.setStyle(gameData[player].color)
-									.setEmoji(gameData[player].em)
-									.setDisabled();
-								msg.edit({
-									embed: Embed,
-									components: [
-										{
-											type: 1,
-											components: [A1, A2, A3],
-										},
-										{
-											type: 1,
-											components: [B1, B2, B3],
-										},
-										{
-											type: 1,
-											components: [C1, C2, C3],
-										},
-									],
-								});
-							}
-						} else if (
-							btn.id == c11 &&
-					gameData[player].member.id === btn.clicker.user.id
-						) {
-							btn.reply.defer();
-							if (btn.label == options.oEmoji || btn.label == options.xEmoji) {
-								btn.reply.send('That spot is already occupied.');
-							} else {
-								try {
-									c1 = gameData[player].em;
-									if (
-										(a1 == options.xEmoji &&
-									b1 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b1 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a2 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c2 == options.xEmoji) ||
-								(a2 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c2 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b3 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b3 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									a2 == options.xEmoji &&
-									a3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									a2 == options.oEmoji &&
-									a3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(b1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									b3 == options.xEmoji) ||
-								(b1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									b3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(c1 == options.xEmoji &&
-									c2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(c1 == options.oEmoji &&
-									c2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									}
-								} catch (e) {
-									console.log(e);
-								}
-								player = (player + 1) % 2;
-								if (player == 0) {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 **${authorName}** VS ${options.opponent.username} 🎮`,
-										)
-										.setColor(options.embed.color);
-								} else {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 ${authorName} VS **${options.opponent.username}** 🎮`,
-										)
-										.setColor(options.embed.color);
-								}
-								C1 = new disbut.MessageButton()
-									.setID(c11)
-									.setStyle(gameData[player].color)
-									.setEmoji(gameData[player].em)
-									.setDisabled();
-								msg.edit({
-									embed: Embed,
-									components: [
-										{
-											type: 1,
-											components: [A1, A2, A3],
-										},
-										{
-											type: 1,
-											components: [B1, B2, B3],
-										},
-										{
-											type: 1,
-											components: [C1, C2, C3],
-										},
-									],
-								});
-							}
-						} else if (
-							btn.id == c22 &&
-					gameData[player].member.id === btn.clicker.user.id
-						) {
-							btn.reply.defer();
-							if (btn.label == options.oEmoji || btn.label == options.xEmoji) {
-								btn.reply.send('That spot is already occupied.');
-							} else {
-								try {
-									c2 = gameData[player].em;
-									if (
-										(a1 == options.xEmoji &&
-									b1 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b1 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a2 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c2 == options.xEmoji) ||
-								(a2 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c2 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b3 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b3 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									a2 == options.xEmoji &&
-									a3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									a2 == options.oEmoji &&
-									a3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(b1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									b3 == options.xEmoji) ||
-								(b1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									b3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(c1 == options.xEmoji &&
-									c2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(c1 == options.oEmoji &&
-									c2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									}
-								} catch (e) {
-									console.log(e);
-								}
-								player = (player + 1) % 2;
-								if (player == 0) {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 **${authorName}** VS ${options.opponent.username} 🎮`,
-										)
-										.setColor(options.embed.color);
-								} else {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 ${authorName} VS **${options.opponent.username}** 🎮`,
-										)
-										.setColor(options.embed.color);
-								}
-								C2 = new disbut.MessageButton()
-									.setID(c22)
-									.setStyle(gameData[player].color)
-									.setEmoji(gameData[player].em)
-									.setDisabled();
-								msg.edit({
-									embed: Embed,
-									components: [
-										{
-											type: 1,
-											components: [A1, A2, A3],
-										},
-										{
-											type: 1,
-											components: [B1, B2, B3],
-										},
-										{
-											type: 1,
-											components: [C1, C2, C3],
-										},
-									],
-								});
-							}
-						} else if (
-							btn.id == c33 &&
-					gameData[player].member.id === btn.clicker.user.id
-						) {
-							btn.reply.defer();
-							if (btn.label == options.oEmoji || btn.label == options.xEmoji) {
-								btn.reply.send('That spot is already occupied.');
-							} else {
-								try {
-									c3 = gameData[player].em;
-									if (
-										(a1 == options.xEmoji &&
-									b1 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b1 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a2 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c2 == options.xEmoji) ||
-								(a2 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c2 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b3 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b3 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									a2 == options.xEmoji &&
-									a3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									a2 == options.oEmoji &&
-									a3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(b1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									b3 == options.xEmoji) ||
-								(b1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									b3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(c1 == options.xEmoji &&
-									c2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(c1 == options.oEmoji &&
-									c2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a1 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c3 == options.xEmoji) ||
-								(a1 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c3 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										(a3 == options.xEmoji &&
-									b2 == options.xEmoji &&
-									c1 == options.xEmoji) ||
-								(a3 == options.oEmoji &&
-									b2 == options.oEmoji &&
-									c1 == options.oEmoji)
-									) {
-										options.message.channel.send(
-											`${gameData[player].member} wins!`,
-										);
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									} else if (
-										a1 !== '⬜' &&
-								a2 !== '⬜' &&
-								a3 !== '⬜' &&
-								b1 !== '⬜' &&
-								b2 !== '⬜' &&
-								b3 !== '⬜' &&
-								c1 !== '⬜' &&
-								c2 !== '⬜' &&
-								c3 !== '⬜'
-									) {
-										options.message.channel.send('Tie!');
-										gameCollector.stop();
-										midDuel.delete(author);
-										midDuel.delete(member.id);
-									}
-								} catch (e) {
-									console.log(e);
-								}
-								player = (player + 1) % 2;
-								if (player == 0) {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 **${authorName}** VS ${options.opponent.username} 🎮`,
-										)
-										.setColor(options.embed.color);
-								} else {
-									Embed = new Discord.MessageEmbed()
-										.setDescription(
-											`🎮 ${authorName} VS **${options.opponent.username}** 🎮`,
-										)
-										.setColor(options.embed.color);
-								}
-								C3 = new disbut.MessageButton()
-									.setID(c33)
-									.setStyle(gameData[player].color)
-									.setEmoji(gameData[player].em)
-									.setDisabled();
-								msg.edit({
-									embed: Embed,
-									components: [
-										{
-											type: 1,
-											components: [A1, A2, A3],
-										},
-										{
-											type: 1,
-											components: [B1, B2, B3],
-										},
-										{
-											type: 1,
-											components: [C1, C2, C3],
-										},
-									],
-								});
-							}
-						} else {
-							return btn.reply.send('Wait for opponent.', true);
+				) {
+					btn.reply.defer();
+					a1 = gameData[player].em;
+					console.log(a1);
+					if (
+						(a1 == options.xEmoji &&
+							b1 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b1 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
 						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.opponent.id);
+						data.delete(options.message.author.id);
+					} else if (
+						(a2 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c2 == options.xEmoji) ||
+						(a2 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c2 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b3 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b3 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							a2 == options.xEmoji &&
+							a3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							a2 == options.oEmoji &&
+							a3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(b1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							b3 == options.xEmoji) ||
+						(b1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							b3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(c1 == options.xEmoji &&
+							c2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(c1 == options.oEmoji &&
+							c2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						a1 !== '⬜' &&
+						a2 !== '⬜' &&
+						a3 !== '⬜' &&
+						b1 !== '⬜' &&
+						b2 !== '⬜' &&
+						b3 !== '⬜' &&
+						c1 !== '⬜' &&
+						c2 !== '⬜' &&
+						c3 !== '⬜'
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(options.drawMessage)
+							.setFooter('©️ Weky Development')
+							.setColor(options.embed.color);
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send({ embed: _embed });
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					}
+					player = (player + 1) % 2;
+					if (player == 0) {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`🎮 **${options.message.author}** - **versus** - ${options.opponent}`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					} else {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`${options.message.author} - **versus** - **${options.opponent}** 🎮`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					}
+					A1 = new disbut.MessageButton()
+						.setID(a11)
+						.setStyle(gameData[player].color)
+						.setEmoji(gameData[player].em)
+						.setDisabled();
+					question.edit({
+						embed: Embed,
+						components: [
+							{
+								type: 1,
+								components: [A1, A2, A3],
+							},
+							{
+								type: 1,
+								components: [B1, B2, B3],
+							},
+							{
+								type: 1,
+								components: [C1, C2, C3],
+							},
+						],
 					});
-				});
+				} else if (
+					btn.id == a22 &&
+					gameData[player].member.id === btn.clicker.user.id
+				) {
+					btn.reply.defer();
+					a2 = gameData[player].em;
+					console.log(a2);
+					if (
+						(a1 == options.xEmoji &&
+							b1 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b1 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a2 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c2 == options.xEmoji) ||
+						(a2 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c2 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b3 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b3 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							a2 == options.xEmoji &&
+							a3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							a2 == options.oEmoji &&
+							a3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(b1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							b3 == options.xEmoji) ||
+						(b1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							b3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(c1 == options.xEmoji &&
+							c2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(c1 == options.oEmoji &&
+							c2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						a1 !== '⬜' &&
+						a2 !== '⬜' &&
+						a3 !== '⬜' &&
+						b1 !== '⬜' &&
+						b2 !== '⬜' &&
+						b3 !== '⬜' &&
+						c1 !== '⬜' &&
+						c2 !== '⬜' &&
+						c3 !== '⬜'
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(options.drawMessage)
+							.setFooter('©️ Weky Development')
+							.setColor(options.embed.color);
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send({ embed: _embed });
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					}
+					player = (player + 1) % 2;
+					if (player == 0) {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`🎮 **${options.message.author}** - **versus** - ${options.opponent}`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					} else {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`${options.message.author} - **versus** - **${options.opponent}** 🎮`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					}
+					A2 = new disbut.MessageButton()
+						.setID(a22)
+						.setStyle(gameData[player].color)
+						.setEmoji(gameData[player].em)
+						.setDisabled();
+					question.edit({
+						embed: Embed,
+						components: [
+							{
+								type: 1,
+								components: [A1, A2, A3],
+							},
+							{
+								type: 1,
+								components: [B1, B2, B3],
+							},
+							{
+								type: 1,
+								components: [C1, C2, C3],
+							},
+						],
+					});
+				} else if (
+					btn.id == a33 &&
+					gameData[player].member.id === btn.clicker.user.id
+				) {
+					btn.reply.defer();
+					a3 = gameData[player].em;
+					console.log(a3);
+					if (
+						(a1 == options.xEmoji &&
+							b1 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b1 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a2 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c2 == options.xEmoji) ||
+						(a2 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c2 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b3 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b3 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							a2 == options.xEmoji &&
+							a3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							a2 == options.oEmoji &&
+							a3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(b1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							b3 == options.xEmoji) ||
+						(b1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							b3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(c1 == options.xEmoji &&
+							c2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(c1 == options.oEmoji &&
+							c2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						a1 !== '⬜' &&
+						a2 !== '⬜' &&
+						a3 !== '⬜' &&
+						b1 !== '⬜' &&
+						b2 !== '⬜' &&
+						b3 !== '⬜' &&
+						c1 !== '⬜' &&
+						c2 !== '⬜' &&
+						c3 !== '⬜'
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(options.drawMessage)
+							.setFooter('©️ Weky Development')
+							.setColor(options.embed.color);
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send({ embed: _embed });
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					}
+					player = (player + 1) % 2;
+					if (player == 0) {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`🎮 **${options.message.author}** - **versus** - ${options.opponent}`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					} else {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`${options.message.author} - **versus** - **${options.opponent}** 🎮`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					}
+					A3 = new disbut.MessageButton()
+						.setID(a33)
+						.setStyle(gameData[player].color)
+						.setEmoji(gameData[player].em)
+						.setDisabled();
+					question.edit({
+						embed: Embed,
+						components: [
+							{
+								type: 1,
+								components: [A1, A2, A3],
+							},
+							{
+								type: 1,
+								components: [B1, B2, B3],
+							},
+							{
+								type: 1,
+								components: [C1, C2, C3],
+							},
+						],
+					});
+				} else if (
+					btn.id == b11 &&
+					gameData[player].member.id === btn.clicker.user.id
+				) {
+					btn.reply.defer();
+					b1 = gameData[player].em;
+					console.log(b1);
+					if (
+						(a1 == options.xEmoji &&
+							b1 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b1 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a2 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c2 == options.xEmoji) ||
+						(a2 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c2 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b3 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b3 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							a2 == options.xEmoji &&
+							a3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							a2 == options.oEmoji &&
+							a3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(b1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							b3 == options.xEmoji) ||
+						(b1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							b3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(c1 == options.xEmoji &&
+							c2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(c1 == options.oEmoji &&
+							c2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						a1 !== '⬜' &&
+						a2 !== '⬜' &&
+						a3 !== '⬜' &&
+						b1 !== '⬜' &&
+						b2 !== '⬜' &&
+						b3 !== '⬜' &&
+						c1 !== '⬜' &&
+						c2 !== '⬜' &&
+						c3 !== '⬜'
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(options.drawMessage)
+							.setFooter('©️ Weky Development')
+							.setColor(options.embed.color);
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send({ embed: _embed });
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					}
+					player = (player + 1) % 2;
+					if (player == 0) {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`🎮 **${options.message.author}** - **versus** - ${options.opponent}`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					} else {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`${options.message.author} - **versus** - **${options.opponent}** 🎮`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					}
+					B1 = new disbut.MessageButton()
+						.setID(b11)
+						.setStyle(gameData[player].color)
+						.setEmoji(gameData[player].em)
+						.setDisabled();
+					question.edit({
+						embed: Embed,
+						components: [
+							{
+								type: 1,
+								components: [A1, A2, A3],
+							},
+							{
+								type: 1,
+								components: [B1, B2, B3],
+							},
+							{
+								type: 1,
+								components: [C1, C2, C3],
+							},
+						],
+					});
+				} else if (
+					btn.id == b22 &&
+					gameData[player].member.id === btn.clicker.user.id
+				) {
+					btn.reply.defer();
+					b2 = gameData[player].em;
+					console.log(b2);
+					if (
+						(a1 == options.xEmoji &&
+							b1 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b1 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a2 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c2 == options.xEmoji) ||
+						(a2 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c2 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b3 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b3 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							a2 == options.xEmoji &&
+							a3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							a2 == options.oEmoji &&
+							a3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(b1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							b3 == options.xEmoji) ||
+						(b1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							b3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(c1 == options.xEmoji &&
+							c2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(c1 == options.oEmoji &&
+							c2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						a1 !== '⬜' &&
+						a2 !== '⬜' &&
+						a3 !== '⬜' &&
+						b1 !== '⬜' &&
+						b2 !== '⬜' &&
+						b3 !== '⬜' &&
+						c1 !== '⬜' &&
+						c2 !== '⬜' &&
+						c3 !== '⬜'
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(options.drawMessage)
+							.setFooter('©️ Weky Development')
+							.setColor(options.embed.color);
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send({ embed: _embed });
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					}
+					player = (player + 1) % 2;
+					if (player == 0) {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`🎮 **${options.message.author}** - **versus** - ${options.opponent}`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					} else {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`${options.message.author} - **versus** - **${options.opponent}** 🎮`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					}
+					B2 = new disbut.MessageButton()
+						.setID(b22)
+						.setStyle(gameData[player].color)
+						.setEmoji(gameData[player].em)
+						.setDisabled();
+					question.edit({
+						embed: Embed,
+						components: [
+							{
+								type: 1,
+								components: [A1, A2, A3],
+							},
+							{
+								type: 1,
+								components: [B1, B2, B3],
+							},
+							{
+								type: 1,
+								components: [C1, C2, C3],
+							},
+						],
+					});
+				} else if (
+					btn.id == b33 &&
+					gameData[player].member.id === btn.clicker.user.id
+				) {
+					btn.reply.defer();
+					b3 = gameData[player].em;
+					console.log(b3);
+					if (
+						(a1 == options.xEmoji &&
+							b1 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b1 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a2 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c2 == options.xEmoji) ||
+						(a2 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c2 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b3 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b3 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							a2 == options.xEmoji &&
+							a3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							a2 == options.oEmoji &&
+							a3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(b1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							b3 == options.xEmoji) ||
+						(b1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							b3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(c1 == options.xEmoji &&
+							c2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(c1 == options.oEmoji &&
+							c2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						a1 !== '⬜' &&
+						a2 !== '⬜' &&
+						a3 !== '⬜' &&
+						b1 !== '⬜' &&
+						b2 !== '⬜' &&
+						b3 !== '⬜' &&
+						c1 !== '⬜' &&
+						c2 !== '⬜' &&
+						c3 !== '⬜'
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(options.drawMessage)
+							.setFooter('©️ Weky Development')
+							.setColor(options.embed.color);
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send({ embed: _embed });
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					}
+					player = (player + 1) % 2;
+					if (player == 0) {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`🎮 **${options.message.author}** - **versus** - ${options.opponent}`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					} else {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`${options.message.author} - **versus** - **${options.opponent}** 🎮`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					}
+					B3 = new disbut.MessageButton()
+						.setID(b33)
+						.setStyle(gameData[player].color)
+						.setEmoji(gameData[player].em)
+						.setDisabled();
+					question.edit({
+						embed: Embed,
+						components: [
+							{
+								type: 1,
+								components: [A1, A2, A3],
+							},
+							{
+								type: 1,
+								components: [B1, B2, B3],
+							},
+							{
+								type: 1,
+								components: [C1, C2, C3],
+							},
+						],
+					});
+				} else if (
+					btn.id == c11 &&
+					gameData[player].member.id === btn.clicker.user.id
+				) {
+					btn.reply.defer();
+					c1 = gameData[player].em;
+					console.log(c1);
+					if (
+						(a1 == options.xEmoji &&
+							b1 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b1 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a2 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c2 == options.xEmoji) ||
+						(a2 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c2 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b3 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b3 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							a2 == options.xEmoji &&
+							a3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							a2 == options.oEmoji &&
+							a3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(b1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							b3 == options.xEmoji) ||
+						(b1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							b3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(c1 == options.xEmoji &&
+							c2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(c1 == options.oEmoji &&
+							c2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						a1 !== '⬜' &&
+						a2 !== '⬜' &&
+						a3 !== '⬜' &&
+						b1 !== '⬜' &&
+						b2 !== '⬜' &&
+						b3 !== '⬜' &&
+						c1 !== '⬜' &&
+						c2 !== '⬜' &&
+						c3 !== '⬜'
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(options.drawMessage)
+							.setFooter('©️ Weky Development')
+							.setColor(options.embed.color);
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send({ embed: _embed });
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					}
+					player = (player + 1) % 2;
+					if (player == 0) {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`🎮 **${options.message.author}** - **versus** - ${options.opponent}`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					} else {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`${options.message.author} - **versus** - **${options.opponent}** 🎮`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					}
+					C1 = new disbut.MessageButton()
+						.setID(c11)
+						.setStyle(gameData[player].color)
+						.setEmoji(gameData[player].em)
+						.setDisabled();
+					question.edit({
+						embed: Embed,
+						components: [
+							{
+								type: 1,
+								components: [A1, A2, A3],
+							},
+							{
+								type: 1,
+								components: [B1, B2, B3],
+							},
+							{
+								type: 1,
+								components: [C1, C2, C3],
+							},
+						],
+					});
+				} else if (
+					btn.id == c22 &&
+					gameData[player].member.id === btn.clicker.user.id
+				) {
+					btn.reply.defer();
+					c2 = gameData[player].em;
+					console.log(c2);
+					if (
+						(a1 == options.xEmoji &&
+							b1 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b1 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a2 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c2 == options.xEmoji) ||
+						(a2 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c2 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b3 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b3 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							a2 == options.xEmoji &&
+							a3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							a2 == options.oEmoji &&
+							a3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(b1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							b3 == options.xEmoji) ||
+						(b1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							b3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(c1 == options.xEmoji &&
+							c2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(c1 == options.oEmoji &&
+							c2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						a1 !== '⬜' &&
+						a2 !== '⬜' &&
+						a3 !== '⬜' &&
+						b1 !== '⬜' &&
+						b2 !== '⬜' &&
+						b3 !== '⬜' &&
+						c1 !== '⬜' &&
+						c2 !== '⬜' &&
+						c3 !== '⬜'
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(options.drawMessage)
+							.setFooter('©️ Weky Development')
+							.setColor(options.embed.color);
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send({ embed: _embed });
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					}
+					player = (player + 1) % 2;
+					if (player == 0) {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`🎮 **${options.message.author}** - **versus** - ${options.opponent}`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					} else {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`${options.message.author} - **versus** - **${options.opponent}** 🎮`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					}
+					C2 = new disbut.MessageButton()
+						.setID(c22)
+						.setStyle(gameData[player].color)
+						.setEmoji(gameData[player].em)
+						.setDisabled();
+					question.edit({
+						embed: Embed,
+						components: [
+							{
+								type: 1,
+								components: [A1, A2, A3],
+							},
+							{
+								type: 1,
+								components: [B1, B2, B3],
+							},
+							{
+								type: 1,
+								components: [C1, C2, C3],
+							},
+						],
+					});
+				} else if (
+					btn.id == c33 &&
+					gameData[player].member.id === btn.clicker.user.id
+				) {
+					btn.reply.defer();
+					c3 = gameData[player].em;
+					console.log(c3);
+					if (
+						(a1 == options.xEmoji &&
+							b1 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b1 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a2 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c2 == options.xEmoji) ||
+						(a2 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c2 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b3 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b3 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							a2 == options.xEmoji &&
+							a3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							a2 == options.oEmoji &&
+							a3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(b1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							b3 == options.xEmoji) ||
+						(b1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							b3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(c1 == options.xEmoji &&
+							c2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(c1 == options.oEmoji &&
+							c2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a1 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c3 == options.xEmoji) ||
+						(a1 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c3 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						(a3 == options.xEmoji &&
+							b2 == options.xEmoji &&
+							c1 == options.xEmoji) ||
+						(a3 == options.oEmoji &&
+							b2 == options.oEmoji &&
+							c1 == options.oEmoji)
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(
+								options.winMessage.replace(
+									'{{winner}}',
+									gameData[player].member,
+								),
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send(_embed);
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					} else if (
+						a1 !== '⬜' &&
+						a2 !== '⬜' &&
+						a3 !== '⬜' &&
+						b1 !== '⬜' &&
+						b2 !== '⬜' &&
+						b3 !== '⬜' &&
+						c1 !== '⬜' &&
+						c2 !== '⬜' &&
+						c3 !== '⬜'
+					) {
+						const _embed = new Discord.MessageEmbed()
+							.setTitle(options.embed.title)
+							.setDescription(options.drawMessage)
+							.setFooter('©️ Weky Development')
+							.setColor(options.embed.color);
+						if (options.embed.timestamp) {
+							_embed.setTimestamp();
+						}
+						options.message.channel.send({ embed: _embed });
+						gameCollector.stop();
+						data.delete(options.message.author.id);
+						data.delete(options.opponent.id);
+					}
+					player = (player + 1) % 2;
+					if (player == 0) {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`🎮 **${options.message.author}** - **versus** - ${options.opponent}`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					} else {
+						Embed = new Discord.MessageEmbed()
+							.setDescription(
+								`${options.message.author} - **versus** - **${options.opponent}** 🎮`,
+							)
+							.setColor(options.embed.color)
+							.setTitle(options.embed.title)
+							.setFooter('©️ Weky Development');
+						if (options.embed.timestamp) {
+							Embed.setTimestamp();
+						}
+					}
+					C3 = new disbut.MessageButton()
+						.setID(c33)
+						.setStyle(gameData[player].color)
+						.setEmoji(gameData[player].em)
+						.setDisabled();
+					question.edit({
+						embed: Embed,
+						components: [
+							{
+								type: 1,
+								components: [A1, A2, A3],
+							},
+							{
+								type: 1,
+								components: [B1, B2, B3],
+							},
+							{
+								type: 1,
+								components: [C1, C2, C3],
+							},
+						],
+					});
+				} else {
+					return btn.reply.send(options.opponentsTurnMessage, true);
+				}
+			});
 		}
 	});
 };

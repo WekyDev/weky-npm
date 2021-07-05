@@ -72,7 +72,7 @@ module.exports = async (options) => {
 		options.winMessage = 'GG, You won! You made it in **{{time}}**.';
 	}
 	if (typeof options.winMessage !== 'string') {
-		throw new TypeError('Weky Error: winMessage must be an string.');
+		throw new TypeError('Weky Error: winMessage must be a string.');
 	}
 
 	if (!options.loseMessage) options.loseMessage = 'Better luck next time!';
@@ -153,7 +153,6 @@ module.exports = async (options) => {
 	const array = [];
 	let remaining = 0;
 	const guessed = [];
-	console.log(options.words);
 	if (options.words.join('').length > options.charGenerated) {
 		options.charGenerated = options.words.join('').length - 1;
 	}

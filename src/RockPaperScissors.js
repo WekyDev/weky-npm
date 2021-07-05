@@ -120,14 +120,14 @@ module.exports = async (options) => {
 		options.winMessage = 'GG, <@{{winner}}> won!';
 	}
 	if (typeof options.winMessage !== 'string') {
-		throw new TypeError('Weky Error: winMessage must be an string.');
+		throw new TypeError('Weky Error: winMessage must be a string.');
 	}
 
 	if (!options.drawMessage) {
 		options.drawMessage = 'This game is deadlock!';
 	}
 	if (typeof options.drawMessage !== 'string') {
-		throw new TypeError('Weky Error: drawMessage must be an string.');
+		throw new TypeError('Weky Error: drawMessage must be a string.');
 	}
 
 	if (!options.endMessage) {

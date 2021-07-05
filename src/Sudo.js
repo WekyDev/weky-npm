@@ -10,16 +10,16 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: Invalid Discord Message was provided.');
 	}
 
+	if (!options.member) options.member = options.message.member;
+	if (!(options.message instanceof Discord.GuildMember)) {
+		throw new TypeError('Weky Error: Invalid Discord GuildMember was provided.');
+	}
+
 	if (!options.text) {
 		throw new Error('Weky Error: text argument was not specified.');
 	}
 	if (typeof options.text !== 'string') {
 		throw new TypeError('Weky Error: text must be a string.');
-	}
-
-	if (!options.member) options.member = options.message.member;
-	if (typeof options.member !== 'object') {
-		throw new TypeError('Weky Error: member must be an object.');
 	}
 
 	if (!options.deleteMessage) options.deleteMessage = false;
