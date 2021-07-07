@@ -221,7 +221,7 @@ module.exports = async (options) => {
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
 	}
-	const question = await options.message.inlineReply({
+	const question = await options.message.reply({
 		embed,
 	});
 	question.edit({

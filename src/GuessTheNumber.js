@@ -161,7 +161,7 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				embed.setTimestamp();
 			}
-			return options.message.inlineReply(embed);
+			return options.message.reply(embed);
 		}
 		const embed = new Discord.MessageEmbed()
 			.setDescription(
@@ -180,7 +180,7 @@ module.exports = async (options) => {
 			.setStyle('red')
 			.setLabel(options.buttonText)
 			.setID(id);
-		const msg = await options.message.inlineReply(embed);
+		const msg = await options.message.reply(embed);
 		await msg.edit({
 			embed: embed,
 			components: [{ type: 1, components: [btn1] }],
@@ -232,7 +232,7 @@ module.exports = async (options) => {
 					embed,
 					components: [{ type: 1, components: [btn1] }],
 				});
-				_msg.inlineReply(_embed);
+				_msg.reply(_embed);
 				gameCollector.stop();
 				collector.stop();
 				if (options.returnWinner) {
@@ -256,7 +256,7 @@ module.exports = async (options) => {
 							.replace(/{{number}}/g, parsedNumber),
 					)
 					.setColor(options.embed.color);
-				_msg.inlineReply(_embed);
+				_msg.reply(_embed);
 			}
 			if (parseInt(_msg.content) > options.number) {
 				const _embed = new Discord.MessageEmbed()
@@ -266,7 +266,7 @@ module.exports = async (options) => {
 							.replace(/{{number}}/g, parsedNumber),
 					)
 					.setColor(options.embed.color);
-				_msg.inlineReply(_embed);
+				_msg.reply(_embed);
 			}
 		});
 
@@ -303,7 +303,7 @@ module.exports = async (options) => {
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
-				options.message.inlineReply({
+				options.message.reply({
 					embed: _embed,
 				});
 			}
@@ -330,7 +330,7 @@ module.exports = async (options) => {
 					embed,
 					components: [{ type: 1, components: [btn1] }],
 				});
-				return options.message.inlineReply(_embed);
+				return options.message.reply(_embed);
 			}
 		});
 	} else {
@@ -353,7 +353,7 @@ module.exports = async (options) => {
 			.setStyle('red')
 			.setLabel(options.buttonText)
 			.setID(id);
-		const msg = await options.message.inlineReply(embed);
+		const msg = await options.message.reply(embed);
 		await msg.edit({
 			embed: embed,
 			components: [{ type: 1, components: [btn1] }],
@@ -394,7 +394,7 @@ module.exports = async (options) => {
 					embed,
 					components: [{ type: 1, components: [btn1] }],
 				});
-				_msg.inlineReply(_embed);
+				_msg.reply(_embed);
 				gameCollector.stop();
 				collector.stop();
 				data.delete(options.message.author.id);
@@ -407,7 +407,7 @@ module.exports = async (options) => {
 							.replace(/{{number}}/g, parsedNumber),
 					)
 					.setColor(options.embed.color);
-				_msg.inlineReply(_embed);
+				_msg.reply(_embed);
 			}
 			if (parseInt(_msg.content) > options.number) {
 				const _embed = new Discord.MessageEmbed()
@@ -417,7 +417,7 @@ module.exports = async (options) => {
 							.replace(/{{number}}/g, parsedNumber),
 					)
 					.setColor(options.embed.color);
-				_msg.inlineReply(_embed);
+				_msg.reply(_embed);
 			}
 		});
 
@@ -455,7 +455,7 @@ module.exports = async (options) => {
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
-				options.message.inlineReply({
+				options.message.reply({
 					embed: _embed,
 				});
 			}
@@ -482,7 +482,7 @@ module.exports = async (options) => {
 					components: [{ type: 1, components: [btn1] }],
 				});
 				data.delete(options.message.author.id);
-				return options.message.inlineReply(_embed);
+				return options.message.reply(_embed);
 			}
 		});
 	}

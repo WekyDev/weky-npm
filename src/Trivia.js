@@ -142,7 +142,7 @@ module.exports = async (options) => {
 		'-' +
 		getRandomString(4);
 
-	const think = await options.message.inlineReply({
+	const think = await options.message.reply({
 		embed: new Discord.MessageEmbed()
 			.setTitle(`${options.thinkMessage}.`)
 			.setColor(options.embed.color),
@@ -313,7 +313,7 @@ module.exports = async (options) => {
 					if (options.embed.timestamp) {
 						winEmbed.setTimestamp();
 					}
-					options.message.inlineReply(winEmbed);
+					options.message.reply(winEmbed);
 				} else {
 					btn1 = new disbut.MessageButton()
 						.setEmoji(options.emojis.one)
@@ -411,7 +411,7 @@ module.exports = async (options) => {
 					if (options.embed.timestamp) {
 						lostEmbed.setTimestamp();
 					}
-					options.message.inlineReply(lostEmbed);
+					options.message.reply(lostEmbed);
 				}
 			});
 		});

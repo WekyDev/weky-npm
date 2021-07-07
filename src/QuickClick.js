@@ -118,7 +118,7 @@ module.exports = async (options) => {
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
 	}
-	options.message.inlineReply(embed).then((msg) => {
+	options.message.reply(embed).then((msg) => {
 		currentGames[options.message.guild.id] = true;
 		currentGames[`${options.message.guild.id}_channel`] =
 			options.message.channel.id;

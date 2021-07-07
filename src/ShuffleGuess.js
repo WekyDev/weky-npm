@@ -149,7 +149,7 @@ module.exports = async (options) => {
 	if (options.embed.timestamp) {
 		emd.setTimestamp();
 	}
-	const embed = await options.message.inlineReply({
+	const embed = await options.message.reply({
 		embed: emd,
 	});
 	const gameCreatedAt = Date.now();
@@ -189,7 +189,7 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
-			msg.inlineReply(_embed);
+			msg.reply(_embed);
 			embed.edit({
 				embed: emd,
 				component: row,
@@ -206,7 +206,7 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
-			msg.inlineReply(_embed).then((m) => m.delete({ timeout: 2000 }));
+			msg.reply(_embed).then((m) => m.delete({ timeout: 2000 }));
 		}
 	});
 	const GameCollector = embed.createButtonCollector((fn) => fn);
@@ -287,7 +287,7 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
-			options.message.inlineReply(_embed);
+			options.message.reply(_embed);
 			data.delete(options.message.author.id);
 			return embed.edit({
 				embed: emd,

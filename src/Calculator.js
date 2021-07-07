@@ -314,7 +314,7 @@ module.exports = async (options) => {
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
 	}
-	options.message.inlineReply(embed).then(async (msg) => {
+	options.message.reply(embed).then(async (msg) => {
 		msg.edit({
 			embed: embed,
 			components: [

@@ -135,7 +135,7 @@ module.exports = async (options) => {
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
 	}
-	const think = await options.message.inlineReply(embed);
+	const think = await options.message.reply(embed);
 	await think.edit({
 		embed,
 		components: [{ type: 1, components: [btn1] }],
@@ -164,7 +164,7 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
-			options.message.inlineReply(_embed);
+			options.message.reply(_embed);
 			btn1 = new disbut.MessageButton()
 				.setStyle('red')
 				.setLabel(options.buttonText)
@@ -185,7 +185,7 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
-			options.message.inlineReply(_embed);
+			options.message.reply(_embed);
 			collector.stop(msg.author.username);
 			data.delete(options.message.author.id);
 			btn1 = new disbut.MessageButton()
@@ -209,7 +209,7 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
-			options.message.inlineReply(_embed);
+			options.message.reply(_embed);
 			btn1 = new disbut.MessageButton()
 				.setStyle('red')
 				.setLabel(options.buttonText)

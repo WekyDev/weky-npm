@@ -1,6 +1,6 @@
 {
 	"name": "weky",
-	"version": "3.0.1",
+	"version": "3.0.2",
 	"description": "A fun npm package to play games within Discord with buttons!",
 	"main": "index.js",
 	"scripts": {
@@ -21,7 +21,7 @@
 		"url": "https://github.com/WekyDev/weky-npm.git"
 	},
 	"dependencies": {
-		"@weky/inlinereply": "^0.0.0",
+		"@weky/reply": "^0.0.0",
 		"axios": "^0.21.1",
 		"chalk": "^4.1.1",
 		"cheerio": "^1.0.0-rc.10",

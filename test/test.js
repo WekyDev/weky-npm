@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-require('@weky/inlinereply');
+require('@weky/reply');
 const client = new Discord.Client();
 const disbut = require('discord-buttons');
 const { Calculator } = require('../index');
