@@ -11,6 +11,7 @@
 
 ## What is weky?
 - A fun npm package to play games within Discord with buttons!
+- looking for examples? click here: [Examples](https://github.com/WekyDev/weky-npm/tree/main/Examples)
 
 ## Features
 - 🧑 Beginner friendly
