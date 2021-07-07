@@ -1,7 +1,7 @@
 # Example for Would You Rather
 
 ```js
-await WillYouPressTheButton({
+await WouldYouRather({
 	message: message,
 	embed: {
 		title: 'Would you rather... | Weky Development',
