@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const {	checkForUpdates } = require('../functions/function');
+const { checkForUpdates } = require('../functions/function');
 
 module.exports = async (options) => {
 	checkForUpdates();
@@ -12,7 +12,9 @@ module.exports = async (options) => {
 
 	if (!options.member) options.member = options.message.member;
 	if (!(options.message instanceof Discord.GuildMember)) {
-		throw new TypeError('Weky Error: Invalid Discord GuildMember was provided.');
+		throw new TypeError(
+			'Weky Error: Invalid Discord GuildMember was provided.',
+		);
 	}
 
 	if (!options.text) {

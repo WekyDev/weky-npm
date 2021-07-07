@@ -147,7 +147,6 @@ module.exports = async (options) => {
 		if (typeof options.returnWinner !== 'boolean') {
 			throw new TypeError('Weky Error: buttonText must be a boolean.');
 		}
-
 		const participants = [];
 		if (currentGames[options.message.guild.id]) {
 			const embed = new Discord.MessageEmbed()

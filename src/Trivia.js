@@ -263,9 +263,7 @@ module.exports = async (options) => {
 					data.delete(options.message.author.id);
 					if (options.returnWinner) {
 						if (!options.gameID) {
-							throw new Error(
-								'Weky Error: gameID argument was not specified.',
-							);
+							throw new Error('Weky Error: gameID argument was not specified.');
 						}
 						if (typeof options.gameID !== 'string') {
 							throw new TypeError('Weky Error: gameID must be a string.');

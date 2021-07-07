@@ -46,11 +46,6 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: thinkMessage must be a boolean.');
 	}
 
-	if(!options.othersMessage) options.othersMessage = 'Only <@{{author}}> can use the buttons!';
-	if(typeof options.othersMessage !== 'string') {
-		throw new TypeError('Weky Error: othersMessage must be a string.');
-	}
-
 	if (!options.winMessage) {
 		options.winMessage =
 			'GG, It was a **{{answer}}**. You got it correct in **{{time}}**.';
@@ -60,11 +55,17 @@ module.exports = async (options) => {
 	}
 
 	if (!options.loseMessage) {
-		options.loseMessage =
-			'Better luck next time! It was a **{{answer}}**.';
+		options.loseMessage = 'Better luck next time! It was a **{{answer}}**.';
 	}
 	if (typeof options.loseMessage !== 'string') {
 		throw new TypeError('Weky Error: loseMessage must be a boolean.');
+	}
+
+	if (!options.othersMessage) {
+		options.othersMessage = 'Only <@{{author}}> can use the buttons!';
+	}
+	if (typeof options.othersMessage !== 'string') {
+		throw new TypeError('Weky Error: othersMessage must be a string.');
 	}
 
 	if (!options.buttons) options.buttons = {};
@@ -203,10 +204,7 @@ module.exports = async (options) => {
 					const winEmbed = new Discord.MessageEmbed()
 						.setDescription(
 							`${options.winMessage
-								.replace(
-									'{{answer}}',
-									decode(answer),
-								)
+								.replace('{{answer}}', decode(answer))
 								.replace('{{time}}', time)}`,
 						)
 						.setColor(options.embed.color)
@@ -239,10 +237,7 @@ module.exports = async (options) => {
 					});
 					const lostEmbed = new Discord.MessageEmbed()
 						.setDescription(
-							`${options.loseMessage.replace(
-								'{{answer}}',
-								decode(answer),
-							)}`,
+							`${options.loseMessage.replace('{{answer}}', decode(answer))}`,
 						)
 						.setColor(options.embed.color)
 						.setFooter('©️ Weky Development');

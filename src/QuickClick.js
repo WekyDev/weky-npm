@@ -1,3 +1,4 @@
+/* eslint-disable space-before-function-paren */
 const currentGames = new Object();
 const Discord = require('discord.js');
 const disbut = require('discord-buttons');
@@ -73,7 +74,8 @@ module.exports = async (options) => {
 	}
 
 	if (!options.loseMessage) {
-		options.loseMessage = 'No one pressed the button in time. So, I dropped the game!';
+		options.loseMessage =
+			'No one pressed the button in time. So, I dropped the game!';
 	}
 	if (typeof options.loseMessage !== 'string') {
 		throw new TypeError('Weky Error: startMessage must be a string.');
@@ -86,7 +88,7 @@ module.exports = async (options) => {
 
 	if (!options.ongoingMessage) {
 		options.ongoingMessage =
-			'A game is already runnning in <#{{channel}}>. You can\'t start a new one!';
+			"A game is already runnning in <#{{channel}}>. You can't start a new one!";
 	}
 	if (typeof options.ongoingMessage !== 'string') {
 		throw new TypeError('Weky Error: ongoingMessage must be a string.');
@@ -120,7 +122,7 @@ module.exports = async (options) => {
 		currentGames[options.message.guild.id] = true;
 		currentGames[`${options.message.guild.id}_channel`] =
 			options.message.channel.id;
-		setTimeout(async function() {
+		setTimeout(async function () {
 			const gameCreatedAt = Date.now();
 			const buttons = [];
 			const rows = [];
@@ -166,8 +168,8 @@ module.exports = async (options) => {
 			});
 			Collector.on('collect', async (button) => {
 				button.reply.defer();
-				if(button.id === 'CORRECT') {
-					buttons.forEach(element => {
+				if (button.id === 'CORRECT') {
+					buttons.forEach((element) => {
 						element.setDisabled();
 					});
 					rows.length = 0;
@@ -198,7 +200,7 @@ module.exports = async (options) => {
 			});
 			Collector.on('end', async (_msg, reason) => {
 				if (reason === 'time') {
-					buttons.forEach(element => {
+					buttons.forEach((element) => {
 						element.setDisabled();
 					});
 					rows.length = 0;

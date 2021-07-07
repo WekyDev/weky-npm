@@ -158,10 +158,10 @@ module.exports = async (options) => {
 		component: row,
 	});
 	const filter = (m) => m.author.id === options.message.author.id;
-	const gameCollector = options.message.channel.createMessageCollector(
-		filter,
-		{ time: options.time, errors: ['time'] },
-	);
+	const gameCollector = options.message.channel.createMessageCollector(filter, {
+		time: options.time,
+		errors: ['time'],
+	});
 	gameCollector.on('collect', async (msg) => {
 		if (msg.content.toLowerCase() === options.word.toString()) {
 			gameCollector.stop();
@@ -213,10 +213,7 @@ module.exports = async (options) => {
 	GameCollector.on('collect', (btn) => {
 		if (btn.clicker.user.id !== options.message.author.id) {
 			return btn.reply.send(
-				options.othersMessage.replace(
-					'{{author}}',
-					options.message.author.id,
-				),
+				options.othersMessage.replace('{{author}}', options.message.author.id),
 				true,
 			);
 		}

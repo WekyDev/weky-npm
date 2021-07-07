@@ -43,7 +43,9 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: field1 must be a string.');
 	}
 
-	if (!options.embed.field2) {options.embed.field2 = 'Words Found/Remaining Words:';}
+	if (!options.embed.field2) {
+		options.embed.field2 = 'Words Found/Remaining Words:';
+	}
 	if (typeof options.embed.field2 !== 'string') {
 		throw new TypeError('Weky Error: field2 must be a string.');
 	}
