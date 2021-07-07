@@ -477,7 +477,6 @@ module.exports = async (options) => {
 							}
 						}
 						if (checkHealth(player)) {
-							msg.reply.defer();
 							btn1 = new MessageButton()
 								.setLabel(options.buttons.hit)
 								.setID(id1)
@@ -520,8 +519,12 @@ module.exports = async (options) => {
 										'Weky Error: gameID argument was not specified.',
 									);
 								}
-								if (typeof options.gameID !== 'string') {
-									throw new TypeError('Weky Error: gameID must be a string.');
+								if (
+									typeof options.gameID !== 'string'
+								) {
+									throw new TypeError(
+										'Weky Error: gameID must be a string.',
+									);
 								}
 								db.set(
 									`Fight_${options.message.guild.id}_${options.gameID}`,
@@ -534,7 +537,6 @@ module.exports = async (options) => {
 							});
 						}
 					} else {
-						msg.reply.defer();
 						btn1 = new MessageButton()
 							.setLabel(options.buttons.hit)
 							.setID(id1)
