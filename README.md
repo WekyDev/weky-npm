@@ -47,7 +47,7 @@ const Discord = require('discord.js');
 require('@weky/inlinereply');
 const client = new Discord.Client();
 const disbut = require('discord-buttons');
-const { Calculator } = require('../index');
+const { Calculator } = require('weky');
 disbut(client);
 
 client.on('ready', async () => {

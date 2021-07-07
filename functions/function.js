@@ -109,7 +109,7 @@ module.exports = {
 				const versions = Object.keys(res.time);
 				const vLatest = versions[versions.length - 1];
 				if (package.dependencies.weky) {
-					if (res['dist-tags'].latest !== package.dependencies.weky) {
+					if (res['dist-tags'].latest !== package.dependencies.weky.slice(1)) {
 						const msg = chalk(
 							`new ${chalk.green('version')} of ${chalk.yellow(
 								'weky',
@@ -126,7 +126,7 @@ module.exports = {
 						boxConsole([msg, tip, install]);
 					}
 				} else if (package.devDependencies.weky) {
-					if (res['dist-tags'].latest !== package.devDependencies.weky) {
+					if (res['dist-tags'].latest !== package.devDependencies.weky.slice(1)) {
 						const msg = chalk(
 							`new ${chalk.green('version')} of ${chalk.yellow(
 								'weky',
