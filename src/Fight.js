@@ -477,7 +477,6 @@ module.exports = async (options) => {
 							}
 						}
 						if (checkHealth(player)) {
-							msg.reply.defer();
 							btn1 = new MessageButton()
 								.setLabel(options.buttons.hit)
 								.setID(id1)
