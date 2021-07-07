@@ -161,7 +161,7 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				embed.setTimestamp();
 			}
-			return options.message.reply(embed);
+			return options.message.channel.send(embed);
 		}
 		const embed = new Discord.MessageEmbed()
 			.setDescription(
@@ -180,7 +180,7 @@ module.exports = async (options) => {
 			.setStyle('red')
 			.setLabel(options.buttonText)
 			.setID(id);
-		const msg = await options.message.reply(embed);
+		const msg = await options.message.channel.send(embed);
 		await msg.edit({
 			embed: embed,
 			components: [{ type: 1, components: [btn1] }],
@@ -303,7 +303,7 @@ module.exports = async (options) => {
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
-				options.message.reply({
+				options.message.channel.send({
 					embed: _embed,
 				});
 			}
@@ -330,7 +330,7 @@ module.exports = async (options) => {
 					embed,
 					components: [{ type: 1, components: [btn1] }],
 				});
-				return options.message.reply(_embed);
+				return options.message.channel.send(_embed);
 			}
 		});
 	} else {
@@ -353,7 +353,7 @@ module.exports = async (options) => {
 			.setStyle('red')
 			.setLabel(options.buttonText)
 			.setID(id);
-		const msg = await options.message.reply(embed);
+		const msg = await options.message.channel.send(embed);
 		await msg.edit({
 			embed: embed,
 			components: [{ type: 1, components: [btn1] }],
@@ -455,7 +455,7 @@ module.exports = async (options) => {
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
-				options.message.reply({
+				options.message.channel.send({
 					embed: _embed,
 				});
 			}
@@ -482,7 +482,7 @@ module.exports = async (options) => {
 					components: [{ type: 1, components: [btn1] }],
 				});
 				data.delete(options.message.author.id);
-				return options.message.reply(_embed);
+				return options.message.channel.send(_embed);
 			}
 		});
 	}

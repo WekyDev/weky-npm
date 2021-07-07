@@ -243,7 +243,7 @@ module.exports = async (options) => {
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
 	}
-	const question = await options.message.reply({
+	const question = await options.message.channel.send({
 		embed,
 	});
 	question.edit({

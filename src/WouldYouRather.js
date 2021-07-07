@@ -87,7 +87,7 @@ module.exports = async (options) => {
 		'-' +
 		getRandomString(4);
 
-	const think = await options.message.reply({
+	const think = await options.message.channel.send({
 		embed: new Discord.MessageEmbed()
 			.setTitle(`${options.thinkMessage}.`)
 			.setColor(options.embed.color),

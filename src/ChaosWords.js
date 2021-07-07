@@ -185,7 +185,7 @@ module.exports = async (options) => {
 		.setStyle('red')
 		.setLabel(options.buttonText)
 		.setID(id);
-	const mes = await options.message.reply(embed);
+	const mes = await options.message.channel.send(embed);
 	await mes.edit({
 		embed,
 		components: [{ type: 1, components: [btn1] }],
@@ -249,7 +249,7 @@ module.exports = async (options) => {
 				if (options.embed.timestamp) {
 					__embed.setTimestamp();
 				}
-				options.message.reply({
+				options.message.channel.send({
 					embed: __embed,
 				});
 				data.delete(options.message.author.id);
@@ -266,7 +266,7 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				__embed.setTimestamp();
 			}
-			options.message.reply({
+			options.message.channel.send({
 				embed: __embed,
 			});
 		} else {
@@ -291,7 +291,7 @@ module.exports = async (options) => {
 					embed: embed,
 					components: [{ type: 1, components: [btn1] }],
 				});
-				options.message.reply({
+				options.message.channel.send({
 					embed: _embed,
 				});
 				data.delete(options.message.author.id);
@@ -309,7 +309,7 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
-			options.message.reply({
+			options.message.channel.send({
 				embed: _embed,
 			});
 		}
@@ -336,7 +336,7 @@ module.exports = async (options) => {
 				components: [{ type: 1, components: [btn1] }],
 			});
 			data.delete(options.message.author.id);
-			options.message.reply(_embed);
+			options.message.channel.send(_embed);
 		}
 	});
 
@@ -368,7 +368,7 @@ module.exports = async (options) => {
 		if (options.embed.timestamp) {
 			_embed.setTimestamp();
 		}
-		options.message.reply(_embed);
+		options.message.channel.send(_embed);
 		data.delete(options.message.author.id);
 		gameCollector.stop();
 		return game.stop();

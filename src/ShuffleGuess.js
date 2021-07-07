@@ -149,7 +149,7 @@ module.exports = async (options) => {
 	if (options.embed.timestamp) {
 		emd.setTimestamp();
 	}
-	const embed = await options.message.reply({
+	const embed = await options.message.channel.send({
 		embed: emd,
 	});
 	const gameCreatedAt = Date.now();
@@ -287,7 +287,7 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
-			options.message.reply(_embed);
+			options.message.channel.send(_embed);
 			data.delete(options.message.author.id);
 			return embed.edit({
 				embed: emd,

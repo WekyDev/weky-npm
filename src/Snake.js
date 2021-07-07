@@ -389,7 +389,7 @@ module.exports = async (options) => {
 		.setLabel(options.buttonText)
 		.setStyle('red')
 		.setID(id6);
-	options.message.reply(embed).then(async (m) => {
+	options.message.channel.send(embed).then(async (m) => {
 		m.edit({
 			embed: embed,
 			components: [

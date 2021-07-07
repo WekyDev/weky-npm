@@ -109,7 +109,7 @@ module.exports = async (options) => {
 		'-' +
 		getRandomString(4);
 
-	const think = await options.message.reply({
+	const think = await options.message.channel.send({
 		embed: new Discord.MessageEmbed()
 			.setTitle(`${options.thinkMessage}.`)
 			.setColor(options.embed.color),
@@ -252,7 +252,7 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
-			options.message.reply({
+			options.message.channel.send({
 				embed: _embed,
 			});
 		}
@@ -285,7 +285,7 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
-			options.message.reply({
+			options.message.channel.send({
 				embed: _embed,
 			});
 		}
