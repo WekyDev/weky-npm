@@ -435,7 +435,7 @@ module.exports = async (options) => {
 				}
 			});
 
-			gameCollector.on('collect', (trivia, reason) => {
+			gameCollector.on('end', (trivia, reason) => {
 				if(reason === 'time') {
 					trivia.reply.defer();
 					btn1 = new disbut.MessageButton()
