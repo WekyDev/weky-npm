@@ -437,7 +437,6 @@ module.exports = async (options) => {
 
 			gameCollector.on('end', (trivia, reason) => {
 				if(reason === 'time') {
-					trivia.reply.defer();
 					btn1 = new disbut.MessageButton()
 						.setEmoji(options.emojis.one)
 						.setID(id1)
@@ -457,64 +456,24 @@ module.exports = async (options) => {
 					data.delete(options.message.author.id);
 					if (winningID === id1) {
 						btn1.setStyle('green');
-						if (trivia.id === id2) {
-							btn2.setStyle('red');
-							btn3.setStyle('grey');
-							btn4.setStyle('grey');
-						} else if (trivia.id === id3) {
-							btn2.setStyle('grey');
-							btn3.setStyle('red');
-							btn4.setStyle('grey');
-						} else if (trivia.id === id4) {
-							btn2.setStyle('grey');
-							btn3.setStyle('grey');
-							btn4.setStyle('red');
-						}
+						btn2.setStyle('grey');
+						btn3.setStyle('grey');
+						btn4.setStyle('grey');
 					} else if (winningID === id2) {
+						btn1.setStyle('grey');
 						btn2.setStyle('green');
-						if (trivia.id === id1) {
-							btn1.setStyle('red');
-							btn3.setStyle('grey');
-							btn4.setStyle('grey');
-						} else if (trivia.id === id3) {
-							btn1.setStyle('grey');
-							btn3.setStyle('red');
-							btn4.setStyle('grey');
-						} else if (trivia.id === id4) {
-							btn1.setStyle('grey');
-							btn3.setStyle('grey');
-							btn4.setStyle('red');
-						}
+						btn3.setStyle('grey');
+						btn4.setStyle('grey');
 					} else if (winningID === id3) {
+						btn1.setStyle('grey');
+						btn2.setStyle('grey');
 						btn3.setStyle('green');
-						if (trivia.id === id1) {
-							btn1.setStyle('red');
-							btn2.setStyle('grey');
-							btn4.setStyle('grey');
-						} else if (trivia.id === id2) {
-							btn1.setStyle('grey');
-							btn2.setStyle('red');
-							btn4.setStyle('grey');
-						} else if (trivia.id === id4) {
-							btn1.setStyle('grey');
-							btn2.setStyle('grey');
-							btn4.setStyle('red');
-						}
+						btn4.setStyle('grey');
 					} else if (winningID === id4) {
+						btn1.setStyle('grey');
+						btn2.setStyle('grey');
+						btn3.setStyle('grey');
 						btn4.setStyle('green');
-						if (trivia.id === id1) {
-							btn1.setStyle('red');
-							btn2.setStyle('grey');
-							btn3.setStyle('grey');
-						} else if (trivia.id === id2) {
-							btn1.setStyle('grey');
-							btn2.setStyle('red');
-							btn3.setStyle('grey');
-						} else if (trivia.id === id3) {
-							btn1.setStyle('grey');
-							btn2.setStyle('grey');
-							btn3.setStyle('red');
-						}
 					}
 					think.edit({
 						embed: embed,
