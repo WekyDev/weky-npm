@@ -1,4 +1,4 @@
-# Example for randomCase
+# Example for random Case
 
 ```js
 randomCase('Weky Development')

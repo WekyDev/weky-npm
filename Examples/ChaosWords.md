@@ -1,4 +1,4 @@
-# Example for ChaosWords
+# Example for Chaos Words
 
 ```js
 await ChaosWords({

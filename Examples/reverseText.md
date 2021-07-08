@@ -1,4 +1,4 @@
-# Example for reverseText
+# Example for reverse Text
 
 ```js
 reverseText('Weky Development')

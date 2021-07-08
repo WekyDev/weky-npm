@@ -1,4 +1,4 @@
-# Example for randomHexColor
+# Example for random HexColor
 
 ```js
 randomHexColor()

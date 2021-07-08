@@ -1,4 +1,3 @@
-const data = new Set();
 const Discord = require('discord.js');
 const fetch = require('node-fetch');
 const disbut = require('discord-buttons');
@@ -65,9 +64,6 @@ module.exports = async (options) => {
 	if (typeof options.buttons.optionB !== 'string') {
 		throw new TypeError('Weky Error: button must be a string.');
 	}
-
-	if (data.has(options.message.author.id)) return;
-	data.add(options.message.author.id);
 
 	const id1 =
 		getRandomString(4) +
@@ -164,7 +160,6 @@ module.exports = async (options) => {
 						.setID(id2)
 						.setDisabled();
 					gameCollector.stop();
-					data.delete(options.message.author.id);
 					think.edit({
 						embed: embed,
 						components: [{ type: 1, components: [btn, btn2] }],
@@ -181,7 +176,6 @@ module.exports = async (options) => {
 						.setID(id2)
 						.setDisabled();
 					gameCollector.stop();
-					data.delete(options.message.author.id);
 					think.edit({
 						embed: embed,
 						components: [{ type: 1, components: [btn, btn2] }],
