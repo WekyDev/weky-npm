@@ -773,7 +773,7 @@ module.exports = async (options) => {
 							});
 						}
 					} else if (button.id === id3) {
-						opponentChoice = ' ✋';
+						opponentChoice = '✋';
 						button.reply.send(
 							options.choseMessage.replace('{{emoji}}', '✋'),
 							true,
