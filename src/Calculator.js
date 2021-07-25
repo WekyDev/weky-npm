@@ -19,14 +19,14 @@ module.exports = async (options) => {
 
 	if (!options.embed) options.embed = {};
 	if (typeof options.embed !== 'object') {
-		throw new TypeError('Weky Error: embed must be an object.');
+		throw new TypeError('Error: embed must be an object.');
 	}
 
 	if (!options.embed.title) {
 		options.embed.title = 'Calculator | Weky Development';
 	}
 	if (typeof options.embed.title !== 'string') {
-		throw new TypeError('Weky Error: embed title must be a string.');
+		throw new TypeError('Wky Error: embed title must be a string.');
 	}
 
 	if (!options.embed.color) options.embed.color = randomHexColor();
@@ -310,7 +310,7 @@ module.exports = async (options) => {
 		.setTitle(options.embed.title)
 		.setDescription(stringify)
 		.setColor(options.embed.color)
-		.setFooter('©️ Weky Development');
+		//.setFooter('©️  Development');
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
 	}
@@ -345,7 +345,7 @@ module.exports = async (options) => {
 				.setTitle(options.embed.title)
 				.setDescription(stringify)
 				.setColor(options.embed.color)
-				.setFooter('©️ Weky Development');
+				//.setFooter('©️ Weky Development');
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
@@ -380,7 +380,7 @@ module.exports = async (options) => {
 				.setTitle(options.embed.title)
 				.setColor(options.embed.color)
 				.setDescription(stringify)
-				.setFooter('©️ Weky Development');
+				//.setFooter('©️ Weky Development');
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
