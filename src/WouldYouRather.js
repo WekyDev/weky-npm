@@ -135,7 +135,7 @@ module.exports = async (options) => {
 			`**A)** ${decode(res.questions[0])} \n**B)** ${decode(res.questions[1])}`,
 		)
 		.setColor(options.embed.color)
-		.setFooter('©️ Weky Development');
+		
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
 	}
@@ -181,7 +181,7 @@ module.exports = async (options) => {
 							})** \nB) ${decode(res.questions[1])} (${res.percentage['2']})`,
 						)
 						.setColor(options.embed.color)
-						.setFooter('©️ Weky Development');
+						
 					if (options.embed.timestamp) {
 						_embed.setTimestamp();
 					}
@@ -213,7 +213,7 @@ module.exports = async (options) => {
 							}) \n**B) ${decode(res.questions[1])} (${res.percentage['2']})**`,
 						)
 						.setColor(options.embed.color)
-						.setFooter('©️ Weky Development');
+						
 					if (options.embed.timestamp) {
 						_embed.setTimestamp();
 					}

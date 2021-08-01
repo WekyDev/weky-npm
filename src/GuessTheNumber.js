@@ -156,7 +156,7 @@ module.exports = async (options) => {
 						currentGames[`${options.message.guild.id}_channel`],
 					),
 				)
-				.setFooter('©️ Weky Development')
+				
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				embed.setTimestamp();
@@ -171,7 +171,7 @@ module.exports = async (options) => {
 				)}`,
 			)
 			.setTitle(options.embed.title)
-			.setFooter('©️ Weky Development')
+			
 			.setColor(options.embed.color);
 		if (options.embed.timestamp) {
 			embed.setTimestamp();
@@ -218,7 +218,7 @@ module.exports = async (options) => {
 							)}`,
 					)
 					.setTitle(options.embed.title)
-					.setFooter('©️ Weky Development')
+					
 					.setColor(options.embed.color);
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
@@ -299,7 +299,7 @@ module.exports = async (options) => {
 						options.loseMessage.replace(/{{number}}/g, options.number),
 					)
 					.setColor(options.embed.color)
-					.setFooter('©️ Weky Development');
+					
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
@@ -317,7 +317,7 @@ module.exports = async (options) => {
 						options.loseMessage.replace(/{{number}}/g, options.number),
 					)
 					.setColor(options.embed.color)
-					.setFooter('©️ Weky Development');
+					
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
@@ -344,7 +344,7 @@ module.exports = async (options) => {
 				)}`,
 			)
 			.setTitle(options.embed.title)
-			.setFooter('©️ Weky Development')
+			
 			.setColor(options.embed.color);
 		if (options.embed.timestamp) {
 			embed.setTimestamp();
@@ -380,7 +380,7 @@ module.exports = async (options) => {
 							.replace(/{{number}}/g, options.number)}`,
 					)
 					.setTitle(options.embed.title)
-					.setFooter('©️ Weky Development')
+					
 					.setColor(options.embed.color);
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
@@ -451,7 +451,7 @@ module.exports = async (options) => {
 						options.loseMessage.replace(/{{number}}/g, options.number),
 					)
 					.setColor(options.embed.color)
-					.setFooter('©️ Weky Development');
+					
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
@@ -468,7 +468,7 @@ module.exports = async (options) => {
 						options.loseMessage.replace(/{{number}}/g, options.number),
 					)
 					.setColor(options.embed.color)
-					.setFooter('©️ Weky Development');
+					
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}

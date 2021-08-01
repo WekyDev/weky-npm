@@ -126,7 +126,7 @@ module.exports = async (options) => {
 		.setTitle(options.embed.title)
 		.setDescription(statement)
 		.setColor(options.embed.color)
-		.setFooter('©️ Weky Development');
+		
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
 	}

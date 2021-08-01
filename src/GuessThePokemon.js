@@ -151,7 +151,7 @@ module.exports = async (options) => {
 		)
 		.setColor(options.embed.color)
 		.setImage(data.HiddenImage)
-		.setFooter('©️ Weky Development');
+		
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
 	}
@@ -180,7 +180,7 @@ module.exports = async (options) => {
 				)
 				.setColor(options.embed.color)
 				.setImage(data.ShowImage)
-				.setFooter('©️ Weky Development');
+				
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
@@ -206,7 +206,7 @@ module.exports = async (options) => {
 						.replace('{{author}}', msg.author.toString()),
 				)
 				.setColor(options.embed.color)
-				.setFooter('©️ Weky Development');
+				
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
@@ -248,7 +248,7 @@ module.exports = async (options) => {
 				)
 				.setColor(options.embed.color)
 				.setImage(data.ShowImage)
-				.setFooter('©️ Weky Development');
+				
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
@@ -281,7 +281,7 @@ module.exports = async (options) => {
 				)
 				.setColor(options.embed.color)
 				.setImage(data.ShowImage)
-				.setFooter('©️ Weky Development');
+				
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}

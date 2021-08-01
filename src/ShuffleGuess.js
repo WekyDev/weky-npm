@@ -140,7 +140,7 @@ module.exports = async (options) => {
 	const emd = new Discord.MessageEmbed()
 		.setColor(options.embed.color)
 		.setTitle(options.embed.title)
-		.setFooter('©️ Weky Development')
+		
 		.setDescription(
 			options.startMessage
 				.replace('{{word}}', word)
@@ -180,7 +180,7 @@ module.exports = async (options) => {
 			const time = convertTime(Date.now() - gameCreatedAt);
 			const _embed = new Discord.MessageEmbed()
 				.setColor(options.embed.color)
-				.setFooter('©️ Weky Development')
+				
 				.setDescription(
 					options.winMessage
 						.replace('{{word}}', options.word.toString())
@@ -202,7 +202,7 @@ module.exports = async (options) => {
 						.replace('{{answer}}', msg.content.toLowerCase()),
 				)
 				.setColor(options.embed.color)
-				.setFooter('©️ Weky Development');
+				
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
@@ -222,7 +222,7 @@ module.exports = async (options) => {
 			const _embed = new Discord.MessageEmbed()
 				.setColor(options.embed.color)
 				.setTitle(options.embed.title)
-				.setFooter('©️ Weky Development')
+				
 				.setDescription(
 					options.startMessage
 						.replace('{{word}}', shuffleString(options.word.toString()))
@@ -252,7 +252,7 @@ module.exports = async (options) => {
 			const _embed = new Discord.MessageEmbed()
 				.setColor(options.embed.color)
 				.setTitle(options.embed.title)
-				.setFooter('©️ Weky Development')
+				
 				.setDescription(
 					options.loseMessage.replace('{{answer}}', options.word.toString()),
 				);
@@ -280,7 +280,7 @@ module.exports = async (options) => {
 			row = new MessageActionRow().addComponent(disbut).addComponent(cancel);
 			const _embed = new Discord.MessageEmbed()
 				.setColor(options.embed.color)
-				.setFooter('©️ Weky Development')
+				
 				.setDescription(
 					options.loseMessage.replace('{{answer}}', options.word.toString()),
 				);

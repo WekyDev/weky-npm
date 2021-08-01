@@ -216,7 +216,7 @@ module.exports = async (options) => {
 				.replace('{{challenger}}', challenger.id)
 				.replace('{{opponent}}', oppenent.id),
 		)
-		.setFooter('©️ Weky Development')
+		
 		.setColor(options.embed.color);
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
@@ -259,7 +259,7 @@ module.exports = async (options) => {
 				.setDescription(
 					options.cancelMessage.replace('{{opponent}}', oppenent.id),
 				)
-				.setFooter('©️ Weky Development')
+				
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				emd.setTimestamp();
@@ -311,7 +311,7 @@ module.exports = async (options) => {
 				.setDescription(
 					options.fightMessage.replace('{{player}}', gameData[player].member),
 				)
-				.setFooter('©️ Weky Development')
+				
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
@@ -350,7 +350,7 @@ module.exports = async (options) => {
 									.setDescription(
 										`(:punch:) ${gameData[player].member.username} — ${gameData[player].health} HP - **versus** - **${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health} HP`,
 									)
-									.setFooter('©️ Weky Development')
+									
 									.setColor(options.embed.color);
 								if (options.embed.timestamp) {
 									__embed.setTimestamp();
@@ -365,7 +365,7 @@ module.exports = async (options) => {
 									.setDescription(
 										`**${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health} HP - **versus** - ${gameData[player].member.username} — ${gameData[player].health} HP (:punch:)`,
 									)
-									.setFooter('©️ Weky Development')
+									
 									.setColor(options.embed.color);
 								if (options.embed.timestamp) {
 									__embed.setTimestamp();
@@ -400,7 +400,7 @@ module.exports = async (options) => {
 										.setDescription(
 											`(:hearts:) ${gameData[player].member.username} — ${gameData[player].health} HP - **versus** - **${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health} HP`,
 										)
-										.setFooter('©️ Weky Development')
+										
 										.setColor(options.embed.color);
 									if (options.embed.timestamp) {
 										__embed.setTimestamp();
@@ -415,7 +415,7 @@ module.exports = async (options) => {
 										.setDescription(
 											`**${gameData[tempPlayer].member.username}** — ${gameData[tempPlayer].health} HP - **versus** - ${gameData[player].member.username} — ${gameData[player].health} HP (:hearts:)`,
 										)
-										.setFooter('©️ Weky Development')
+										
 										.setColor(options.embed.color);
 									if (options.embed.timestamp) {
 										__embed.setTimestamp();
@@ -465,7 +465,7 @@ module.exports = async (options) => {
 											gameData[player].member.id,
 										),
 									)
-									.setFooter('©️ Weky Development')
+									
 									.setColor(options.embed.color);
 								if (options.embed.timestamp) {
 									__embed.setTimestamp();
@@ -508,7 +508,7 @@ module.exports = async (options) => {
 										gameData[tempPlayer].member.id,
 									),
 								)
-								.setFooter('©️ Weky Development')
+								
 								.setColor(options.embed.color);
 							if (options.embed.timestamp) {
 								__embed.setTimestamp();
@@ -564,7 +564,7 @@ module.exports = async (options) => {
 									gameData[tempPlayer].member.id,
 								),
 							)
-							.setFooter('©️ Weky Development')
+							
 							.setColor(options.embed.color);
 						if (options.embed.timestamp) {
 							__embed.setTimestamp();
@@ -619,7 +619,7 @@ module.exports = async (options) => {
 			const _embed = new Discord.MessageEmbed()
 				.setTitle(options.embed.title)
 				.setDescription(options.endMessage.replace('{{opponent}}', oppenent.id))
-				.setFooter('©️ Weky Development')
+				
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();

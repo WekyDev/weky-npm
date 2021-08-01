@@ -176,7 +176,7 @@ module.exports = async (options) => {
 		)
 		.addField(options.embed.field1, array.join(''))
 		.addField(options.embed.field2, `0/${options.words.length}`)
-		.setFooter('©️ Weky Development')
+		
 		.setColor(options.embed.color);
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
@@ -215,7 +215,7 @@ module.exports = async (options) => {
 				.addField(options.embed.field1, array.join(''))
 				.addField(options.embed.field3, `${guessed.join(', ')}`)
 				.addField(options.embed.field2, `${remaining}/${options.words.length}`)
-				.setFooter('©️ Weky Development')
+				
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
@@ -244,7 +244,7 @@ module.exports = async (options) => {
 					.addField(options.embed.field1, arr)
 					.setDescription(options.winMessage.replace('{{time}}', time))
 					.addField(options.embed.field4, `${options.words.join(', ')}`)
-					.setFooter('©️ Weky Development')
+					
 					.setColor(options.embed.color);
 				if (options.embed.timestamp) {
 					__embed.setTimestamp();
@@ -256,7 +256,7 @@ module.exports = async (options) => {
 				return game.stop();
 			}
 			const __embed = new Discord.MessageEmbed()
-				.setFooter('©️ Weky Development')
+				
 				.setDescription(
 					`${options.correctWordMessage
 						.replace('{{word}}', msg.content.toLowerCase())
@@ -277,7 +277,7 @@ module.exports = async (options) => {
 					.setDescription(options.loseMessage)
 					.addField(options.embed.field1, arr)
 					.addField(options.embed.field4, `${options.words.join(', ')}`)
-					.setFooter('©️ Weky Development')
+					
 					.setColor(options.embed.color);
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
@@ -298,7 +298,7 @@ module.exports = async (options) => {
 				return game.stop();
 			}
 			const _embed = new Discord.MessageEmbed()
-				.setFooter('©️ Weky Development')
+				
 				.setDescription(
 					`${options.wrongWordMessage.replace(
 						'{{remaining_tries}}',
@@ -321,7 +321,7 @@ module.exports = async (options) => {
 				.setDescription(options.loseMessage)
 				.addField(options.embed.field1, arr)
 				.addField(options.embed.field4, `${options.words.join(', ')}`)
-				.setFooter('©️ Weky Development')
+				
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
@@ -363,7 +363,7 @@ module.exports = async (options) => {
 			.setDescription(options.loseMessage)
 			.addField(options.embed.field1, arr)
 			.addField(options.embed.field4, `${options.words.join(', ')}`)
-			.setFooter('©️ Weky Development')
+			
 			.setColor(options.embed.color);
 		if (options.embed.timestamp) {
 			_embed.setTimestamp();

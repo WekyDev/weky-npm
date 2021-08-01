@@ -155,7 +155,7 @@ module.exports = async (options) => {
 				)}`,
 		)
 		.setColor(options.embed.color)
-		.setFooter('©️ Weky Development');
+		
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
 	}

@@ -230,7 +230,7 @@ module.exports = async (options) => {
 		const editEmbed = new Discord.MessageEmbed()
 			.setColor(options.embed.color)
 			.setTitle(options.embed.title)
-			.setFooter('©️ Weky Development')
+			
 			.setDescription(gameBoardToString());
 		if (options.embed.timestamp) {
 			editEmbed.setTimestamp();
@@ -323,7 +323,7 @@ module.exports = async (options) => {
 		const editEmbed = new Discord.MessageEmbed()
 			.setColor(options.embed.color)
 			.setTitle(options.embed.title)
-			.setFooter('©️ Weky Development')
+			
 			.setDescription(options.embed.description.replace('{{score}}', score));
 		if (options.embed.timestamp) {
 			editEmbed.setTimestamp();
@@ -353,7 +353,7 @@ module.exports = async (options) => {
 	const embed = new Discord.MessageEmbed()
 		.setColor(options.embed.color)
 		.setTitle(options.embed.title)
-		.setFooter('©️ Weky Development')
+		
 		.setDescription(gameBoardToString());
 	if (options.embed.timestamp) {
 		embed.setTimestamp();

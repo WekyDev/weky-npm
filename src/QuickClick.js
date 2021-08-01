@@ -97,7 +97,7 @@ module.exports = async (options) => {
 		const embed = new Discord.MessageEmbed()
 			.setTitle(options.embed.title)
 			.setColor(options.embed.color)
-			.setFooter('©️ Weky Development')
+			
 			.setDescription(
 				options.ongoingMessage.replace(
 					'{{channel}}',
@@ -112,7 +112,7 @@ module.exports = async (options) => {
 	const embed = new Discord.MessageEmbed()
 		.setTitle(options.embed.title)
 		.setColor(options.embed.color)
-		.setFooter('©️ Weky Development')
+		
 		.setDescription(options.waitMessage);
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
@@ -150,7 +150,7 @@ module.exports = async (options) => {
 			const _embed = new Discord.MessageEmbed()
 				.setTitle(options.embed.title)
 				.setColor(options.embed.color)
-				.setFooter('©️ Weky Development')
+				
 				.setDescription(
 					options.startMessage.replace('{{time}}', convertTime(options.time)),
 				);
@@ -186,7 +186,7 @@ module.exports = async (options) => {
 								.replace('{{time}}', (Date.now() - gameCreatedAt) / 1000),
 						)
 						.setColor(options.embed.color)
-						.setFooter('©️ Weky Development');
+						
 					if (options.embed.timestamp) {
 						__embed.setTimestamp();
 					}
@@ -212,7 +212,7 @@ module.exports = async (options) => {
 					const __embed = new Discord.MessageEmbed()
 						.setTitle(options.embed.title)
 						.setColor(options.embed.color)
-						.setFooter('©️ Weky Development')
+						
 						.setDescription(options.loseMessage);
 					if (options.embed.timestamp) {
 						__embed.setTimestamp();

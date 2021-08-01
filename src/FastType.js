@@ -129,7 +129,7 @@ module.exports = async (options) => {
 			)}`,
 		)
 		.addField('Sentence:', `${sentence}`)
-		.setFooter('©️ Weky Development')
+		
 		.setColor(options.embed.color);
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
@@ -156,7 +156,7 @@ module.exports = async (options) => {
 						.replace('{{time}}', convertTime(time))
 						.replace('{{wpm}}', wpm.toFixed(2)),
 				)
-				.setFooter('©️ Weky Development')
+				
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
@@ -176,7 +176,7 @@ module.exports = async (options) => {
 		} else {
 			const _embed = new Discord.MessageEmbed()
 				.setDescription(`${options.loseMessage}`)
-				.setFooter('©️ Weky Development')
+				
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
@@ -199,7 +199,7 @@ module.exports = async (options) => {
 		if (reason === 'time') {
 			const _embed = new Discord.MessageEmbed()
 				.setDescription(`${options.loseMessage}`)
-				.setFooter('©️ Weky Development')
+				
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();

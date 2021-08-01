@@ -151,7 +151,7 @@ module.exports = async (options) => {
 		.setTitle(options.embed.title)
 		.setDescription(decode(question.question))
 		.setColor(options.embed.color)
-		.setFooter('©️ Weky Development');
+		
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
 	}
@@ -203,7 +203,7 @@ module.exports = async (options) => {
 								.replace('{{time}}', time)}`,
 						)
 						.setColor(options.embed.color)
-						.setFooter('©️ Weky Development');
+						
 					if (options.embed.timestamp) {
 						winEmbed.setTimestamp();
 					}
@@ -234,7 +234,7 @@ module.exports = async (options) => {
 							`${options.loseMessage.replace('{{answer}}', decode(answer))}`,
 						)
 						.setColor(options.embed.color)
-						.setFooter('©️ Weky Development');
+						
 					if (options.embed.timestamp) {
 						lostEmbed.setTimestamp();
 					}
