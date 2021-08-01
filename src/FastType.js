@@ -14,7 +14,7 @@ module.exports = async (options) => {
 	if (!options.message) {
 		throw new Error('Weky Error: message argument was not specified.');
 	}
-	if (!(options.message instanceof Discord.Message)) {
+	if (typeof options.message !== 'object') {
 		throw new TypeError('Weky Error: Invalid Discord Message was provided.');
 	}
 
@@ -115,7 +115,6 @@ module.exports = async (options) => {
 		.split(' ')
 		.map((msg) => `\`${msg.split('').join(' ')}\``)
 		.join(' ');
-	const inGame = new Set();
 	const gameCreatedAt = Date.now();
 	let btn1 = new disbut.MessageButton()
 		.setStyle('red')
@@ -146,9 +145,7 @@ module.exports = async (options) => {
 		{ time: options.time },
 	);
 	collector.on('collect', async (msg) => {
-		if (inGame.has(options.message.author.id)) {
-			inGame.add(options.message.author.id);
-		}
+		if (msg.author.id !== options.message.author.id) return;
 		if (msg.content.toLowerCase().trim() === options.sentence.toLowerCase()) {
 			const time = Date.now() - gameCreatedAt;
 			const minute = (time / 1000 / 60) % 60;
@@ -176,7 +173,6 @@ module.exports = async (options) => {
 			});
 			collector.stop(msg.author.username);
 			data.delete(options.message.author.id);
-			return inGame.delete(options.message.author.id);
 		} else {
 			const _embed = new Discord.MessageEmbed()
 				.setDescription(`${options.loseMessage}`)
@@ -197,7 +193,6 @@ module.exports = async (options) => {
 				embed,
 				components: [{ type: 1, components: [btn1] }],
 			});
-			return inGame.delete(options.message.author.id);
 		}
 	});
 	collector.on('end', async (_collected, reason) => {
@@ -220,7 +215,6 @@ module.exports = async (options) => {
 				components: [{ type: 1, components: [btn1] }],
 			});
 			data.delete(options.message.author.id);
-			return inGame.delete(options.message.author.id);
 		}
 	});
 

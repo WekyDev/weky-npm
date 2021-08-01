@@ -1,4 +1,4 @@
-# Example for ChaosWords
+# Example for Chaos Words
 
 ```js
 await ChaosWords({
@@ -23,5 +23,5 @@ await ChaosWords({
     maxTries: 10,
     buttonText: 'Cancel',
     othersMessage: 'Only <@{{author}}> can use the buttons!'
-});s
+});
 ```

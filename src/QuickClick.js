@@ -1,4 +1,3 @@
-/* eslint-disable space-before-function-paren */
 const currentGames = new Object();
 const Discord = require('discord.js');
 const disbut = require('discord-buttons');
@@ -14,7 +13,7 @@ module.exports = async (options) => {
 	if (!options.message) {
 		throw new Error('Weky Error: message argument was not specified.');
 	}
-	if (!(options.message instanceof Discord.Message)) {
+	if (typeof options.message !== 'object') {
 		throw new TypeError('Weky Error: Invalid Discord Message was provided.');
 	}
 
@@ -88,7 +87,7 @@ module.exports = async (options) => {
 
 	if (!options.ongoingMessage) {
 		options.ongoingMessage =
-			"A game is already runnning in <#{{channel}}>. You can't start a new one!";
+			'A game is already runnning in <#{{channel}}>. You can\'t start a new one!';
 	}
 	if (typeof options.ongoingMessage !== 'string') {
 		throw new TypeError('Weky Error: ongoingMessage must be a string.');
@@ -122,7 +121,7 @@ module.exports = async (options) => {
 		currentGames[options.message.guild.id] = true;
 		currentGames[`${options.message.guild.id}_channel`] =
 			options.message.channel.id;
-		setTimeout(async function () {
+		setTimeout(async function() {
 			const gameCreatedAt = Date.now();
 			const buttons = [];
 			const rows = [];
@@ -163,12 +162,12 @@ module.exports = async (options) => {
 				components: rows,
 			});
 			const Collector = await msg.createButtonCollector((fn) => fn, {
-				max: 1,
 				time: options.time,
 			});
 			Collector.on('collect', async (button) => {
-				button.reply.defer();
 				if (button.id === 'CORRECT') {
+					button.reply.defer();
+					Collector.stop();
 					buttons.forEach((element) => {
 						element.setDisabled();
 					});

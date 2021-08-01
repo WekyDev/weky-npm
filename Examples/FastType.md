@@ -12,7 +12,7 @@ await FastType({
     sentence: 'This is a sentence!',
     winMessage: 'GG, you have a wpm of **{{wpm}}** and You made it in **{{time}}**.',
     loseMessage: 'Better luck next time!',
-    cancelMessage: 'You ended the game!'
+    cancelMessage: 'You ended the game!',
     time: 60000,
     buttonText: 'Cancel',
     othersMessage: 'Only <@{{author}}> can use the buttons!'

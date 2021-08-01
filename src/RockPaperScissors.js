@@ -13,14 +13,14 @@ module.exports = async (options) => {
 	if (!options.message) {
 		throw new Error('Weky Error: message argument was not specified.');
 	}
-	if (!(options.message instanceof Discord.Message)) {
+	if (typeof options.message !== 'object') {
 		throw new TypeError('Weky Error: Invalid Discord Message was provided.');
 	}
 
 	if (!options.opponent) {
 		throw new Error('Weky Error: opponent argument was not specified.');
 	}
-	if (!(options.opponent instanceof Discord.User)) {
+	if (typeof options.opponent !== 'object') {
 		throw new TypeError('Weky Error: Invalid Discord User was provided.');
 	}
 
@@ -302,17 +302,17 @@ module.exports = async (options) => {
 				.setID(id1)
 				.setLabel(options.buttons.scissors)
 				.setStyle('blurple')
-				.setEmoji('✂️');
+				.setEmoji('✌️');
 			let rockbtn = new MessageButton()
 				.setID(id2)
 				.setLabel(options.buttons.rock)
 				.setStyle('blurple')
-				.setEmoji('⛰️');
+				.setEmoji('✊');
 			let paperbtn = new MessageButton()
 				.setID(id3)
 				.setLabel(options.buttons.paper)
 				.setStyle('blurple')
-				.setEmoji('📄');
+				.setEmoji('✋');
 			let row = new MessageActionRow()
 				.addComponent(rockbtn)
 				.addComponent(paperbtn)
@@ -355,9 +355,9 @@ module.exports = async (options) => {
 						return button.reply.send(options.noChangeMessage, true);
 					}
 					if (button.id === id2) {
-						challengerChoice = '⛰️';
+						challengerChoice = '✊';
 						button.reply.send(
-							options.choseMessage.replace('{{emoji}}', '⛰️'),
+							options.choseMessage.replace('{{emoji}}', '✊'),
 							true,
 						);
 						if (challengerChose && opponentChose === true) {
@@ -365,9 +365,9 @@ module.exports = async (options) => {
 							if (challengerChoice === opponentChoice) {
 								result = options.drawMessage;
 							} else if (
-								(opponentChoice === '✂️' && challengerChoice === '📄') ||
-								(opponentChoice === '⛰️' && challengerChoice === '✂️') ||
-								(opponentChoice === '📄' && challengerChoice === '⛰️')
+								(opponentChoice === '✌️' && challengerChoice === '✋') ||
+								(opponentChoice === '✊' && challengerChoice === '✌️') ||
+								(opponentChoice === '✋' && challengerChoice === '✊')
 							) {
 								if (options.returnWinner) {
 									if (!options.gameID) {
@@ -412,19 +412,19 @@ module.exports = async (options) => {
 								.setID(id1)
 								.setLabel(options.buttons.scissors)
 								.setStyle('blurple')
-								.setEmoji('✂️');
+								.setEmoji('✌️');
 							rockbtn = new MessageButton()
 								.setDisabled()
 								.setID(id2)
 								.setLabel(options.buttons.rock)
 								.setStyle('blurple')
-								.setEmoji('⛰️');
+								.setEmoji('✊');
 							paperbtn = new MessageButton()
 								.setDisabled()
 								.setID(id3)
 								.setLabel(options.buttons.paper)
 								.setStyle('blurple')
-								.setEmoji('📄');
+								.setEmoji('✋');
 							row = new MessageActionRow()
 								.addComponent(rockbtn)
 								.addComponent(paperbtn)
@@ -458,9 +458,9 @@ module.exports = async (options) => {
 							});
 						}
 					} else if (button.id === id3) {
-						challengerChoice = '📄';
+						challengerChoice = '✋';
 						button.reply.send(
-							options.choseMessage.replace('{{emoji}}', '📄'),
+							options.choseMessage.replace('{{emoji}}', '✋'),
 							true,
 						);
 						if (challengerChose && opponentChose === true) {
@@ -468,9 +468,9 @@ module.exports = async (options) => {
 							if (challengerChoice === opponentChoice) {
 								result = options.drawMessage;
 							} else if (
-								(opponentChoice === '✂️' && challengerChoice === '📄') ||
-								(opponentChoice === '⛰️' && challengerChoice === '✂️') ||
-								(opponentChoice === '📄' && challengerChoice === '⛰️')
+								(opponentChoice === '✌️' && challengerChoice === '✋') ||
+								(opponentChoice === '✊' && challengerChoice === '✌️') ||
+								(opponentChoice === '✋' && challengerChoice === '✊')
 							) {
 								if (options.returnWinner) {
 									if (!options.gameID) {
@@ -515,19 +515,19 @@ module.exports = async (options) => {
 								.setID(id1)
 								.setLabel(options.buttons.scissors)
 								.setStyle('blurple')
-								.setEmoji('✂️');
+								.setEmoji('✌️');
 							rockbtn = new MessageButton()
 								.setDisabled()
 								.setID(id2)
 								.setLabel(options.buttons.rock)
 								.setStyle('blurple')
-								.setEmoji('⛰️');
+								.setEmoji('✊');
 							paperbtn = new MessageButton()
 								.setDisabled()
 								.setID(id3)
 								.setLabel(options.buttons.paper)
 								.setStyle('blurple')
-								.setEmoji('📄');
+								.setEmoji('✋');
 							row = new MessageActionRow()
 								.addComponent(rockbtn)
 								.addComponent(paperbtn)
@@ -561,9 +561,9 @@ module.exports = async (options) => {
 							});
 						}
 					} else if (button.id === id1) {
-						challengerChoice = '✂️';
+						challengerChoice = '✌️';
 						button.reply.send(
-							options.choseMessage.replace('{{emoji}}', '✂️'),
+							options.choseMessage.replace('{{emoji}}', '✌️'),
 							true,
 						);
 						if (challengerChose && opponentChose === true) {
@@ -571,9 +571,9 @@ module.exports = async (options) => {
 							if (challengerChoice === opponentChoice) {
 								result = options.drawMessage;
 							} else if (
-								(opponentChoice === '✂️' && challengerChoice === '📄') ||
-								(opponentChoice === '⛰️' && challengerChoice === '✂️') ||
-								(opponentChoice === '📄' && challengerChoice === '⛰️')
+								(opponentChoice === '✌️' && challengerChoice === '✋') ||
+								(opponentChoice === '✊' && challengerChoice === '✌️') ||
+								(opponentChoice === '✋' && challengerChoice === '✊')
 							) {
 								if (options.returnWinner) {
 									if (!options.gameID) {
@@ -618,19 +618,19 @@ module.exports = async (options) => {
 								.setID(id1)
 								.setLabel(options.buttons.scissors)
 								.setStyle('blurple')
-								.setEmoji('✂️');
+								.setEmoji('✌️');
 							rockbtn = new MessageButton()
 								.setDisabled()
 								.setID(id2)
 								.setLabel(options.buttons.rock)
 								.setStyle('blurple')
-								.setEmoji('⛰️');
+								.setEmoji('✊');
 							paperbtn = new MessageButton()
 								.setDisabled()
 								.setID(id3)
 								.setLabel(options.buttons.paper)
 								.setStyle('blurple')
-								.setEmoji('📄');
+								.setEmoji('✋');
 							row = new MessageActionRow()
 								.addComponent(rockbtn)
 								.addComponent(paperbtn)
@@ -670,9 +670,9 @@ module.exports = async (options) => {
 						return button.reply.send(options.noChangeMessage, true);
 					}
 					if (button.id === id2) {
-						opponentChoice = '⛰️';
+						opponentChoice = '✊';
 						button.reply.send(
-							options.choseMessage.replace('{{emoji}}', '⛰️'),
+							options.choseMessage.replace('{{emoji}}', '✊'),
 							true,
 						);
 						if (challengerChose && opponentChose === true) {
@@ -680,9 +680,9 @@ module.exports = async (options) => {
 							if (challengerChoice === opponentChoice) {
 								result = options.drawMessage;
 							} else if (
-								(opponentChoice === '✂️' && challengerChoice === '📄') ||
-								(opponentChoice === '⛰️' && challengerChoice === '✂️') ||
-								(opponentChoice === '📄' && challengerChoice === '⛰️')
+								(opponentChoice === '✌️' && challengerChoice === '✋') ||
+								(opponentChoice === '✊' && challengerChoice === '✌️') ||
+								(opponentChoice === '✋' && challengerChoice === '✊')
 							) {
 								if (options.returnWinner) {
 									if (!options.gameID) {
@@ -727,19 +727,19 @@ module.exports = async (options) => {
 								.setID(id1)
 								.setLabel(options.buttons.scissors)
 								.setStyle('blurple')
-								.setEmoji('✂️');
+								.setEmoji('✌️');
 							rockbtn = new MessageButton()
 								.setDisabled()
 								.setID(id2)
 								.setLabel(options.buttons.rock)
 								.setStyle('blurple')
-								.setEmoji('⛰️');
+								.setEmoji('✊');
 							paperbtn = new MessageButton()
 								.setDisabled()
 								.setID(id3)
 								.setLabel(options.buttons.paper)
 								.setStyle('blurple')
-								.setEmoji('📄');
+								.setEmoji('✋');
 							row = new MessageActionRow()
 								.addComponent(rockbtn)
 								.addComponent(paperbtn)
@@ -773,9 +773,9 @@ module.exports = async (options) => {
 							});
 						}
 					} else if (button.id === id3) {
-						opponentChoice = ' 📄';
+						opponentChoice = '✋';
 						button.reply.send(
-							options.choseMessage.replace('{{emoji}}', '📄'),
+							options.choseMessage.replace('{{emoji}}', '✋'),
 							true,
 						);
 						if (challengerChose && opponentChose === true) {
@@ -783,9 +783,9 @@ module.exports = async (options) => {
 							if (challengerChoice === opponentChoice) {
 								result = options.drawMessage;
 							} else if (
-								(opponentChoice === '✂️' && challengerChoice === '📄') ||
-								(opponentChoice === '⛰️' && challengerChoice === '✂️') ||
-								(opponentChoice === '📄' && challengerChoice === '⛰️')
+								(opponentChoice === '✌️' && challengerChoice === '✋') ||
+								(opponentChoice === '✊' && challengerChoice === '✌️') ||
+								(opponentChoice === '✋' && challengerChoice === '✊')
 							) {
 								if (options.returnWinner) {
 									if (!options.gameID) {
@@ -830,19 +830,19 @@ module.exports = async (options) => {
 								.setID(id1)
 								.setLabel(options.buttons.scissors)
 								.setStyle('blurple')
-								.setEmoji('✂️');
+								.setEmoji('✌️');
 							rockbtn = new MessageButton()
 								.setDisabled()
 								.setID(id2)
 								.setLabel(options.buttons.rock)
 								.setStyle('blurple')
-								.setEmoji('⛰️');
+								.setEmoji('✊');
 							paperbtn = new MessageButton()
 								.setDisabled()
 								.setID(id3)
 								.setLabel(options.buttons.paper)
 								.setStyle('blurple')
-								.setEmoji('📄');
+								.setEmoji('✋');
 							row = new MessageActionRow()
 								.addComponent(rockbtn)
 								.addComponent(paperbtn)
@@ -876,9 +876,9 @@ module.exports = async (options) => {
 							});
 						}
 					} else if (button.id === id1) {
-						opponentChoice = '✂️';
+						opponentChoice = '✌️';
 						button.reply.send(
-							options.choseMessage.replace('{{emoji}}', '✂️'),
+							options.choseMessage.replace('{{emoji}}', '✌️'),
 							true,
 						);
 						if (challengerChose && opponentChose === true) {
@@ -886,9 +886,9 @@ module.exports = async (options) => {
 							if (challengerChoice === opponentChoice) {
 								result = options.drawMessage;
 							} else if (
-								(opponentChoice === '✂️' && challengerChoice === '📄') ||
-								(opponentChoice === '⛰️' && challengerChoice === '✂️') ||
-								(opponentChoice === '📄' && challengerChoice === '⛰️')
+								(opponentChoice === '✌️' && challengerChoice === '✋') ||
+								(opponentChoice === '✊' && challengerChoice === '✌️') ||
+								(opponentChoice === '✋' && challengerChoice === '✊')
 							) {
 								if (options.returnWinner) {
 									if (!options.gameID) {
@@ -933,19 +933,19 @@ module.exports = async (options) => {
 								.setID(id1)
 								.setLabel(options.buttons.scissors)
 								.setStyle('blurple')
-								.setEmoji('✂️');
+								.setEmoji('✌️');
 							rockbtn = new MessageButton()
 								.setDisabled()
 								.setID(id2)
 								.setLabel(options.buttons.rock)
 								.setStyle('blurple')
-								.setEmoji('⛰️');
+								.setEmoji('✊');
 							paperbtn = new MessageButton()
 								.setDisabled()
 								.setID(id3)
 								.setLabel(options.buttons.paper)
 								.setStyle('blurple')
-								.setEmoji('📄');
+								.setEmoji('✋');
 							row = new MessageActionRow()
 								.addComponent(rockbtn)
 								.addComponent(paperbtn)
@@ -988,19 +988,19 @@ module.exports = async (options) => {
 						.setID(id1)
 						.setLabel(options.buttons.scissors)
 						.setStyle('blurple')
-						.setEmoji('✂️');
+						.setEmoji('✌️');
 					rockbtn = new MessageButton()
 						.setDisabled()
 						.setID(id2)
 						.setLabel(options.buttons.rock)
 						.setStyle('blurple')
-						.setEmoji('⛰️');
+						.setEmoji('✊');
 					paperbtn = new MessageButton()
 						.setDisabled()
 						.setID(id3)
 						.setLabel(options.buttons.paper)
 						.setStyle('blurple')
-						.setEmoji('📄');
+						.setEmoji('✋');
 					row = new MessageActionRow()
 						.addComponent(rockbtn)
 						.addComponent(paperbtn)

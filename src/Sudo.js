@@ -6,12 +6,12 @@ module.exports = async (options) => {
 	if (!options.message) {
 		throw new Error('Weky Error: message argument was not specified.');
 	}
-	if (!(options.message instanceof Discord.Message)) {
+	if (typeof options.message !== 'object') {
 		throw new TypeError('Weky Error: Invalid Discord Message was provided.');
 	}
 
 	if (!options.member) options.member = options.message.member;
-	if (!(options.message instanceof Discord.GuildMember)) {
+	if (typeof options.member !== 'object') {
 		throw new TypeError(
 			'Weky Error: Invalid Discord GuildMember was provided.',
 		);

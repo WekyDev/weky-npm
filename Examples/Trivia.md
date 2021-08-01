@@ -3,7 +3,12 @@
 ```js
 await Trivia({
 	message: message,
-	embed: { color: '#7289da', timestamp: true },
+	embed: {
+		title: 'Trivia | Weky Development',
+		description: 'You only have **{{time}}** to guess the answer!',
+		color: '#7289da',
+		timestamp: true,
+	},
 	difficulty: 'hard',
 	thinkMessage: 'I am thinking',
 	winMessage:

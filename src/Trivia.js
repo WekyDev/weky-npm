@@ -18,13 +18,23 @@ module.exports = async (options) => {
 	if (!options.message) {
 		throw new Error('Weky Error: message argument was not specified.');
 	}
-	if (!(options.message instanceof Discord.Message)) {
+	if (typeof options.message !== 'object') {
 		throw new TypeError('Weky Error: Invalid Discord Message was provided.');
 	}
 
 	if (!options.embed) options.embed = {};
 	if (typeof options.embed !== 'object') {
 		throw new TypeError('Weky Error: embed must be an object.');
+	}
+
+	if (!options.embed.title) options.embed.title = 'Trivia | Weky Development';
+	if (typeof options.embed.title !== 'string') {
+		throw new TypeError('Weky Error: embed title must be a string.');
+	}
+
+	if (!options.embed.description) options.embed.description = 'You only have **{{time}}** to guess the answer!';
+	if (typeof options.embed.description !== 'string') {
+		throw new TypeError('Weky Error: embed title must be a string.');
 	}
 
 	if (!options.embed.color) options.embed.color = randomHexColor();
@@ -91,16 +101,26 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: emoji four must be an emoji.');
 	}
 
-	if (!options.othersMessage) {
-		options.othersMessage = 'Only <@{{author}}> can use the buttons!';
+	if (!options.time) options.time = 60000;
+	if (parseInt(options.time) < 10000) {
+		throw new Error(
+			'Weky Error: time argument must be greater than 10 Seconds (in ms i.e. 10000).',
+		);
 	}
-	if (typeof options.othersMessage !== 'string') {
-		throw new TypeError('Weky Error: othersMessage must be a string.');
+	if (typeof options.time !== 'number') {
+		throw new TypeError('Weky Error: time must be a number.');
 	}
 
 	if (!options.returnWinner) options.returnWinner = false;
 	if (typeof options.returnWinner !== 'boolean') {
 		throw new TypeError('Weky Error: buttonText must be a boolean.');
+	}
+
+	if (!options.othersMessage) {
+		options.othersMessage = 'Only <@{{author}}> can use the buttons!';
+	}
+	if (typeof options.othersMessage !== 'string') {
+		throw new TypeError('Weky Error: othersMessage must be a string.');
 	}
 
 	if (data.has(options.message.author.id)) return;
@@ -209,15 +229,13 @@ module.exports = async (options) => {
 			.setTitle(`${options.thinkMessage}.`)
 			.setColor(options.embed.color),
 	});
-	let i = 0;
+	let opt = '';
+	for (let i = 0; i < question.options.length; i++) {
+		opt += `**${i + 1})** ${decode(question.options[i])}\n`;
+	}
 	const embed = new Discord.MessageEmbed()
-		.setTitle(decode(question.question))
-		.setDescription(
-			question.options.map((opt) => {
-				i++;
-				return `**${i})** ${decode(opt)}\n`;
-			}),
-		)
+		.setTitle(options.embed.title)
+		.addField(decode(question.question), `${options.embed.description.replace('{{time}}', convertTime(options.time))}\n\n${opt}`)
 		.setColor(options.embed.color)
 		.setFooter('©️ Weky Development');
 	if (options.embed.timestamp) {
@@ -230,7 +248,9 @@ module.exports = async (options) => {
 		})
 		.then(async (m) => {
 			const gameCreatedAt = Date.now();
-			const gameCollector = m.createButtonCollector((fn) => fn);
+			const gameCollector = m.createButtonCollector((fn) => fn, {
+				time: options.time,
+			});
 			gameCollector.on('collect', (trivia) => {
 				if (trivia.clicker.user.id !== options.message.author.id) {
 					return trivia.reply.send(
@@ -412,6 +432,66 @@ module.exports = async (options) => {
 						lostEmbed.setTimestamp();
 					}
 					options.message.channel.send(lostEmbed);
+				}
+			});
+
+			gameCollector.on('end', (trivia, reason) => {
+				if(reason === 'time') {
+					btn1 = new disbut.MessageButton()
+						.setEmoji(options.emojis.one)
+						.setID(id1)
+						.setDisabled();
+					btn2 = new disbut.MessageButton()
+						.setEmoji(options.emojis.two)
+						.setID(id2)
+						.setDisabled();
+					btn3 = new disbut.MessageButton()
+						.setEmoji(options.emojis.three)
+						.setID(id3)
+						.setDisabled();
+					btn4 = new disbut.MessageButton()
+						.setEmoji(options.emojis.four)
+						.setID(id4)
+						.setDisabled();
+					data.delete(options.message.author.id);
+					if (winningID === id1) {
+						btn1.setStyle('green');
+						btn2.setStyle('grey');
+						btn3.setStyle('grey');
+						btn4.setStyle('grey');
+					} else if (winningID === id2) {
+						btn1.setStyle('grey');
+						btn2.setStyle('green');
+						btn3.setStyle('grey');
+						btn4.setStyle('grey');
+					} else if (winningID === id3) {
+						btn1.setStyle('grey');
+						btn2.setStyle('grey');
+						btn3.setStyle('green');
+						btn4.setStyle('grey');
+					} else if (winningID === id4) {
+						btn1.setStyle('grey');
+						btn2.setStyle('grey');
+						btn3.setStyle('grey');
+						btn4.setStyle('green');
+					}
+					think.edit({
+						embed: embed,
+						components: [{ type: 1, components: [btn1, btn2, btn3, btn4] }],
+					});
+					const lostEmbed = new Discord.MessageEmbed()
+						.setDescription(
+							`${options.loseMessage.replace(
+								'{{answer}}',
+								decode(question.options[question.correct]),
+							)}`,
+						)
+						.setColor(options.embed.color)
+						.setFooter('©️ Weky Development');
+					if (options.embed.timestamp) {
+						lostEmbed.setTimestamp();
+					}
+					options.message.inlineReply(lostEmbed);
 				}
 			});
 		});

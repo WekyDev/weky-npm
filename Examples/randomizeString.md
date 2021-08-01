@@ -1,4 +1,4 @@
-# Example for randomizeString
+# Example for randomize String
 
 ```js
 randomizeString(['🍏', '🍐', '🍋', '🍌', '🍉', '🍇']);

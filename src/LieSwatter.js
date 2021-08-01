@@ -1,4 +1,3 @@
-const data = new Set();
 const fetch = require('node-fetch');
 const Discord = require('discord.js');
 const disbut = require('discord-buttons');
@@ -15,7 +14,7 @@ module.exports = async (options) => {
 	if (!options.message) {
 		throw new Error('Weky Error: message argument was not specified.');
 	}
-	if (!(options.message instanceof Discord.Message)) {
+	if (typeof options.message !== 'object') {
 		throw new TypeError('Weky Error: Invalid Discord Message was provided.');
 	}
 
@@ -82,9 +81,6 @@ module.exports = async (options) => {
 	if (typeof options.buttons.lie !== 'string') {
 		throw new TypeError('Weky Error: lie buttons text must be a string.');
 	}
-
-	if (data.has(options.message.author.id)) return;
-	data.add(options.message.author.id);
 
 	const id1 =
 		getRandomString(4) +
@@ -188,7 +184,6 @@ module.exports = async (options) => {
 						.setID(id2)
 						.setDisabled();
 					gameCollector.stop();
-					data.delete(options.message.author.id);
 					if (winningID === id1) {
 						btn1.setStyle('green');
 						btn2.setStyle('red');
@@ -223,7 +218,6 @@ module.exports = async (options) => {
 						.setID(id2)
 						.setDisabled();
 					gameCollector.stop();
-					data.delete(options.message.author.id);
 					if (winningID === id1) {
 						btn1.setStyle('green');
 						btn2.setStyle('red');

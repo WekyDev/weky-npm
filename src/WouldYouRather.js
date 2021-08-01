@@ -1,4 +1,3 @@
-const data = new Set();
 const Discord = require('discord.js');
 const disbut = require('discord-buttons');
 const { decode } = require('html-entities');
@@ -14,7 +13,7 @@ module.exports = async (options) => {
 	if (!options.message) {
 		throw new Error('Weky Error: message argument was not specified.');
 	}
-	if (!(options.message instanceof Discord.Message)) {
+	if (typeof options.message !== 'object') {
 		throw new TypeError('Weky Error: Invalid Discord Message was provided.');
 	}
 
@@ -66,9 +65,6 @@ module.exports = async (options) => {
 	if (typeof options.buttons.optionB !== 'string') {
 		throw new TypeError('Weky Error: button must be a string.');
 	}
-
-	if (data.has(options.message.author.id)) return;
-	data.add(options.message.author.id);
 
 	const id1 =
 		getRandomString(4) +
@@ -177,7 +173,6 @@ module.exports = async (options) => {
 						.setID(id2)
 						.setDisabled();
 					gameCollector.stop();
-					data.delete(options.message.author.id);
 					const _embed = new Discord.MessageEmbed()
 						.setTitle(options.embed.title)
 						.setDescription(
@@ -210,7 +205,6 @@ module.exports = async (options) => {
 						.setID(id2)
 						.setDisabled();
 					gameCollector.stop();
-					data.delete(options.message.author.id);
 					const _embed = new Discord.MessageEmbed()
 						.setTitle(options.embed.title)
 						.setDescription(
