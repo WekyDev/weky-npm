@@ -1,6 +1,6 @@
 {
 	"name": "weky",
-	"version": "3.1.1",
+	"version": "3.1.2",
 	"description": "A fun npm package to play games within Discord with buttons!",
 	"main": "index.js",
 	"scripts": {
