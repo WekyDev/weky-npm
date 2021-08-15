@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const fetch = require('node-fetch');
-const disbut = require('discord-buttons');
+const disbut = require('discord.js');
 const {
 	randomHexColor,
 	checkForUpdates,

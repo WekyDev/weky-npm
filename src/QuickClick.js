@@ -1,6 +1,6 @@
 const currentGames = new Object();
 const Discord = require('discord.js');
-const disbut = require('discord-buttons');
+const disbut = require('discord.js');
 const {
 	convertTime,
 	shuffleArray,

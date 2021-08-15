@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 const Discord = require('discord.js');
-const disbut = require('discord-buttons');
+const disbut = require('discord.js');
 const { decode } = require('html-entities');
 const {
 	convertTime,

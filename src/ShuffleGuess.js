@@ -1,6 +1,6 @@
 const data = new Set();
 const Discord = require('discord.js');
-const { MessageButton, MessageActionRow } = require('discord-buttons');
+const { MessageButton, MessageActionRow } = require('discord.js');
 const {
 	convertTime,
 	shuffleString,

@@ -1,6 +1,6 @@
 const data = new Set();
 const Discord = require('discord.js');
-const { MessageButton } = require('discord-buttons');
+const { MessageButton } = require('discord.js');
 const {
 	randomHexColor,
 	checkForUpdates,

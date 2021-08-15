@@ -1,7 +1,7 @@
 const data = new Set();
 const db = require('quick.db');
 const Discord = require('discord.js');
-const { MessageButton, MessageActionRow } = require('discord-buttons');
+const { MessageButton, MessageActionRow } = require('discord.js');
 const {
 	randomHexColor,
 	checkForUpdates,
