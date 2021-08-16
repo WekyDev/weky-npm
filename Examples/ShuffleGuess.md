@@ -6,7 +6,8 @@ await ShuffleGuess({
 	embed: {
 		title: 'Shuffle Guess | Weky Development',
 		color: '#7289da',
-		timestamp: true,
+        footer: '©️ Weky Development',
+		timestamp: true
 	},
 	word: ['voice'],
 	button: { cancel: 'Cancel', reshuffle: 'Reshuffle' },
@@ -17,6 +18,6 @@ await ShuffleGuess({
 	loseMessage: 'Better luck next time! The correct answer was **{{answer}}**.',
 	incorrectMessage: "No {{author}}! The word isn't `{{answer}}`",
 	othersMessage: 'Only <@{{author}}> can use the buttons!',
-	time: 60000,
+	time: 60000
 });
 ```

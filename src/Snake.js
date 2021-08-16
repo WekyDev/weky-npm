@@ -40,6 +40,13 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: color must be a string.');
 	}
 
+	if (!options.embed.footer) {
+		options.embed.footer = '©️ Weky Development';
+	}
+	if (typeof options.embed.footer !== 'string') {
+		throw new TypeError('Weky Error: embed footer must be a string.');
+	}
+
 	if (!options.embed.timestamp) options.embed.timestamp = true;
 	if (typeof options.embed.timestamp !== 'boolean') {
 		throw new TypeError('Weky Error: timestamp must be a boolean.');
@@ -101,67 +108,67 @@ module.exports = async (options) => {
 	data.add(options.message.author.id);
 
 	const id1 =
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8);
+		getRandomString(20);
 
 	const id2 =
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8);
+		getRandomString(20);
 
 	const id3 =
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8);
+		getRandomString(20);
 
 	const id4 =
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8);
+		getRandomString(20);
 
 	const id5 =
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8);
+		getRandomString(20);
 
 	const id6 =
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8);
+		getRandomString(20);
 
 	const id7 =
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(8);
+		getRandomString(20);
 
 	let score = 0;
 	const width = 15;
@@ -230,7 +237,7 @@ module.exports = async (options) => {
 		const editEmbed = new Discord.MessageEmbed()
 			.setColor(options.embed.color)
 			.setTitle(options.embed.title)
-			.setFooter('©️ Weky Development')
+			.setFooter(options.embed.footer)
 			.setDescription(gameBoardToString());
 		if (options.embed.timestamp) {
 			editEmbed.setTimestamp();
@@ -323,7 +330,7 @@ module.exports = async (options) => {
 		const editEmbed = new Discord.MessageEmbed()
 			.setColor(options.embed.color)
 			.setTitle(options.embed.title)
-			.setFooter('©️ Weky Development')
+			.setFooter(options.embed.footer)
 			.setDescription(options.embed.description.replace('{{score}}', score));
 		if (options.embed.timestamp) {
 			editEmbed.setTimestamp();
@@ -353,7 +360,7 @@ module.exports = async (options) => {
 	const embed = new Discord.MessageEmbed()
 		.setColor(options.embed.color)
 		.setTitle(options.embed.title)
-		.setFooter('©️ Weky Development')
+		.setFooter(options.embed.footer)
 		.setDescription(gameBoardToString());
 	if (options.embed.timestamp) {
 		embed.setTimestamp();

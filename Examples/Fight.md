@@ -7,6 +7,7 @@ await Fight({
     embed: {
         title: 'Fight | Weky Development',
         color: '#7289da',
+        footer: '©️ Weky Development',
         timestamp: true
     },
     buttons: {

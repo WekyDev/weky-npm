@@ -43,6 +43,13 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: embed color must be a string.');
 	}
 
+	if (!options.embed.footer) {
+		options.embed.footer = '©️ Weky Development';
+	}
+	if (typeof options.embed.footer !== 'string') {
+		throw new TypeError('Weky Error: embed footer must be a string.');
+	}
+
 	if (!options.embed.timestamp) options.embed.timestamp = true;
 	if (typeof options.embed.timestamp !== 'boolean') {
 		throw new TypeError('Weky Error: timestamp must be a boolean.');
@@ -126,13 +133,13 @@ module.exports = async (options) => {
 	}
 
 	const id =
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4);
+		getRandomString(20);
 
 	if (options.publicGame) {
 		if (!options.ongoingMessage) {
@@ -156,7 +163,7 @@ module.exports = async (options) => {
 						currentGames[`${options.message.guild.id}_channel`],
 					),
 				)
-				.setFooter('©️ Weky Development')
+				.setFooter(options.embed.footer)
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				embed.setTimestamp();
@@ -171,7 +178,7 @@ module.exports = async (options) => {
 				)}`,
 			)
 			.setTitle(options.embed.title)
-			.setFooter('©️ Weky Development')
+			.setFooter(options.embed.footer)
 			.setColor(options.embed.color);
 		if (options.embed.timestamp) {
 			embed.setTimestamp();
@@ -218,7 +225,7 @@ module.exports = async (options) => {
 							)}`,
 					)
 					.setTitle(options.embed.title)
-					.setFooter('©️ Weky Development')
+					.setFooter(options.embed.footer)
 					.setColor(options.embed.color);
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
@@ -299,7 +306,7 @@ module.exports = async (options) => {
 						options.loseMessage.replace(/{{number}}/g, options.number),
 					)
 					.setColor(options.embed.color)
-					.setFooter('©️ Weky Development');
+					.setFooter(options.embed.footer);
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
@@ -317,7 +324,7 @@ module.exports = async (options) => {
 						options.loseMessage.replace(/{{number}}/g, options.number),
 					)
 					.setColor(options.embed.color)
-					.setFooter('©️ Weky Development');
+					.setFooter(options.embed.footer);
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
@@ -344,7 +351,7 @@ module.exports = async (options) => {
 				)}`,
 			)
 			.setTitle(options.embed.title)
-			.setFooter('©️ Weky Development')
+			.setFooter(options.embed.footer)
 			.setColor(options.embed.color);
 		if (options.embed.timestamp) {
 			embed.setTimestamp();
@@ -380,7 +387,7 @@ module.exports = async (options) => {
 							.replace(/{{number}}/g, options.number)}`,
 					)
 					.setTitle(options.embed.title)
-					.setFooter('©️ Weky Development')
+					.setFooter(options.embed.footer)
 					.setColor(options.embed.color);
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
@@ -451,7 +458,7 @@ module.exports = async (options) => {
 						options.loseMessage.replace(/{{number}}/g, options.number),
 					)
 					.setColor(options.embed.color)
-					.setFooter('©️ Weky Development');
+					.setFooter(options.embed.footer);
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
@@ -468,7 +475,7 @@ module.exports = async (options) => {
 						options.loseMessage.replace(/{{number}}/g, options.number),
 					)
 					.setColor(options.embed.color)
-					.setFooter('©️ Weky Development');
+					.setFooter(options.embed.footer);
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}

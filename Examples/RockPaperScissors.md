@@ -8,7 +8,8 @@ await RockPaperScissors({
 		title: 'Rock Paper Scissors | Weky Development',
 		description: 'Press the button below to choose your element.',
 		color: '#7289da',
-		timestamp: true,
+        footer: '©️ Weky Development',
+		timestamp: true
 	},
 	buttons: {
 		rock: 'Rock',
@@ -30,6 +31,6 @@ await RockPaperScissors({
 	choseMessage: 'You picked {{emoji}}',
 	noChangeMessage: 'You cannot change your selection!',
 	othersMessage: 'Only {{author}} can use the buttons!',
-	returnWinner: false,
+	returnWinner: false
 });
 ```

@@ -7,10 +7,11 @@ await WillYouPressTheButton({
 		title: 'Will you press the button? | Weky Development',
 		description: '```{{statement1}}```\n**but**\n\n```{{statement2}}```',
 		color: '#7289da',
-		timestamp: true,
+        footer: '©️ Weky Development',
+		timestamp: true
 	},
 	button: { yes: 'Yes', no: 'No' },
 	thinkMessage: 'I am thinking',
-	othersMessage: 'Only <@{{author}}> can use the buttons!',
+	othersMessage: 'Only <@{{author}}> can use the buttons!'
 });
 ````

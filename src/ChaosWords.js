@@ -65,6 +65,13 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: embed color must be a string.');
 	}
 
+	if (!options.embed.footer) {
+		options.embed.footer = '©️ Weky Development';
+	}
+	if (typeof options.embed.footer !== 'string') {
+		throw new TypeError('Weky Error: embed footer must be a string.');
+	}
+
 	if (!options.embed.timestamp) options.embed.timestamp = true;
 	if (typeof options.embed.timestamp !== 'boolean') {
 		throw new TypeError('Weky Error: timestamp must be a boolean.');
@@ -143,13 +150,13 @@ module.exports = async (options) => {
 	data.add(options.message.author.id);
 
 	const id =
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4);
+		getRandomString(20);
 
 	let tries = 0;
 	const array = [];
@@ -176,7 +183,7 @@ module.exports = async (options) => {
 		)
 		.addField(options.embed.field1, array.join(''))
 		.addField(options.embed.field2, `0/${options.words.length}`)
-		.setFooter('©️ Weky Development')
+		.setFooter(options.embed.footer)
 		.setColor(options.embed.color);
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
@@ -215,7 +222,7 @@ module.exports = async (options) => {
 				.addField(options.embed.field1, array.join(''))
 				.addField(options.embed.field3, `${guessed.join(', ')}`)
 				.addField(options.embed.field2, `${remaining}/${options.words.length}`)
-				.setFooter('©️ Weky Development')
+				.setFooter(options.embed.footer)
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
@@ -244,7 +251,7 @@ module.exports = async (options) => {
 					.addField(options.embed.field1, arr)
 					.setDescription(options.winMessage.replace('{{time}}', time))
 					.addField(options.embed.field4, `${options.words.join(', ')}`)
-					.setFooter('©️ Weky Development')
+					.setFooter(options.embed.footer)
 					.setColor(options.embed.color);
 				if (options.embed.timestamp) {
 					__embed.setTimestamp();
@@ -256,7 +263,7 @@ module.exports = async (options) => {
 				return game.stop();
 			}
 			const __embed = new Discord.MessageEmbed()
-				.setFooter('©️ Weky Development')
+				.setFooter(options.embed.footer)
 				.setDescription(
 					`${options.correctWordMessage
 						.replace('{{word}}', msg.content.toLowerCase())
@@ -277,7 +284,7 @@ module.exports = async (options) => {
 					.setDescription(options.loseMessage)
 					.addField(options.embed.field1, arr)
 					.addField(options.embed.field4, `${options.words.join(', ')}`)
-					.setFooter('©️ Weky Development')
+					.setFooter(options.embed.footer)
 					.setColor(options.embed.color);
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
@@ -298,7 +305,7 @@ module.exports = async (options) => {
 				return game.stop();
 			}
 			const _embed = new Discord.MessageEmbed()
-				.setFooter('©️ Weky Development')
+				.setFooter(options.embed.footer)
 				.setDescription(
 					`${options.wrongWordMessage.replace(
 						'{{remaining_tries}}',
@@ -321,7 +328,7 @@ module.exports = async (options) => {
 				.setDescription(options.loseMessage)
 				.addField(options.embed.field1, arr)
 				.addField(options.embed.field4, `${options.words.join(', ')}`)
-				.setFooter('©️ Weky Development')
+				.setFooter(options.embed.footer)
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
@@ -363,7 +370,7 @@ module.exports = async (options) => {
 			.setDescription(options.loseMessage)
 			.addField(options.embed.field1, arr)
 			.addField(options.embed.field4, `${options.words.join(', ')}`)
-			.setFooter('©️ Weky Development')
+			.setFooter(options.embed.footer)
 			.setColor(options.embed.color);
 		if (options.embed.timestamp) {
 			_embed.setTimestamp();

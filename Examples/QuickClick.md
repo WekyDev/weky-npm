@@ -6,7 +6,8 @@ await QuickClick({
 	embed: {
 		title: 'Quick Click | Weky Development',
 		color: '#7289da',
-		timestamp: true,
+        footer: '©️ Weky Development',
+		timestamp: true
 	},
 	time: 60000,
 	waitMessage: 'The buttons may appear anytime now!',
@@ -16,6 +17,6 @@ await QuickClick({
 	loseMessage: 'No one pressed the button in time. So, I dropped the game!',
 	emoji: '👆',
 	ongoingMessage:
-		"A game is already runnning in <#{{channel}}>. You can't start a new one!",
+		"A game is already runnning in <#{{channel}}>. You can't start a new one!"
 });
 ```

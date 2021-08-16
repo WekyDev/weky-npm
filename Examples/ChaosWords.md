@@ -11,6 +11,7 @@ await ChaosWords({
         field2: 'Words Found/Remaining Words:',
         field3: 'Words found:',
         field4: 'Words:',
+        footer: '©️ Weky Development',
         timestamp: true
     },
     winMessage: 'GG, You won! You made it in **{{time}}**.',

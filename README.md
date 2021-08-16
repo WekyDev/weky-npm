@@ -4,7 +4,7 @@
 <p align="center">
    <a href="https://www.npmjs.com/package/weky"><img src="https://img.shields.io/npm/v/weky.svg?style=flat-square" /></a>
    <a href="https://weky-docs.sujalgoel.repl.co"><img src="https://img.shields.io/badge/Documentation-Yes-amiajokegreen.svg?style=flat-square" /></a>
-   <a href="https://github.com/WekyDev/weky-npm/blob/main/LICENSE"><img src="https://averylongdomainyesitisverylongasyoucanseedudesee.tk/static/weky-license.svg" /></a>
+   <a href="https://github.com/WekyDev/weky-npm/blob/main/LICENSE"><img src="https://nuggies.js.org/assets/img/license.ade17f5e.svg" /></a>
    <br>
    <a href="https://www.npmjs.com/package/weky"><img src="https://nodei.co/npm/weky.png?downloadRank=true&downloads=true&downloadRank=true&stars=true" /></a>
 </p>
@@ -73,7 +73,7 @@ client.on('message', async (message) => {
 client.login('DISCORD_BOT_TOKEN');
 ```
 ## Result 📤
-<img src="https://averylongdomainyesitisverylongasyoucanseedudesee.tk/static/8fab0d5da53d3cc78b456703b3e93c0d.png">
+<img src="https://i.imgur.com/NRwlCK6.png">
 
 ## Contributing 🤝
 - Contributions, issues and feature requests are welcome!

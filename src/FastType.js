@@ -43,6 +43,13 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: embed color must be a string.');
 	}
 
+	if (!options.embed.footer) {
+		options.embed.footer = '©️ Weky Development';
+	}
+	if (typeof options.embed.footer !== 'string') {
+		throw new TypeError('Weky Error: embed footer must be a string.');
+	}
+
 	if (!options.embed.timestamp) options.embed.timestamp = true;
 	if (typeof options.embed.timestamp !== 'boolean') {
 		throw new TypeError('Weky Error: timestamp must be a boolean.');
@@ -102,13 +109,13 @@ module.exports = async (options) => {
 	data.add(options.message.author.id);
 
 	const id =
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4);
+		getRandomString(20);
 
 	const sentence = options.sentence
 		.toLowerCase()
@@ -129,7 +136,7 @@ module.exports = async (options) => {
 			)}`,
 		)
 		.addField('Sentence:', `${sentence}`)
-		.setFooter('©️ Weky Development')
+		.setFooter(options.embed.footer)
 		.setColor(options.embed.color);
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
@@ -156,7 +163,7 @@ module.exports = async (options) => {
 						.replace('{{time}}', convertTime(time))
 						.replace('{{wpm}}', wpm.toFixed(2)),
 				)
-				.setFooter('©️ Weky Development')
+				.setFooter(options.embed.footer)
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
@@ -176,7 +183,7 @@ module.exports = async (options) => {
 		} else {
 			const _embed = new Discord.MessageEmbed()
 				.setDescription(`${options.loseMessage}`)
-				.setFooter('©️ Weky Development')
+				.setFooter(options.embed.footer)
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
@@ -199,7 +206,7 @@ module.exports = async (options) => {
 		if (reason === 'time') {
 			const _embed = new Discord.MessageEmbed()
 				.setDescription(`${options.loseMessage}`)
-				.setFooter('©️ Weky Development')
+				.setFooter(options.embed.footer)
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();

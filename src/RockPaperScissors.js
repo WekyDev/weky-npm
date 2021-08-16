@@ -51,6 +51,13 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: embed color must be a string.');
 	}
 
+	if (!options.embed.footer) {
+		options.embed.footer = '©️ Weky Development';
+	}
+	if (typeof options.embed.footer !== 'string') {
+		throw new TypeError('Weky Error: embed footer must be a string.');
+	}
+
 	if (!options.embed.timestamp) {
 		options.embed.timestamp = true;
 	}
@@ -187,31 +194,31 @@ module.exports = async (options) => {
 	data.add(options.opponent.id);
 
 	const id1 =
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4);
+		getRandomString(20);
 
 	const id2 =
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4);
+		getRandomString(20);
 
 	const id3 =
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4);
+		getRandomString(20);
 
 	if (
 		options.opponent.bot ||
@@ -238,7 +245,7 @@ module.exports = async (options) => {
 				.replace('{{challenger}}', options.message.author.id)
 				.replace('{{opponent}}', options.opponent.id),
 		)
-		.setFooter('©️ Weky Development')
+		.setFooter(options.embed.footer)
 		.setColor(options.embed.color);
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
@@ -284,7 +291,7 @@ module.exports = async (options) => {
 				.setDescription(
 					options.cancelMessage.replace('{{opponent}}', options.opponent.id),
 				)
-				.setFooter('©️ Weky Development')
+				.setFooter(options.embed.footer)
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				emd.setTimestamp();
@@ -320,7 +327,7 @@ module.exports = async (options) => {
 			const emd = new Discord.MessageEmbed()
 				.setTitle(options.embed.title)
 				.setDescription(options.embed.description)
-				.setFooter('©️ Weky Development')
+				.setFooter(options.embed.footer)
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				emd.setTimestamp();
@@ -445,7 +452,7 @@ module.exports = async (options) => {
 										inline: true,
 									},
 								)
-								.setFooter('©️ Weky Development');
+								.setFooter(options.embed.footer);
 							if (options.embed.timestamp) {
 								_embed.setTimestamp();
 							}
@@ -548,7 +555,7 @@ module.exports = async (options) => {
 										inline: true,
 									},
 								)
-								.setFooter('©️ Weky Development');
+								.setFooter(options.embed.footer);
 							if (options.embed.timestamp) {
 								_embed.setTimestamp();
 							}
@@ -651,7 +658,7 @@ module.exports = async (options) => {
 										inline: true,
 									},
 								)
-								.setFooter('©️ Weky Development');
+								.setFooter(options.embed.footer);
 							if (options.embed.timestamp) {
 								_embed.setTimestamp();
 							}
@@ -760,7 +767,7 @@ module.exports = async (options) => {
 										inline: true,
 									},
 								)
-								.setFooter('©️ Weky Development');
+								.setFooter(options.embed.footer);
 							if (options.embed.timestamp) {
 								_embed.setTimestamp();
 							}
@@ -863,7 +870,7 @@ module.exports = async (options) => {
 										inline: true,
 									},
 								)
-								.setFooter('©️ Weky Development');
+								.setFooter(options.embed.footer);
 							if (options.embed.timestamp) {
 								_embed.setTimestamp();
 							}
@@ -966,7 +973,7 @@ module.exports = async (options) => {
 										inline: true,
 									},
 								)
-								.setFooter('©️ Weky Development');
+								.setFooter(options.embed.footer);
 							if (options.embed.timestamp) {
 								_embed.setTimestamp();
 							}
@@ -1008,7 +1015,7 @@ module.exports = async (options) => {
 					const _embed = new Discord.MessageEmbed()
 						.setTitle(options.embed.title)
 						.setDescription(options.timeEndMessage)
-						.setFooter('©️ Weky Development')
+						.setFooter(options.embed.footer)
 						.setColor(options.embed.color);
 					if (options.embed.timestamp) {
 						_embed.setTimestamp();
@@ -1045,7 +1052,7 @@ module.exports = async (options) => {
 				.setDescription(
 					options.endMessage.replace('{{opponent}}', options.opponent.id),
 				)
-				.setFooter('©️ Weky Development')
+				.setFooter(options.embed.footer)
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();

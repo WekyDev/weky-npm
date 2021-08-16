@@ -7,7 +7,8 @@ await GuessTheNumber({
 		title: 'Guess The Number | Weky Development',
 		description: 'You have **{{time}}** to guess the number.',
 		color: '#7289da',
-		timestamp: true,
+        footer: '©️ Weky Development',
+		timestamp: true
 	},
 	publicGame: true,
 	number: 189,
@@ -27,6 +28,6 @@ await GuessTheNumber({
 	buttonText: 'Cancel',
 	ongoingMessage:
 		"A game is already runnning in <#{{channel}}>. You can't start a new one!",
-	returnWinner: false,
+	returnWinner: false
 });
 ```

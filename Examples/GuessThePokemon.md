@@ -8,7 +8,8 @@ await GuessThePokemon({
 		description:
 			'**Type:**\n{{type}}\n\n**Abilities:**\n{{abilities}}\n\nYou only have **{{time}}** to guess the pokémon.',
 		color: '#7289da',
-		timestamp: true,
+        footer: '©️ Weky Development',
+		timestamp: true
 	},
 	thinkMessage: 'I am thinking',
 	othersMessage: 'Only <@{{author}}> can use the buttons!',
@@ -17,6 +18,6 @@ await GuessThePokemon({
 	loseMessage: 'Better luck next time! It was a **{{answer}}**.',
 	time: 60000,
 	incorrectMessage: "No {{author}}! The pokémon isn't `{{answer}}`",
-	buttonText: 'Cancel',
+	buttonText: 'Cancel'
 });
 ```

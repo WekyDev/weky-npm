@@ -7,7 +7,8 @@ await Snake({
 		title: 'Snake | Weky Development',
 		description: 'GG, you scored **{{score}}** points!',
 		color: '#7289da',
-		timestamp: true,
+        footer: '©️ Weky Development',
+		timestamp: true
 	},
 	emojis: {
 		empty: '⬛',
@@ -19,6 +20,6 @@ await Snake({
 		left: '➡️',
 	},
 	othersMessage: 'Only <@{{author}}> can use the buttons!',
-	buttonText: 'Cancel',
+	buttonText: 'Cancel'
 });
 ```

@@ -6,13 +6,14 @@ await LieSwatter({
 	embed: {
 		title: 'Lie Swatter | Weky Development',
 		color: '#7289da',
-		timestamp: true,
+        footer: '©️ Weky Development',
+		timestamp: true
 	},
 	thinkMessage: 'I am thinking',
 	winMessage:
 		'GG, It was a **{{answer}}**. You got it correct in **{{time}}**.',
 	loseMessage: 'Better luck next time! It was a **{{answer}}**.',
 	othersMessage: 'Only <@{{author}}> can use the buttons!',
-	buttons: { true: 'Truth', lie: 'Lie' },
+	buttons: { true: 'Truth', lie: 'Lie' }
 });
 ```

@@ -33,6 +33,13 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: embed color must be a string.');
 	}
 
+	if (!options.embed.footer) {
+		options.embed.footer = '©️ Weky Development';
+	}
+	if (typeof options.embed.footer !== 'string') {
+		throw new TypeError('Weky Error: embed footer must be a string.');
+	}
+
 	if (!options.embed.timestamp) options.embed.timestamp = true;
 	if (typeof options.embed.timestamp !== 'boolean') {
 		throw new TypeError('Weky Error: timestamp must be a boolean.');
@@ -66,22 +73,22 @@ module.exports = async (options) => {
 	}
 
 	const id1 =
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4);
+		getRandomString(20);
 
 	const id2 =
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4) +
+		getRandomString(20) +
 		'-' +
-		getRandomString(4);
+		getRandomString(20);
 
 	const think = await options.message.inlineReply({
 		embed: new Discord.MessageEmbed()
@@ -126,7 +133,7 @@ module.exports = async (options) => {
 		.setTitle(options.embed.title)
 		.setDescription(statement)
 		.setColor(options.embed.color)
-		.setFooter('©️ Weky Development');
+		.setFooter(options.embed.footer);
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
 	}

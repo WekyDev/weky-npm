@@ -1,4 +1,3 @@
-const data = new Set();
 const math = require('mathjs');
 const Discord = require('discord.js');
 const { MessageButton } = require('discord-buttons');
@@ -34,12 +33,19 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: embed color must be a string.');
 	}
 
+	if (!options.embed.footer) {
+		options.embed.footer = '©️ Weky Development';
+	}
+	if (typeof options.embed.footer !== 'string') {
+		throw new TypeError('Weky Error: embed footer must be a string.');
+	}
+
 	if (!options.embed.timestamp) options.embed.timestamp = true;
 	if (typeof options.embed.timestamp !== 'boolean') {
 		throw new TypeError('Weky Error: timestamp must be a boolean.');
 	}
 
-	if (!options.disabledQuery) options.disabledQuery = 'Calculator is disabled!';
+	if (!options.disabledQuery) {options.disabledQuery = 'Calculator is disabled!';}
 	if (typeof options.disabledQuery !== 'string') {
 		throw new TypeError('Weky Error: disabledQuery must be a string.');
 	}
@@ -58,36 +64,209 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: othersMessage must be a string.');
 	}
 
-	if (data.has(options.message.author.id)) return;
-	data.add(options.message.author.id);
-
 	// Button ID generator
 	let str = ' ';
 	let stringify = '```\n' + str + '\n```';
-	const calc_irrc = getRandomString(20);
-	const empty_irrc = getRandomString(20);
-	const calc_percent = getRandomString(20);
-	const calculator_7 = getRandomString(20);
-	const calculator_8 = getRandomString(20);
-	const calculator_9 = getRandomString(20);
-	const calculator_1 = getRandomString(20);
-	const calculator_2 = getRandomString(20);
-	const calculator_3 = getRandomString(20);
-	const calculator_4 = getRandomString(20);
-	const calculator_5 = getRandomString(20);
-	const calculator_0 = getRandomString(20);
-	const calculator_6 = getRandomString(20);
-	const calculator_e1 = getRandomString(20);
-	const calculator_e2 = getRandomString(20);
-	const calculator_dot = getRandomString(20);
-	const calculator_plus = getRandomString(20);
-	const calculator_star = getRandomString(20);
-	const calculator_equal = getRandomString(20);
-	const calculator_clear = getRandomString(20);
-	const calculator_minus = getRandomString(20);
-	const calculator_devide = getRandomString(20);
-	const calculator_backspace = getRandomString(20);
-	const calculator_uppercase = getRandomString(20);
+	const calc_irrc =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const empty_1 =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const empty_2 =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calc_percent =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_7 =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_8 =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_9 =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_1 =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_2 =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_3 =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_4 =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_5 =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_0 =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_6 =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_e1 =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_e2 =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_dot =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_plus =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_star =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_equal =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_clear =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_minus =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_devide =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_backspace =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
+	const calculator_uppercase =
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20) +
+			'-' +
+			getRandomString(20);
 
 	// Buttons
 	const ac = new MessageButton()
@@ -178,9 +357,14 @@ module.exports = async (options) => {
 		.setLabel('DC')
 		.setID(calc_irrc)
 		.setStyle('red');
-	const empty = new MessageButton()
+	const empty1 = new MessageButton()
 		.setLabel('\u200b')
-		.setID(empty_irrc)
+		.setID(empty_1)
+		.setStyle('gray')
+		.setDisabled();
+	const empty2 = new MessageButton()
+		.setLabel('\u200b')
+		.setID(empty_2)
 		.setStyle('gray')
 		.setDisabled();
 	const percent = new MessageButton()
@@ -310,7 +494,7 @@ module.exports = async (options) => {
 		.setTitle(options.embed.title)
 		.setDescription(stringify)
 		.setColor(options.embed.color)
-		.setFooter('©️ Weky Development');
+		.setFooter(options.embed.footer);
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
 	}
@@ -332,11 +516,11 @@ module.exports = async (options) => {
 				},
 				{
 					type: 1,
-					components: [one, two, three, minus, empty],
+					components: [one, two, three, minus, empty1],
 				},
 				{
 					type: 1,
-					components: [dot, zero, equal, plus, empty],
+					components: [dot, zero, equal, plus, empty2],
 				},
 			],
 		});
@@ -345,7 +529,7 @@ module.exports = async (options) => {
 				.setTitle(options.embed.title)
 				.setDescription(stringify)
 				.setColor(options.embed.color)
-				.setFooter('©️ Weky Development');
+				.setFooter(options.embed.footer);
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
@@ -366,11 +550,11 @@ module.exports = async (options) => {
 					},
 					{
 						type: 1,
-						components: [one, two, three, minus, empty],
+						components: [one, two, three, minus, empty1],
 					},
 					{
 						type: 1,
-						components: [dot, zero, equal, plus, empty],
+						components: [dot, zero, equal, plus, empty2],
 					},
 				],
 			});
@@ -380,7 +564,7 @@ module.exports = async (options) => {
 				.setTitle(options.embed.title)
 				.setColor(options.embed.color)
 				.setDescription(stringify)
-				.setFooter('©️ Weky Development');
+				.setFooter(options.embed.footer);
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
@@ -401,11 +585,11 @@ module.exports = async (options) => {
 					},
 					{
 						type: 1,
-						components: [qone, qtwo, qthree, qminus, empty],
+						components: [qone, qtwo, qthree, qminus, empty1],
 					},
 					{
 						type: 1,
-						components: [qdot, qzero, qequal, qplus, empty],
+						components: [qdot, qzero, qequal, qplus, empty2],
 					},
 				],
 			});
@@ -521,7 +705,12 @@ module.exports = async (options) => {
 				edit();
 				break;
 			case calculator_backspace:
-				if (str === ' ' || str === '' || str === null || str === undefined) {
+				if (
+					str === ' ' ||
+							str === '' ||
+							str === null ||
+							str === undefined
+				) {
 					return;
 				} else {
 					str = str.split('');
@@ -558,7 +747,6 @@ module.exports = async (options) => {
 					}
 				}
 			} else if (btn.id === calc_irrc) {
-				data.delete(options.message.author.id);
 				str = options.disabledQuery;
 				stringify = '```\n' + str + '\n```';
 				edit();

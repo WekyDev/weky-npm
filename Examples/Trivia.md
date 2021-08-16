@@ -7,7 +7,8 @@ await Trivia({
 		title: 'Trivia | Weky Development',
 		description: 'You only have **{{time}}** to guess the answer!',
 		color: '#7289da',
-		timestamp: true,
+        footer: '©️ Weky Development',
+		timestamp: true
 	},
 	difficulty: 'hard',
 	thinkMessage: 'I am thinking',
@@ -21,6 +22,6 @@ await Trivia({
 		four: '4️⃣',
 	},
 	othersMessage: 'Only <@{{author}}> can use the buttons!',
-	returnWinner: false,
+	returnWinner: false
 });
 ```

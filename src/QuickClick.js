@@ -6,6 +6,7 @@ const {
 	shuffleArray,
 	randomHexColor,
 	checkForUpdates,
+	getRandomString,
 } = require('../functions/function');
 
 module.exports = async (options) => {
@@ -32,6 +33,13 @@ module.exports = async (options) => {
 	if (!options.embed.color) options.embed.color = randomHexColor();
 	if (typeof options.embed.color !== 'string') {
 		throw new TypeError('Weky Error: embed color must be a string.');
+	}
+
+	if (!options.embed.footer) {
+		options.embed.footer = '©️ Weky Development';
+	}
+	if (typeof options.embed.footer !== 'string') {
+		throw new TypeError('Weky Error: embed footer must be a string.');
 	}
 
 	if (!options.embed.timestamp) options.embed.timestamp = true;
@@ -97,7 +105,7 @@ module.exports = async (options) => {
 		const embed = new Discord.MessageEmbed()
 			.setTitle(options.embed.title)
 			.setColor(options.embed.color)
-			.setFooter('©️ Weky Development')
+			.setFooter(options.embed.footer)
 			.setDescription(
 				options.ongoingMessage.replace(
 					'{{channel}}',
@@ -112,7 +120,7 @@ module.exports = async (options) => {
 	const embed = new Discord.MessageEmbed()
 		.setTitle(options.embed.title)
 		.setColor(options.embed.color)
-		.setFooter('©️ Weky Development')
+		.setFooter(options.embed.footer)
 		.setDescription(options.waitMessage);
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
@@ -131,7 +139,15 @@ module.exports = async (options) => {
 						.setDisabled()
 						.setLabel('\u200b')
 						.setStyle('blurple')
-						.setID('INCORRECT'),
+						.setID(
+							getRandomString(20) +
+								'-' +
+								getRandomString(20) +
+								'-' +
+								getRandomString(20) +
+								'-' +
+								getRandomString(20),
+						),
 				);
 			}
 			buttons.push(
@@ -141,7 +157,7 @@ module.exports = async (options) => {
 					.setID('CORRECT'),
 			);
 			shuffleArray(buttons);
-			for (let i = 0; i < Math.ceil(25 / 5); i++) {
+			for (let i = 0; i < Math.ceil(20 / 5); i++) {
 				rows.push(new disbut.MessageActionRow());
 			}
 			rows.forEach((row, i) => {
@@ -150,7 +166,7 @@ module.exports = async (options) => {
 			const _embed = new Discord.MessageEmbed()
 				.setTitle(options.embed.title)
 				.setColor(options.embed.color)
-				.setFooter('©️ Weky Development')
+				.setFooter(options.embed.footer)
 				.setDescription(
 					options.startMessage.replace('{{time}}', convertTime(options.time)),
 				);
@@ -172,7 +188,7 @@ module.exports = async (options) => {
 						element.setDisabled();
 					});
 					rows.length = 0;
-					for (let i = 0; i < Math.ceil(25 / 5); i++) {
+					for (let i = 0; i < Math.ceil(20 / 5); i++) {
 						rows.push(new disbut.MessageActionRow());
 					}
 					rows.forEach((row, i) => {
@@ -186,7 +202,7 @@ module.exports = async (options) => {
 								.replace('{{time}}', (Date.now() - gameCreatedAt) / 1000),
 						)
 						.setColor(options.embed.color)
-						.setFooter('©️ Weky Development');
+						.setFooter(options.embed.footer);
 					if (options.embed.timestamp) {
 						__embed.setTimestamp();
 					}
@@ -203,7 +219,7 @@ module.exports = async (options) => {
 						element.setDisabled();
 					});
 					rows.length = 0;
-					for (let i = 0; i < Math.ceil(25 / 5); i++) {
+					for (let i = 0; i < Math.ceil(20 / 5); i++) {
 						rows.push(new disbut.MessageActionRow());
 					}
 					rows.forEach((row, i) => {
@@ -212,7 +228,7 @@ module.exports = async (options) => {
 					const __embed = new Discord.MessageEmbed()
 						.setTitle(options.embed.title)
 						.setColor(options.embed.color)
-						.setFooter('©️ Weky Development')
+						.setFooter(options.embed.footer)
 						.setDescription(options.loseMessage);
 					if (options.embed.timestamp) {
 						__embed.setTimestamp();

@@ -6,6 +6,7 @@ await Calculator({
     embed: {
         title: 'Calculator | Weky Development',
         color: '#7289da',
+        footer: '©️ Weky Development',
         timestamp: true
     },
     disabledQuery: 'Calculator is disabled!',

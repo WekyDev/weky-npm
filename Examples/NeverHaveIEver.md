@@ -6,10 +6,11 @@ await NeverHaveIEver({
 	embed: {
 		title: 'Never Have I Ever | Weky Development',
 		color: '#7289da',
-		timestamp: true,
+        footer: '©️ Weky Development',
+		timestamp: true
 	},
 	thinkMessage: 'I am thinking',
 	othersMessage: 'Only <@{{author}}> can use the buttons!',
-	buttons: { optionA: 'Yes', optionB: 'No' },
+	buttons: { optionA: 'Yes', optionB: 'No' }
 });
 ```
