@@ -65,9 +65,6 @@ module.exports = async (options) => {
 			throw new TypeError('Weky Error: othersMessage must be a string.');
 		}
 
-		// if (data.has(options.message.author.id)) return;
-		// data.add(options.message.author.id);
-
 		// Button ID generator
 		let str = ' ';
 		let stringify = '```\n' + str + '\n```';
@@ -96,8 +93,6 @@ module.exports = async (options) => {
 		const calc_uppercase = getRandomString(20);
 		const noncalc_space = getRandomString(20);
 		const noncalc_spacee = getRandomString(20);
-
-		// Buttons
 
 		// Row 1
 		const e1 = new MessageButton()
@@ -198,6 +193,12 @@ module.exports = async (options) => {
 			.setLabel('-')
 			.setStyle(blurple);
 
+		const space = new MessageButton()
+			.setCustomId(noncalc_space)
+			.setLabel('\u200b')
+			.setStyle(gray)
+			.setDisabled();
+
 		// Row 5
 		const dot = new MessageButton()
 			.setCustomId(calc_dot)
@@ -219,21 +220,13 @@ module.exports = async (options) => {
 			.setLabel('+')
 			.setStyle(blurple);
 
-		// Universal
-		const space = new MessageButton()
-			.setCustomId(noncalc_space)
-			.setLabel('\u200b')
-			.setStyle(gray)
-			.setDisabled();
-
 		const spacee = new MessageButton()
 			.setCustomId(noncalc_spacee)
 			.setLabel('\u200b')
 			.setStyle(gray)
 			.setDisabled();
 
-		// ----------------------------------------------------------------------
-
+		//  Send
 		const embed = new MessageEmbed()
 			.setTitle(options.embed.title)
 			.setDescription(stringify)
@@ -245,7 +238,6 @@ module.exports = async (options) => {
 		options.message.channel.send({
 			embeds: [embed]
 		}).then(async (msg) => {
-			// console.log([seven, eight, nine, slash, destroy])
 			msg.edit({
 				embeds: [embed],
 				components: [{
@@ -270,6 +262,8 @@ module.exports = async (options) => {
 					},
 				],
 			});
+
+			// Functions
 			async function edit() {
 				const _embed = new MessageEmbed()
 					.setTitle(options.embed.title)
@@ -338,17 +332,19 @@ module.exports = async (options) => {
 					],
 				});
 			}
+
+			// Collector
 			const filter = (btn) => btn.user.id == options.message.member.id;
 			const calc = msg.channel.createMessageComponentCollector({
 				filter
-			});;
+			});
 
 			calc.on('collect', async btn => {
-				if (btn.user.id !== options.message.author.id) {
+				if (btn.user.id !== options.message.member.id) {
 					return btn.reply({
 						content: options.othersMessage.replace(
 							'{{author}}',
-							options.message.author.id,
+							options.message.member.id,
 						),
 						emphemeral: true,
 					});
