@@ -16,6 +16,7 @@ client.on('message', async (message) => {
 			embed: {
 				title: 'Calculator | Weky Development',
 				color: '#5865F2',
+				footer: '©️ Weky Development',
 				timestamp: true,
 			},
 			disabledQuery: 'Calculator is disabled!',
