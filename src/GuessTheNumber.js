@@ -2,13 +2,13 @@ const data = new Set();
 const db = require('quick.db');
 const currentGames = new Object();
 const Discord = require('discord.js');
-const disbut = require('discord.js');
 const {
 	convertTime,
 	randomHexColor,
 	getRandomString,
 	checkForUpdates,
 } = require('../functions/function');
+const red = 'DANGER';
 
 module.exports = async (options) => {
 	checkForUpdates();
@@ -156,12 +156,14 @@ module.exports = async (options) => {
 						currentGames[`${options.message.guild.id}_channel`],
 					),
 				)
-				
+
 				.setColor(options.embed.color);
 			if (options.embed.timestamp) {
 				embed.setTimestamp();
 			}
-			return options.message.channel.send(embed);
+			return options.message.channel.send({
+				embeds: [embed]
+			});
 		}
 		const embed = new Discord.MessageEmbed()
 			.setDescription(
@@ -171,27 +173,33 @@ module.exports = async (options) => {
 				)}`,
 			)
 			.setTitle(options.embed.title)
-			
+
 			.setColor(options.embed.color);
 		if (options.embed.timestamp) {
 			embed.setTimestamp();
 		}
-		let btn1 = new disbut.MessageButton()
-			.setStyle('red')
+		let btn1 = new Discord.MessageButton()
+			.setStyle(red)
 			.setLabel(options.buttonText)
-			.setID(id);
-		const msg = await options.message.channel.send(embed);
+			.setCustomId(id);
+		const msg = await options.message.channel.send({
+			embeds: [embed]
+		});
 		await msg.edit({
-			embed: embed,
-			components: [{ type: 1, components: [btn1] }],
+			embeds: [embed],
+			components: [{
+				type: 1,
+				components: [btn1]
+			}],
 		});
 		const gameCreatedAt = Date.now();
 		const collector = new Discord.MessageCollector(
 			options.message.channel,
-			(m) => !m.author.bot,
-			{ time: options.time },
+			(m) => !m.author.bot, {
+				time: options.time
+			},
 		);
-		const gameCollector = msg.createButtonCollector((fn) => fn);
+		const gameCollector = msg.createMessageComponentCollector((fn) => fn);
 		currentGames[options.message.guild.id] = true;
 		currentGames[`${options.message.guild.id}_channel`] =
 			options.message.channel.id;
@@ -218,21 +226,26 @@ module.exports = async (options) => {
 							)}`,
 					)
 					.setTitle(options.embed.title)
-					
+
 					.setColor(options.embed.color);
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
-				btn1 = new disbut.MessageButton()
-					.setStyle('red')
+				btn1 = new Discord.MessageButton()
+					.setStyle(red)
 					.setLabel(options.buttonText)
 					.setDisabled()
-					.setID(id);
+					.setCustomId(id);
 				await msg.edit({
-					embed,
-					components: [{ type: 1, components: [btn1] }],
+					embeds: [embed],
+					components: [{
+						type: 1,
+						components: [btn1]
+					}],
 				});
-				_msg.reply(_embed);
+				_msg.reply({
+					embeds: [_embed]
+				});
 				gameCollector.stop();
 				collector.stop();
 				if (options.returnWinner) {
@@ -252,46 +265,53 @@ module.exports = async (options) => {
 				const _embed = new Discord.MessageEmbed()
 					.setDescription(
 						options.bigNumberMessage
-							.replace(/{{author}}/g, _msg.author.toString())
-							.replace(/{{number}}/g, parsedNumber),
+						.replace(/{{author}}/g, _msg.author.toString())
+						.replace(/{{number}}/g, parsedNumber),
 					)
 					.setColor(options.embed.color);
-				_msg.reply(_embed);
+				_msg.reply({
+					embeds: [_embed]
+				});
 			}
 			if (parseInt(_msg.content) > options.number) {
 				const _embed = new Discord.MessageEmbed()
 					.setDescription(
 						options.smallNumberMessage
-							.replace(/{{author}}/g, _msg.author.toString())
-							.replace(/{{number}}/g, parsedNumber),
+						.replace(/{{author}}/g, _msg.author.toString())
+						.replace(/{{number}}/g, parsedNumber),
 					)
 					.setColor(options.embed.color);
-				_msg.reply(_embed);
+				_msg.reply({
+					embeds: [_embed]
+				});
 			}
 		});
 
 		gameCollector.on('collect', (button) => {
 			if (button.clicker.user.id !== options.message.author.id) {
-				return button.reply.send(
-					options.othersMessage.replace(
+				return button.reply({
+					content: options.othersMessage.replace(
 						/{{author}}/g,
 						options.message.author.id,
 					),
-					true,
-				);
+					ephemeral: true,
+				});
 			}
-			button.reply.defer();
+			button.deferUpdate();
 			if (button.id === id) {
-				btn1 = new disbut.MessageButton()
-					.setStyle('red')
+				btn1 = new Discord.MessageButton()
+					.setStyle(red)
 					.setLabel(options.buttonText)
 					.setDisabled()
-					.setID(id);
+					.setCustomId(id);
 				gameCollector.stop();
 				collector.stop();
 				msg.edit({
-					embed: embed,
-					components: [{ type: 1, components: [btn1] }],
+					embeds: [embed],
+					components: [{
+						type: 1,
+						components: [btn1]
+					}],
 				});
 				const _embed = new Discord.MessageEmbed()
 					.setTitle(options.embed.title)
@@ -299,12 +319,12 @@ module.exports = async (options) => {
 						options.loseMessage.replace(/{{number}}/g, options.number),
 					)
 					.setColor(options.embed.color)
-					
+
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
 				options.message.channel.send({
-					embed: _embed,
+					embeds: [_embed],
 				});
 			}
 		});
@@ -317,20 +337,25 @@ module.exports = async (options) => {
 						options.loseMessage.replace(/{{number}}/g, options.number),
 					)
 					.setColor(options.embed.color)
-					
+
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
-				btn1 = new disbut.MessageButton()
-					.setStyle('red')
+				btn1 = new Discord.MessageButton()
+					.setStyle(red)
 					.setLabel(options.buttonText)
 					.setDisabled()
-					.setID(id);
+					.setCustomId(id);
 				await msg.edit({
-					embed,
-					components: [{ type: 1, components: [btn1] }],
+					embeds: [embed],
+					components: [{
+						type: 1,
+						components: [btn1]
+					}],
 				});
-				return options.message.channel.send(_embed);
+				return options.message.channel.send({
+					embeds: [_embed]
+				});
 			}
 		});
 	} else {
@@ -344,27 +369,33 @@ module.exports = async (options) => {
 				)}`,
 			)
 			.setTitle(options.embed.title)
-			
+
 			.setColor(options.embed.color);
 		if (options.embed.timestamp) {
 			embed.setTimestamp();
 		}
-		let btn1 = new disbut.MessageButton()
-			.setStyle('red')
+		let btn1 = new Discord.MessageButton()
+			.setStyle(red)
 			.setLabel(options.buttonText)
-			.setID(id);
-		const msg = await options.message.channel.send(embed);
+			.setCustomId(id);
+		const msg = await options.message.channel.send({
+			embeds: [embed]
+		});
 		await msg.edit({
-			embed: embed,
-			components: [{ type: 1, components: [btn1] }],
+			embeds: [embed],
+			components: [{
+				type: 1,
+				components: [btn1]
+			}],
 		});
 		const gameCreatedAt = Date.now();
 		const collector = new Discord.MessageCollector(
 			options.message.channel,
-			(m) => !m.author.bot,
-			{ time: options.time },
+			(m) => !m.author.bot, {
+				time: options.time
+			},
 		);
-		const gameCollector = msg.createButtonCollector((fn) => fn);
+		const gameCollector = msg.createMessageComponentCollector((fn) => fn);
 		collector.on('collect', async (_msg) => {
 			if (_msg.author.id !== options.message.author.id) return;
 			if (isNaN(_msg.content)) {
@@ -380,21 +411,26 @@ module.exports = async (options) => {
 							.replace(/{{number}}/g, options.number)}`,
 					)
 					.setTitle(options.embed.title)
-					
+
 					.setColor(options.embed.color);
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
-				btn1 = new disbut.MessageButton()
-					.setStyle('red')
+				btn1 = new Discord.MessageButton()
+					.setStyle(red)
 					.setLabel(options.buttonText)
 					.setDisabled()
-					.setID(id);
+					.setCustomId(id);
 				await msg.edit({
-					embed,
-					components: [{ type: 1, components: [btn1] }],
+					embeds: [embed],
+					components: [{
+						type: 1,
+						components: [btn1]
+					}],
 				});
-				_msg.reply(_embed);
+				_msg.reply({
+					embeds: [_embed]
+				});
 				gameCollector.stop();
 				collector.stop();
 				data.delete(options.message.author.id);
@@ -403,47 +439,54 @@ module.exports = async (options) => {
 				const _embed = new Discord.MessageEmbed()
 					.setDescription(
 						options.bigNumberMessage
-							.replace(/{{author}}/g, _msg.author.toString())
-							.replace(/{{number}}/g, parsedNumber),
+						.replace(/{{author}}/g, _msg.author.toString())
+						.replace(/{{number}}/g, parsedNumber),
 					)
 					.setColor(options.embed.color);
-				_msg.reply(_embed);
+				_msg.reply({
+					embeds: [_embed]
+				});
 			}
 			if (parseInt(_msg.content) > options.number) {
 				const _embed = new Discord.MessageEmbed()
 					.setDescription(
 						options.smallNumberMessage
-							.replace(/{{author}}/g, _msg.author.toString())
-							.replace(/{{number}}/g, parsedNumber),
+						.replace(/{{author}}/g, _msg.author.toString())
+						.replace(/{{number}}/g, parsedNumber),
 					)
 					.setColor(options.embed.color);
-				_msg.reply(_embed);
+				_msg.reply({
+					embeds: [_embed]
+				});
 			}
 		});
 
 		gameCollector.on('collect', (button) => {
 			if (button.clicker.user.id !== options.message.author.id) {
-				return button.reply.send(
-					options.othersMessage.replace(
+				return button.reply({
+					content: options.othersMessage.replace(
 						/{{author}}/g,
 						options.message.author.id,
 					),
-					true,
-				);
+					ephemeral: true,
+				});
 			}
-			button.reply.defer();
+			button.deferUpdate();
 			if (button.id === id) {
-				btn1 = new disbut.MessageButton()
-					.setStyle('red')
+				btn1 = new Discord.MessageButton()
+					.setStyle(red)
 					.setLabel(options.buttonText)
 					.setDisabled()
-					.setID(id);
+					.setCustomId(id);
 				gameCollector.stop();
 				collector.stop();
 				data.delete(options.message.author.id);
 				msg.edit({
-					embed: embed,
-					components: [{ type: 1, components: [btn1] }],
+					embeds: [embed],
+					components: [{
+						type: 1,
+						components: [btn1]
+					}],
 				});
 				const _embed = new Discord.MessageEmbed()
 					.setTitle(options.embed.title)
@@ -451,12 +494,12 @@ module.exports = async (options) => {
 						options.loseMessage.replace(/{{number}}/g, options.number),
 					)
 					.setColor(options.embed.color)
-					
+
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
 				options.message.channel.send({
-					embed: _embed,
+					embeds: [_embed],
 				});
 			}
 		});
@@ -468,21 +511,26 @@ module.exports = async (options) => {
 						options.loseMessage.replace(/{{number}}/g, options.number),
 					)
 					.setColor(options.embed.color)
-					
+
 				if (options.embed.timestamp) {
 					_embed.setTimestamp();
 				}
-				btn1 = new disbut.MessageButton()
-					.setStyle('red')
+				btn1 = new Discord.MessageButton()
+					.setStyle(red)
 					.setLabel(options.buttonText)
 					.setDisabled()
-					.setID(id);
+					.setCustomId(id);
 				await msg.edit({
-					embed,
-					components: [{ type: 1, components: [btn1] }],
+					embeds: [embed],
+					components: [{
+						type: 1,
+						components: [btn1]
+					}],
 				});
 				data.delete(options.message.author.id);
-				return options.message.channel.send(_embed);
+				return options.message.channel.send({
+					embeds: [_embed]
+				});
 			}
 		});
 	}

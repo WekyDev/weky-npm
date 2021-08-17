@@ -1,6 +1,5 @@
 const data = new Set();
 const Discord = require('discord.js');
-const disbut = require('discord.js');
 const {
 	convertTime,
 	randomHexColor,
@@ -8,6 +7,8 @@ const {
 	checkForUpdates,
 	getRandomSentence,
 } = require('../functions/function');
+
+const red = 'DANGER';
 
 module.exports = async (options) => {
 	checkForUpdates();
@@ -116,10 +117,10 @@ module.exports = async (options) => {
 		.map((msg) => `\`${msg.split('').join(' ')}\``)
 		.join(' ');
 	const gameCreatedAt = Date.now();
-	let btn1 = new disbut.MessageButton()
-		.setStyle('red')
+	let btn1 = new Discord.MessageButton()
+		.setStyle(red)
 		.setLabel(options.buttonText)
-		.setID(id);
+		.setCustomId(id);
 	const embed = new Discord.MessageEmbed()
 		.setTitle(options.embed.title)
 		.setDescription(
@@ -134,7 +135,9 @@ module.exports = async (options) => {
 	if (options.embed.timestamp) {
 		embed.setTimestamp();
 	}
-	const think = await options.message.channel.send(embed);
+	const think = await options.message.channel.send({
+		embeds: [embed]
+	});
 	await think.edit({
 		embed,
 		components: [{ type: 1, components: [btn1] }],
@@ -161,12 +164,14 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
-			options.message.channel.send(_embed);
-			btn1 = new disbut.MessageButton()
-				.setStyle('red')
+			options.message.channel.send({
+				embeds: [_embed]
+			});
+			btn1 = new Discord.MessageButton()
+				.setStyle(red)
 				.setLabel(options.buttonText)
 				.setDisabled()
-				.setID(id);
+				.setCustomId(id);
 			await think.edit({
 				embed,
 				components: [{ type: 1, components: [btn1] }],
@@ -181,14 +186,16 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
-			options.message.channel.send(_embed);
+			options.message.channel.send({
+				embeds: [_embed]
+			});
 			collector.stop(msg.author.username);
 			data.delete(options.message.author.id);
-			btn1 = new disbut.MessageButton()
-				.setStyle('red')
+			btn1 = new Discord.MessageButton()
+				.setStyle(red)
 				.setLabel(options.buttonText)
 				.setDisabled()
-				.setID(id);
+				.setCustomId(id);
 			await think.edit({
 				embed,
 				components: [{ type: 1, components: [btn1] }],
@@ -204,12 +211,14 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
-			options.message.channel.send(_embed);
-			btn1 = new disbut.MessageButton()
-				.setStyle('red')
+			options.message.channel.send({
+				embeds: [_embed]
+			});
+			btn1 = new Discord.MessageButton()
+				.setStyle(red)
 				.setLabel(options.buttonText)
 				.setDisabled()
-				.setID(id);
+				.setCustomId(id);
 			await think.edit({
 				embed,
 				components: [{ type: 1, components: [btn1] }],
@@ -217,25 +226,27 @@ module.exports = async (options) => {
 			data.delete(options.message.author.id);
 		}
 	});
-
-	const gameCollector = think.createButtonCollector((fn) => fn);
+	const gameCollector = think.channel.createMessageComponentCollector((fn) => fn);
 	gameCollector.on('collect', (button) => {
-		if (button.clicker.user.id !== options.message.author.id) {
-			return button.reply.send(
-				options.othersMessage.replace('{{author}}', options.message.author.id),
-				true,
-			);
+		if (button.user.id !== options.message.member.id) {
+			return button.reply.send({
+				content: options.othersMessage.replace('{{author}}', options.message.author.id),
+				ephemeral: true,
+			});
 		}
-		btn1 = new disbut.MessageButton()
-			.setStyle('red')
+		btn1 = new Discord.MessageButton()
+			.setStyle(red)
 			.setLabel(options.buttonText)
 			.setDisabled()
-			.setID(id);
+			.setCustomId(id);
 		think.edit({
 			embed: embed,
 			components: [{ type: 1, components: [btn1] }],
 		});
-		button.reply.send(options.cancelMessage, true);
+		button.reply({
+			content: options.cancelMessage, 
+			ephemeral: true,
+		});
 		gameCollector.stop();
 		data.delete(options.message.author.id);
 		return collector.stop();
