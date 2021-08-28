@@ -7,7 +7,7 @@ const {
 	randomHexColor,
 	checkForUpdates,
 	getRandomString,
-} = require('../functions/function');
+} = require('@functions');
 
 module.exports = async (options) => {
 	checkForUpdates();
@@ -189,7 +189,7 @@ module.exports = async (options) => {
 						element.setDisabled();
 					});
 					rows.length = 0;
-					for (let i = 0; i < Math.ceil(20 / 5); i++) {
+					for (let i = 0; i < i < 5; i++) {
 						rows.push(new disbut.MessageActionRow());
 					}
 					rows.forEach((row, i) => {
@@ -220,7 +220,7 @@ module.exports = async (options) => {
 						element.setDisabled();
 					});
 					rows.length = 0;
-					for (let i = 0; i < Math.ceil(20 / 5); i++) {
+					for (let i = 0; i < i < 5; i++) {
 						rows.push(new disbut.MessageActionRow());
 					}
 					rows.forEach((row, i) => {

@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { checkForUpdates } = require('../functions/function');
+const { checkForUpdates } = require('@functions');
 
 module.exports = async (options) => {
 	checkForUpdates();
@@ -43,7 +43,8 @@ module.exports = async (options) => {
 				}
 			});
 	} else {
-		await webhook.send(Discord.Util.removeMentions(options.text), {
+		await webhook.send({
+			content: Discord.Util.removeMentions(options.text),
 			username: options.member.user.username,
 			avatarURL: options.member.user.displayAvatarURL(),
 		});

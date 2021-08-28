@@ -1,11 +1,7 @@
 bruh.json
 json.sqlite
-src/Chess.js
 node_modules/
-src/Akinator.js
 src/test.TicTacToe.js
 test/config.json
-test/progress.txt
 package-lock.json
-src/ConnectFour.js
 test/original.test.js

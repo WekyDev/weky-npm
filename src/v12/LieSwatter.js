@@ -1,12 +1,13 @@
+const fetch = require('node-fetch');
 const Discord = require('discord.js');
 const disbut = require('discord-buttons');
 const { decode } = require('html-entities');
 const {
-	fetchhtml,
+	convertTime,
 	randomHexColor,
 	checkForUpdates,
 	getRandomString,
-} = require('../functions/function');
+} = require('@functions');
 
 module.exports = async (options) => {
 	checkForUpdates();
@@ -23,7 +24,7 @@ module.exports = async (options) => {
 	}
 
 	if (!options.embed.title) {
-		options.embed.title = 'Would you rather... | Weky Development';
+		options.embed.title = 'Lie Swatter | Weky Development';
 	}
 	if (typeof options.embed.title !== 'string') {
 		throw new TypeError('Weky Error: embed title must be a string.');
@@ -51,6 +52,21 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: thinkMessage must be a boolean.');
 	}
 
+	if (!options.winMessage) {
+		options.winMessage =
+			'GG, It was a **{{answer}}**. You got it correct in **{{time}}**.';
+	}
+	if (typeof options.winMessage !== 'string') {
+		throw new TypeError('Weky Error: winMessage must be a boolean.');
+	}
+
+	if (!options.loseMessage) {
+		options.loseMessage = 'Better luck next time! It was a **{{answer}}**.';
+	}
+	if (typeof options.loseMessage !== 'string') {
+		throw new TypeError('Weky Error: loseMessage must be a boolean.');
+	}
+
 	if (!options.othersMessage) {
 		options.othersMessage = 'Only <@{{author}}> can use the buttons!';
 	}
@@ -63,14 +79,14 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: buttons must be an object.');
 	}
 
-	if (!options.buttons.optionA) options.buttons.optionA = 'Option A';
-	if (typeof options.buttons.optionA !== 'string') {
-		throw new TypeError('Weky Error: button must be a string.');
+	if (!options.buttons.true) options.buttons.true = 'Truth';
+	if (typeof options.buttons.true !== 'string') {
+		throw new TypeError('Weky Error: true buttons text must be a string.');
 	}
 
-	if (!options.buttons.optionB) options.buttons.optionB = 'Option B';
-	if (typeof options.buttons.optionB !== 'string') {
-		throw new TypeError('Weky Error: button must be a string.');
+	if (!options.buttons.lie) options.buttons.lie = 'Lie';
+	if (typeof options.buttons.lie !== 'string') {
+		throw new TypeError('Weky Error: lie buttons text must be a string.');
 	}
 
 	const id1 =
@@ -81,6 +97,7 @@ module.exports = async (options) => {
 		getRandomString(20) +
 		'-' +
 		getRandomString(20);
+
 	const id2 =
 		getRandomString(20) +
 		'-' +
@@ -100,35 +117,36 @@ module.exports = async (options) => {
 			.setTitle(`${options.thinkMessage}..`)
 			.setColor(options.embed.color),
 	});
-	const $ = await fetchhtml('http://either.io');
 	await think.edit({
 		embed: new Discord.MessageEmbed()
 			.setTitle(`${options.thinkMessage}...`)
 			.setColor(options.embed.color),
 	});
-	const blue = $('div.result.result-1').children();
-	const red = $('div.result.result-2').children();
-	const res = {
-		questions: [blue.eq(3).text(), red.eq(3).text()],
-		percentage: {
-			1: blue.eq(1).text(),
-			2: red.eq(1).text(),
-		},
-		author: $('span[id="question-author"] a').text(),
-	};
+	const { results } = await fetch(
+		'https://opentdb.com/api.php?amount=1&type=boolean',
+	).then((res) => res.json());
+	const question = results[0];
 	await think.edit({
 		embed: new Discord.MessageEmbed()
 			.setTitle(`${options.thinkMessage}..`)
 			.setColor(options.embed.color),
 	});
-
-	let btn = new disbut.MessageButton()
+	let answer;
+	let winningID;
+	if (question.correct_answer === 'True') {
+		winningID = id1;
+		answer = options.buttons.true;
+	} else {
+		winningID = id2;
+		answer = options.buttons.lie;
+	}
+	let btn1 = new disbut.MessageButton()
 		.setStyle('blurple')
-		.setLabel(`${options.buttons.optionA}`)
+		.setLabel(options.buttons.true)
 		.setID(id1);
 	let btn2 = new disbut.MessageButton()
 		.setStyle('blurple')
-		.setLabel(`${options.buttons.optionB}`)
+		.setLabel(options.buttons.lie)
 		.setID(id2);
 
 	await think.edit({
@@ -138,9 +156,7 @@ module.exports = async (options) => {
 	});
 	const embed = new Discord.MessageEmbed()
 		.setTitle(options.embed.title)
-		.setDescription(
-			`**A)** ${decode(res.questions[0])} \n**B)** ${decode(res.questions[1])}`,
-		)
+		.setDescription(decode(question.question))
 		.setColor(options.embed.color)
 		.setFooter(options.embed.footer);
 	if (options.embed.timestamp) {
@@ -149,13 +165,14 @@ module.exports = async (options) => {
 	await think
 		.edit({
 			embed: embed,
-			components: [{ type: 1, components: [btn, btn2] }],
+			components: [{ type: 1, components: [btn1, btn2] }],
 		})
 		.then(async (m) => {
+			const gameCreatedAt = Date.now();
 			const gameCollector = m.createButtonCollector((fn) => fn);
-			gameCollector.on('collect', (wyr) => {
-				if (wyr.clicker.user.id !== options.message.author.id) {
-					return wyr.reply.send(
+			gameCollector.on('collect', (button) => {
+				if (button.clicker.user.id !== options.message.author.id) {
+					return button.reply.send(
 						options.othersMessage.replace(
 							'{{author}}',
 							options.message.author.id,
@@ -163,71 +180,72 @@ module.exports = async (options) => {
 						true,
 					);
 				}
-				wyr.reply.defer();
-				if (wyr.id === id1) {
-					btn = new disbut.MessageButton()
-						.setStyle('blurple')
-						.setLabel(
-							`${options.buttons.optionA}` + ` (${res.percentage['1']})`,
-						)
+				button.reply.defer();
+				if (button.id === winningID) {
+					btn1 = new disbut.MessageButton()
+						.setLabel(options.buttons.true)
 						.setID(id1)
 						.setDisabled();
 					btn2 = new disbut.MessageButton()
-						.setStyle('gray')
-						.setLabel(
-							`${options.buttons.optionB}` + ` (${res.percentage['2']})`,
-						)
+						.setLabel(options.buttons.lie)
 						.setID(id2)
 						.setDisabled();
 					gameCollector.stop();
-					const _embed = new Discord.MessageEmbed()
-						.setTitle(options.embed.title)
+					if (winningID === id1) {
+						btn1.setStyle('green');
+						btn2.setStyle('red');
+					} else {
+						btn1.setStyle('red');
+						btn2.setStyle('green');
+					}
+					think.edit({
+						embed: embed,
+						components: [{ type: 1, components: [btn1, btn2] }],
+					});
+					const time = convertTime(Date.now() - gameCreatedAt);
+					const winEmbed = new Discord.MessageEmbed()
 						.setDescription(
-							`**A) ${decode(res.questions[0])} (${
-								res.percentage['1']
-							})** \nB) ${decode(res.questions[1])} (${res.percentage['2']})`,
+							`${options.winMessage
+								.replace('{{answer}}', decode(answer))
+								.replace('{{time}}', time)}`,
 						)
 						.setColor(options.embed.color)
 						.setFooter(options.embed.footer);
 					if (options.embed.timestamp) {
-						_embed.setTimestamp();
+						winEmbed.setTimestamp();
 					}
-					think.edit({
-						embed: _embed,
-						components: [{ type: 1, components: [btn, btn2] }],
-					});
-				} else if (wyr.id === id2) {
-					btn = new disbut.MessageButton()
-						.setStyle('gray')
-						.setLabel(
-							`${options.buttons.optionA}` + ` (${res.percentage['1']})`,
-						)
+					options.message.inlineReply(winEmbed);
+				} else {
+					btn1 = new disbut.MessageButton()
+						.setLabel(options.buttons.true)
 						.setID(id1)
 						.setDisabled();
 					btn2 = new disbut.MessageButton()
-						.setStyle('blurple')
-						.setLabel(
-							`${options.buttons.optionB}` + ` (${res.percentage['2']})`,
-						)
+						.setLabel(options.buttons.lie)
 						.setID(id2)
 						.setDisabled();
 					gameCollector.stop();
-					const _embed = new Discord.MessageEmbed()
-						.setTitle(options.embed.title)
+					if (winningID === id1) {
+						btn1.setStyle('green');
+						btn2.setStyle('red');
+					} else {
+						btn1.setStyle('red');
+						btn2.setStyle('green');
+					}
+					think.edit({
+						embed: embed,
+						components: [{ type: 1, components: [btn1, btn2] }],
+					});
+					const lostEmbed = new Discord.MessageEmbed()
 						.setDescription(
-							`A) ${decode(res.questions[0])} (${
-								res.percentage['1']
-							}) \n**B) ${decode(res.questions[1])} (${res.percentage['2']})**`,
+							`${options.loseMessage.replace('{{answer}}', decode(answer))}`,
 						)
 						.setColor(options.embed.color)
 						.setFooter(options.embed.footer);
 					if (options.embed.timestamp) {
-						_embed.setTimestamp();
+						lostEmbed.setTimestamp();
 					}
-					think.edit({
-						embed: _embed,
-						components: [{ type: 1, components: [btn, btn2] }],
-					});
+					options.message.inlineReply(lostEmbed);
 				}
 			});
 		});

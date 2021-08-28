@@ -1,8 +1,11 @@
 /* eslint-disable no-useless-escape */
+
+require('module-alias/register');
 const flip = require('./data/flip.js');
 const tiny = require('./data/tiny.js');
 const bent = require('./data/bent.js');
 const copy = require('./data/copy.js');
+const DJSVersion = require('discord.js').version;
 
 module.exports = {
 	bent: function(str) {
@@ -98,19 +101,43 @@ module.exports = {
 	},
 };
 
-module.exports.Sudo = require('./src/Sudo');
-module.exports.Snake = require('./src/Snake');
-module.exports.Fight = require('./src/Fight');
-module.exports.Trivia = require('./src/Trivia');
-module.exports.FastType = require('./src/FastType');
-module.exports.QuickClick = require('./src/QuickClick');
-module.exports.ChaosWords = require('./src/ChaosWords');
-module.exports.LieSwatter = require('./src/LieSwatter');
-module.exports.Calculator = require('./src/Calculator');
-module.exports.ShuffleGuess = require('./src/ShuffleGuess');
-module.exports.GuessTheNumber = require('./src/GuessTheNumber');
-module.exports.NeverHaveIEver = require('./src/NeverHaveIEver');
-module.exports.WouldYouRather = require('./src/WouldYouRather');
-module.exports.GuessThePokemon = require('./src/GuessThePokemon');
-module.exports.RockPaperScissors = require('./src/RockPaperScissors');
-module.exports.WillYouPressTheButton = require('./src/WillYouPressTheButton');
+
+if(DJSVersion === '12.5.3') {
+	module.exports = {
+		Sudo: require('./src/v12/Sudo'),
+		Snake : require('./src/v12/Snake'),
+		Fight : require('./src/v12/Fight'),
+		Trivia : require('./src/v12/Trivia'),
+		FastType : require('./src/v12/FastType'),
+		QuickClick : require('./src/v12/QuickClick'),
+		ChaosWords : require('./src/v12/ChaosWords'),
+		LieSwatter : require('./src/v12/LieSwatter'),
+		Calculator : require('./src/v12/Calculator'),
+		ShuffleGuess : require('./src/v12/ShuffleGuess'),
+		GuessTheNumber : require('./src/v12/GuessTheNumber'),
+		NeverHaveIEver : require('./src/v12/NeverHaveIEver'),
+		WouldYouRather : require('./src/v12/WouldYouRather'),
+		GuessThePokemon : require('./src/v12/GuessThePokemon'),
+		RockPaperScissors : require('./src/v12/RockPaperScissors'),
+		WillYouPressTheButton : require('./src/v12/WillYouPressTheButton'),
+	};
+} else if(DJSVersion.startsWith('13.1')) {
+	module.exports = {
+		Sudo: require('./src/v13/Sudo'),
+		// Snake : require('./src/v13/Snake'),
+		// Fight : require('./src/v13/Fight'),
+		// Trivia : require('./src/v13/Trivia'),
+		// FastType : require('./src/v13/FastType'),
+		// QuickClick : require('./src/v13/QuickClick'),
+		ChaosWords : require('./src/v13/ChaosWords'),
+		// LieSwatter : require('./src/v13/LieSwatter'),
+		Calculator : require('./src/v13/Calculator'),
+		// ShuffleGuess : require('./src/v13/ShuffleGuess'),
+		// GuessTheNumber : require('./src/v13/GuessTheNumber'),
+		// NeverHaveIEver : require('./src/v13/NeverHaveIEver'),
+		WouldYouRather : require('./src/v13/WouldYouRather'),
+		// GuessThePokemon : require('./src/v13/GuessThePokemon'),
+		// RockPaperScissors : require('./src/v13/RockPaperScissors'),
+		WillYouPressTheButton : require('./src/v13/WillYouPressTheButton'),
+	};
+}
