@@ -112,11 +112,15 @@ module.exports = async (options) => {
 		],
 	});
 
-	const { data } = await fetch('https://api.sujalgoel.engineer/wyr', {
+	const response = await fetch('https://api.sujalgoel.engineer/wyr', {
 		headers: {
 			Authorization: 'Sujal ' + options.APItoken,
 		},
 	}).then((res) => res.json());
+	if (response.success === 'false') {
+		throw new Error(`API Error: ${JSON.stringify(response)}`);
+	}
+	const data = response.data;
 
 	await think.edit({
 		embeds: [

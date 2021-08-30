@@ -163,7 +163,6 @@ module.exports = async (options) => {
 			rows.forEach((row, i) => {
 				row.addComponents(buttons.slice(0 + i * 5, 5 + i * 5));
 			});
-			console.log(rows);
 			const _embed = new Discord.MessageEmbed()
 				.setTitle(options.embed.title)
 				.setColor(options.embed.color)
