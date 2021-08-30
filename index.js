@@ -101,7 +101,7 @@ module.exports = {
 };
 
 
-if(DJSVersion === '12.5.3') {
+if(DJSVersion === '^12.5.3') {
 	module.exports = {
 		Sudo: require('./src/v12/Sudo'),
 		Snake : require('./src/v12/Snake'),
@@ -120,7 +120,7 @@ if(DJSVersion === '12.5.3') {
 		RockPaperScissors : require('./src/v12/RockPaperScissors'),
 		WillYouPressTheButton : require('./src/v12/WillYouPressTheButton'),
 	};
-} else if(DJSVersion.startsWith('13.1')) {
+} else if(DJSVersion.startsWith('^13.1')) {
 	module.exports = {
 		Sudo: require('./src/v13/Sudo'),
 		// Snake : require('./src/v13/Snake'),
