@@ -1,14 +1,9 @@
-const { MessageEmbed, MessageButton } = require('discord.js');
+const Discord = require('discord.js');
 const { decode } = require('html-entities');
-const {
-	randomHexColor,
-	getRandomString,
-	checkForUpdates,
-	WillYouPressTheButton,
-} = require('@functions');
+const functions = require('../../functions/function');
 
 module.exports = async (options) => {
-	checkForUpdates();
+	functions.checkForUpdates();
 	if (!options.message) {
 		throw new Error('Weky Error: message argument was not specified.');
 	}
@@ -36,7 +31,7 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: embed description must be a string.');
 	}
 
-	if (!options.embed.color) options.embed.color = randomHexColor();
+	if (!options.embed.color) options.embed.color = functions.randomHexColor();
 	if (typeof options.embed.color !== 'string') {
 		throw new TypeError('Weky Error: embed color must be a string.');
 	}
@@ -81,25 +76,26 @@ module.exports = async (options) => {
 	}
 
 	const id1 =
-		getRandomString(20) +
+		functions.getRandomString(20) +
 		'-' +
-		getRandomString(20) +
+		functions.getRandomString(20) +
 		'-' +
-		getRandomString(20) +
+		functions.getRandomString(20) +
 		'-' +
-		getRandomString(20);
+		functions.getRandomString(20);
+
 	const id2 =
-		getRandomString(20) +
+		functions.getRandomString(20) +
 		'-' +
-		getRandomString(20) +
+		functions.getRandomString(20) +
 		'-' +
-		getRandomString(20) +
+		functions.getRandomString(20) +
 		'-' +
-		getRandomString(20);
+		functions.getRandomString(20);
 
 	const think = await options.message.reply({
 		embeds: [
-			new MessageEmbed()
+			new Discord.MessageEmbed()
 				.setTitle(`${options.thinkMessage}.`)
 				.setColor(options.embed.color),
 		],
@@ -107,17 +103,17 @@ module.exports = async (options) => {
 
 	await think.edit({
 		embeds: [
-			new MessageEmbed()
+			new Discord.MessageEmbed()
 				.setTitle(`${options.thinkMessage}..`)
 				.setColor(options.embed.color),
 		],
 	});
 
-	const fetchedData = await WillYouPressTheButton();
+	const fetchedData = await functions.WillYouPressTheButton();
 
 	await think.edit({
 		embeds: [
-			new MessageEmbed()
+			new Discord.MessageEmbed()
 				.setTitle(`${options.thinkMessage}...`)
 				.setColor(options.embed.color),
 		],
@@ -133,30 +129,30 @@ module.exports = async (options) => {
 
 	await think.edit({
 		embeds: [
-			new MessageEmbed()
+			new Discord.MessageEmbed()
 				.setTitle(`${options.thinkMessage}..`)
 				.setColor(options.embed.color),
 		],
 	});
 
-	let btn = new MessageButton()
+	let btn = new Discord.MessageButton()
 		.setStyle('SUCCESS')
 		.setLabel(options.button.yes)
 		.setCustomId(id1);
-	let btn2 = new MessageButton()
+	let btn2 = new Discord.MessageButton()
 		.setStyle('DANGER')
 		.setLabel(options.button.no)
 		.setCustomId(id2);
 
 	await think.edit({
 		embeds: [
-			new MessageEmbed()
+			new Discord.MessageEmbed()
 				.setTitle(`${options.thinkMessage}.`)
 				.setColor(options.embed.color),
 		],
 	});
 
-	const embed = new MessageEmbed()
+	const embed = new Discord.MessageEmbed()
 		.setTitle(options.embed.title)
 		.setDescription(
 			`${options.embed.description
@@ -202,12 +198,12 @@ module.exports = async (options) => {
 		await wyptb.deferUpdate();
 
 		if (wyptb.customId === id1) {
-			btn = new MessageButton()
+			btn = new Discord.MessageButton()
 				.setStyle('SUCCESS')
 				.setLabel(`${options.button.yes} (${res.percentage['1']})`)
 				.setCustomId(id1)
 				.setDisabled();
-			btn2 = new MessageButton()
+			btn2 = new Discord.MessageButton()
 				.setStyle('DANGER')
 				.setLabel(`${options.button.no} (${res.percentage['2']})`)
 				.setCustomId(id2)
@@ -218,12 +214,12 @@ module.exports = async (options) => {
 				components: [{ type: 1, components: [btn, btn2] }],
 			});
 		} else if (wyptb.customId === id2) {
-			btn = new MessageButton()
+			btn = new Discord.MessageButton()
 				.setStyle('DANGER')
 				.setLabel(`${options.button.yes} (${res.percentage['1']})`)
 				.setCustomId(id1)
 				.setDisabled();
-			btn2 = new MessageButton()
+			btn2 = new Discord.MessageButton()
 				.setStyle('SUCCESS')
 				.setLabel(`${options.button.no} (${res.percentage['2']})`)
 				.setCustomId(id2)

@@ -1,15 +1,9 @@
 const data = new Set();
 const Discord = require('discord.js');
-const {
-	convertTime,
-	randomHexColor,
-	getRandomString,
-	checkForUpdates,
-	getRandomSentence,
-} = require('@functions');
+const functions = require('../../functions/function');
 
 module.exports = async (options) => {
-	checkForUpdates();
+	functions.checkForUpdates();
 	if (!options.message) {
 		throw new Error('Weky Error: message argument was not specified.');
 	}
@@ -59,7 +53,7 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: field4 must be a string.');
 	}
 
-	if (!options.embed.color) options.embed.color = randomHexColor();
+	if (!options.embed.color) options.embed.color = functions.randomHexColor();
 	if (typeof options.embed.color !== 'string') {
 		throw new TypeError('Weky Error: embed color must be a string.');
 	}
@@ -115,7 +109,7 @@ module.exports = async (options) => {
 	}
 
 	if (!options.words) {
-		options.words = getRandomSentence(Math.floor(Math.random() * 6) + 2);
+		options.words = functions.getRandomSentence(Math.floor(Math.random() * 6) + 2);
 	}
 	if (typeof options.words !== 'object') {
 		throw new TypeError('Weky Error: words must be an array.');
@@ -149,13 +143,13 @@ module.exports = async (options) => {
 	data.add(options.message.author.id);
 
 	const id =
-		getRandomString(20) +
+		functions.getRandomString(20) +
 		'-' +
-		getRandomString(20) +
+		functions.getRandomString(20) +
 		'-' +
-		getRandomString(20) +
+		functions.getRandomString(20) +
 		'-' +
-		getRandomString(20);
+		functions.getRandomString(20);
 
 	let tries = 0;
 	const array = [];
@@ -183,7 +177,7 @@ module.exports = async (options) => {
 	const embed = new Discord.MessageEmbed()
 		.setTitle(options.embed.title)
 		.setDescription(
-			options.embed.description.replace('{{time}}', convertTime(options.time)),
+			options.embed.description.replace('{{time}}', functions.convertTime(options.time)),
 		)
 		.addField(options.embed.field1, array.join(''))
 		.addField(options.embed.field2, `0/${options.words.length}`)
@@ -223,7 +217,7 @@ module.exports = async (options) => {
 				.setDescription(
 					options.embed.description.replace(
 						'{{time}}',
-						convertTime(options.time),
+						functions.convertTime(options.time),
 					),
 				)
 				.addField(options.embed.field1, array.join(''))
@@ -262,7 +256,7 @@ module.exports = async (options) => {
 						},
 					],
 				});
-				const time = convertTime(Date.now() - gameCreatedAt);
+				const time = functions.convertTime(Date.now() - gameCreatedAt);
 				const __embed = new Discord.MessageEmbed()
 					.setTitle(options.embed.title)
 					.addField(options.embed.field1, arr)

@@ -1,15 +1,9 @@
 const math = require('mathjs');
-const { MessageEmbed } = require('discord.js');
-const {
-	addRow,
-	createButton,
-	randomHexColor,
-	checkForUpdates,
-	getRandomString,
-} = require('@functions');
+const Discord = require('discord.js');
+const functions = require('../../functions/function');
 
 module.exports = async (options) => {
-	checkForUpdates();
+	functions.checkForUpdates();
 	if (!options.message) {
 		throw new Error('Weky Error: message argument was not specified.');
 	}
@@ -29,7 +23,7 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: embed title must be a string.');
 	}
 
-	if (!options.embed.color) options.embed.color = randomHexColor();
+	if (!options.embed.color) options.embed.color = functions.randomHexColor();
 	if (typeof options.embed.color !== 'string') {
 		throw new TypeError('Weky Error: embed color must be a string.');
 	}
@@ -109,13 +103,15 @@ module.exports = async (options) => {
 
 	for (let i = 0; i < text.length; i++) {
 		if (button[current].length === 5) current++;
-		button[current].push(createButton(text[i], false, getRandomString));
+		button[current].push(
+			functions.createButton(text[i], false, functions.getRandomString),
+		);
 		if (i === text.length - 1) {
-			for (const btn of button) row.push(addRow(btn));
+			for (const btn of button) row.push(functions.addRow(btn));
 		}
 	}
 
-	const embed = new MessageEmbed()
+	const embed = new Discord.MessageEmbed()
 		.setTitle(options.embed.title)
 		.setDescription(stringify)
 		.setColor(options.embed.color)
@@ -131,7 +127,7 @@ module.exports = async (options) => {
 		})
 		.then(async (msg) => {
 			async function edit() {
-				const _embed = new MessageEmbed()
+				const _embed = new Discord.MessageEmbed()
 					.setTitle(options.embed.title)
 					.setDescription(stringify)
 					.setColor(options.embed.color)
@@ -146,7 +142,7 @@ module.exports = async (options) => {
 			}
 
 			async function lock() {
-				const _embed = new MessageEmbed()
+				const _embed = new Discord.MessageEmbed()
 					.setTitle(options.embed.title)
 					.setColor(options.embed.color)
 					.setDescription(stringify)
@@ -156,9 +152,11 @@ module.exports = async (options) => {
 				}
 				for (let i = 0; i < text.length; i++) {
 					if (buttons[cur].length === 5) cur++;
-					buttons[cur].push(createButton(text[i], true, getRandomString));
+					buttons[cur].push(
+						functions.createButton(text[i], true, functions.getRandomString),
+					);
 					if (i === text.length - 1) {
-						for (const btn of buttons) rows.push(addRow(btn));
+						for (const btn of buttons) rows.push(functions.addRow(btn));
 					}
 				}
 

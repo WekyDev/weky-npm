@@ -8,7 +8,7 @@ const {
 	checkForUpdates,
 	getRandomString,
 	getRandomSentence,
-} = require('@functions');
+} = require('../../functions/function');
 
 module.exports = async (options) => {
 	checkForUpdates();

@@ -1,8 +1,8 @@
 const Discord = require('discord.js');
-const { checkForUpdates } = require('@functions');
+const functions = require('../../functions/function');
 
 module.exports = async (options) => {
-	checkForUpdates();
+	functions.checkForUpdates();
 	if (!options.message) {
 		throw new Error('Weky Error: message argument was not specified.');
 	}

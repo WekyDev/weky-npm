@@ -1,6 +1,5 @@
 /* eslint-disable no-useless-escape */
 
-require('module-alias/register');
 const flip = require('./data/flip.js');
 const tiny = require('./data/tiny.js');
 const bent = require('./data/bent.js');

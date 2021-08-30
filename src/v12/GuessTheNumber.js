@@ -8,7 +8,7 @@ const {
 	randomHexColor,
 	getRandomString,
 	checkForUpdates,
-} = require('@functions');
+} = require('../../functions/function');
 
 module.exports = async (options) => {
 	checkForUpdates();

@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { checkForUpdates } = require('@functions');
+const { checkForUpdates } = require('../../functions/function');
 
 module.exports = async (options) => {
 	checkForUpdates();
