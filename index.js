@@ -5,7 +5,7 @@ const flip = require('./data/flip.js');
 const tiny = require('./data/tiny.js');
 const bent = require('./data/bent.js');
 const copy = require('./data/copy.js');
-const DJSVersion = require('discord.js').version;
+const DJSVersion = require('../../package.json').dependencies['discord.js'] || require('../../package.json').devDependencies['discord.js'];
 
 module.exports = {
 	bent: function(str) {
