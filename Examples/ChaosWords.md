@@ -24,5 +24,5 @@ await ChaosWords({
     maxTries: 10,
     buttonText: 'Cancel',
     othersMessage: 'Only <@{{author}}> can use the buttons!'
-});s
+});
 ```
