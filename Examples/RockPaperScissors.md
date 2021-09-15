@@ -7,7 +7,7 @@ await RockPaperScissors({
 	embed: {
 		title: 'Rock Paper Scissors | Weky Development',
 		description: 'Press the button below to choose your element.',
-		color: '#7289da',
+		color: '#5865F2',
         footer: '©️ Weky Development',
 		timestamp: true
 	},

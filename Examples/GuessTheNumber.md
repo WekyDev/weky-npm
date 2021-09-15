@@ -6,7 +6,7 @@ await GuessTheNumber({
 	embed: {
 		title: 'Guess The Number | Weky Development',
 		description: 'You have **{{time}}** to guess the number.',
-		color: '#7289da',
+		color: '#5865F2',
         footer: '©️ Weky Development',
 		timestamp: true
 	},

@@ -6,7 +6,7 @@ await Trivia({
 	embed: {
 		title: 'Trivia | Weky Development',
 		description: 'You only have **{{time}}** to guess the answer!',
-		color: '#7289da',
+		color: '#5865F2',
         footer: '©️ Weky Development',
 		timestamp: true
 	},

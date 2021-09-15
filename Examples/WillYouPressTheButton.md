@@ -6,7 +6,7 @@ await WillYouPressTheButton({
 	embed: {
 		title: 'Will you press the button? | Weky Development',
 		description: '```{{statement1}}```\n**but**\n\n```{{statement2}}```',
-		color: '#7289da',
+		color: '#5865F2',
         footer: '©️ Weky Development',
 		timestamp: true
 	},

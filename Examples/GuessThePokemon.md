@@ -7,7 +7,7 @@ await GuessThePokemon({
 		title: 'Guess The Pokémon | Weky Development',
 		description:
 			'**Type:**\n{{type}}\n\n**Abilities:**\n{{abilities}}\n\nYou only have **{{time}}** to guess the pokémon.',
-		color: '#7289da',
+		color: '#5865F2',
         footer: '©️ Weky Development',
 		timestamp: true
 	},

@@ -100,7 +100,6 @@ module.exports = {
 	},
 };
 
-
 if(DJSVersion === '^12.5.3') {
 	module.exports = {
 		Sudo: require('./src/v12/Sudo'),
@@ -120,18 +119,19 @@ if(DJSVersion === '^12.5.3') {
 		RockPaperScissors : require('./src/v12/RockPaperScissors'),
 		WillYouPressTheButton : require('./src/v12/WillYouPressTheButton'),
 	};
-} else if(DJSVersion.startsWith('^13.1')) {
+} else {
 	module.exports = {
 		Sudo: require('./src/v13/Sudo'),
-		// Snake : require('./src/v13/Snake'),
+		Snake : require('./src/v13/Snake'),
 		// Fight : require('./src/v13/Fight'),
-		// Trivia : require('./src/v13/Trivia'),
+		Trivia : require('./src/v13/Trivia'),
+		QuickFind: require('./src/v13/QuickFind'),
 		// FastType : require('./src/v13/FastType'),
-		// QuickClick : require('./src/v13/QuickClick'),
+		QuickClick : require('./src/v13/QuickClick'),
 		ChaosWords : require('./src/v13/ChaosWords'),
 		// LieSwatter : require('./src/v13/LieSwatter'),
 		Calculator : require('./src/v13/Calculator'),
-		// ShuffleGuess : require('./src/v13/ShuffleGuess'),
+		ShuffleGuess : require('./src/v13/ShuffleGuess'),
 		// GuessTheNumber : require('./src/v13/GuessTheNumber'),
 		// NeverHaveIEver : require('./src/v13/NeverHaveIEver'),
 		WouldYouRather : require('./src/v13/WouldYouRather'),

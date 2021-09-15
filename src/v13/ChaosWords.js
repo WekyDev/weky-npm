@@ -371,8 +371,11 @@ module.exports = async (options) => {
 		}
 	});
 
-	const gameCollector = mes.createMessageComponentCollector((fn) => fn);
-	gameCollector.on('collect', (button) => {
+	const gameCollector = mes.createMessageComponentCollector({
+		filter: (fn) => fn,
+	});
+
+	gameCollector.on('collect', async (button) => {
 		if (button.user.id !== options.message.member.id) {
 			return button.reply({
 				content: options.othersMessage.replace(
@@ -382,7 +385,7 @@ module.exports = async (options) => {
 				ephemeral: true,
 			});
 		}
-		button.deferUpdate();
+		await button.deferUpdate();
 		btn1 = new Discord.MessageButton()
 			.setStyle('DANGER')
 			.setLabel(options.buttonText)

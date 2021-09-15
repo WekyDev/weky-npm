@@ -6,7 +6,7 @@ await ChaosWords({
     embed: {
         title: 'ChaosWords | Weky Development',
         description: 'You have **{{time}}** to find the hidden words in the below sentence.',
-        color: '#7289da',
+        color: '#5865F2',
         field1: 'Sentence:',
         field2: 'Words Found/Remaining Words:',
         field3: 'Words found:',
@@ -24,5 +24,5 @@ await ChaosWords({
     maxTries: 10,
     buttonText: 'Cancel',
     othersMessage: 'Only <@{{author}}> can use the buttons!'
-});s
+});
 ```

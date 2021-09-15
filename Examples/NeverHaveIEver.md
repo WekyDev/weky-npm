@@ -5,7 +5,7 @@ await NeverHaveIEver({
 	message: message,
 	embed: {
 		title: 'Never Have I Ever | Weky Development',
-		color: '#7289da',
+		color: '#5865F2',
         footer: '©️ Weky Development',
 		timestamp: true
 	},

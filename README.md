@@ -32,7 +32,7 @@ await Calculator({
     message: message,
     embed: {
         title: 'Calculator | Weky Development',
-        color: '#7289da',
+        color: '#5865F2',
         footer: '©️ Weky Development',
         timestamp: true
     },
@@ -76,7 +76,7 @@ client.on('message', async (message) => {
 client.login('DISCORD_BOT_TOKEN');
 ```
 
-#### Discord.js v12.5.3
+#### Discord.js v13.1.0
 ```js
 const Discord = require('discord.js');
 const client = new Discord.Client();

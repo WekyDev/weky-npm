@@ -5,7 +5,7 @@ await ShuffleGuess({
 	message: message,
 	embed: {
 		title: 'Shuffle Guess | Weky Development',
-		color: '#7289da',
+		color: '#5865F2',
         footer: '©️ Weky Development',
 		timestamp: true
 	},

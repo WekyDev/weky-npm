@@ -6,7 +6,7 @@ await Snake({
 	embed: {
 		title: 'Snake | Weky Development',
 		description: 'GG, you scored **{{score}}** points!',
-		color: '#7289da',
+		color: '#5865F2',
         footer: '©️ Weky Development',
 		timestamp: true
 	},

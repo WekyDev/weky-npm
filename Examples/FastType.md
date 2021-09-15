@@ -6,7 +6,7 @@ await FastType({
     embed: {
         title: 'FastType | Weky Development',
         description: 'You have **{{time}}** to type the below sentence.',
-        color: '#7289da',
+        color: '#5865F2',
         footer: '©️ Weky Development',
         timestamp: true
     },

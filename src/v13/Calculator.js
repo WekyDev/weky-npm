@@ -166,7 +166,9 @@ module.exports = async (options) => {
 				});
 			}
 
-			const calc = msg.createMessageComponentCollector((fn) => fn);
+			const calc = msg.createMessageComponentCollector({
+				filter: (fn) => fn,
+			});
 
 			calc.on('collect', async (btn) => {
 				if (btn.user.id !== options.message.author.id) {
@@ -178,7 +180,7 @@ module.exports = async (options) => {
 						ephemeral: true,
 					});
 				}
-				btn.deferUpdate();
+				await btn.deferUpdate();
 				if (btn.customId === 'calAC') {
 					str += ' ';
 					stringify = '```\n' + str + '\n```';

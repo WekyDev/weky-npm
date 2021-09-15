@@ -6,7 +6,7 @@ await Fight({
     opponent: message.mentions.users.first(),
     embed: {
         title: 'Fight | Weky Development',
-        color: '#7289da',
+        color: '#5865F2',
         footer: '©️ Weky Development',
         timestamp: true
     },

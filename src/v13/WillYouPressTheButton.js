@@ -182,7 +182,9 @@ module.exports = async (options) => {
 		components: [{ type: 1, components: [btn, btn2] }],
 	});
 
-	const gameCollector = think.createMessageComponentCollector((fn) => fn);
+	const gameCollector = think.createMessageComponentCollector({
+		filter: (fn) => fn,
+	});
 
 	gameCollector.on('collect', async (wyptb) => {
 		if (wyptb.user.id !== options.message.author.id) {

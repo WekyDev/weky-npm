@@ -41,13 +41,6 @@ module.exports = async (options) => {
 		throw new TypeError('Weky Error: timestamp must be a boolean.');
 	}
 
-	if (!options.APItoken) {
-		throw new Error('Weky Error: API token was not specified.');
-	}
-	if (typeof options.APItoken !== 'string') {
-		throw new TypeError('Weky Error: API token must be a string.');
-	}
-
 	if (!options.thinkMessage) options.thinkMessage = 'I am thinking';
 	if (typeof options.thinkMessage !== 'string') {
 		throw new TypeError('Weky Error: thinkMessage must be a boolean.');
@@ -109,14 +102,9 @@ module.exports = async (options) => {
 		],
 	});
 
-	const response = await fetch('https://api.sujalgoel.engineer/wyr', {
-		headers: {
-			Authorization: 'Sujal ' + options.APItoken,
-		},
-	}).then((res) => res.json());
-	if (response.success === 'false') {
-		throw new Error(`API Error: ${JSON.stringify(response)}`);
-	}
+	const response = await fetch(
+		'https://fun-api.sujalgoel.engineer/wyr',
+	).then((res) => res.json());
 	const data = response.data;
 
 	await think.edit({
@@ -187,7 +175,9 @@ module.exports = async (options) => {
 		components: [{ type: 1, components: [btn, btn2] }],
 	});
 
-	const gameCollector = think.createMessageComponentCollector((fn) => fn);
+	const gameCollector = think.createMessageComponentCollector({
+		filter: (fn) => fn,
+	});
 
 	gameCollector.on('collect', async (wyr) => {
 		if (wyr.user.id !== options.message.author.id) {

@@ -1,7 +1,6 @@
 bruh.json
 json.sqlite
 node_modules/
-src/test.TicTacToe.js
-test/config.json
 package-lock.json
+src/test.TicTacToe.js
 test/original.test.js

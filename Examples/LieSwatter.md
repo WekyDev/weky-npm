@@ -5,7 +5,7 @@ await LieSwatter({
 	message: message,
 	embed: {
 		title: 'Lie Swatter | Weky Development',
-		color: '#7289da',
+		color: '#5865F2',
         footer: '©️ Weky Development',
 		timestamp: true
 	},
