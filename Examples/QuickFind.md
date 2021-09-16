@@ -1,4 +1,4 @@
-# Example for Chaos Words
+# Example for Quick Find
 
 ```js
 await QuickFind({
