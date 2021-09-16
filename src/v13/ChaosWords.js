@@ -385,7 +385,9 @@ module.exports = async (options) => {
 				ephemeral: true,
 			});
 		}
+
 		await button.deferUpdate();
+
 		btn1 = new Discord.MessageButton()
 			.setStyle('DANGER')
 			.setLabel(options.buttonText)
