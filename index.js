@@ -123,10 +123,10 @@ if(DJSVersion === '^12.5.3') {
 	module.exports = {
 		Sudo: require('./src/v13/Sudo'),
 		Snake : require('./src/v13/Snake'),
-		// Fight : require('./src/v13/Fight'),
+		Fight : require('./src/v13/Fight'),
 		Trivia : require('./src/v13/Trivia'),
+		FastType : require('./src/v13/FastType'),
 		QuickFind: require('./src/v13/QuickFind'),
-		// FastType : require('./src/v13/FastType'),
 		QuickClick : require('./src/v13/QuickClick'),
 		ChaosWords : require('./src/v13/ChaosWords'),
 		LieSwatter : require('./src/v13/LieSwatter'),
