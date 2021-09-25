@@ -6,7 +6,7 @@ await WouldYouRather({
 	embed: {
 		title: 'Would you rather... | Weky Development',
 		color: '#5865F2',
-        footer: '©️ Weky Development',
+        	footer: '©️ Weky Development',
 		timestamp: true
 	},
 	thinkMessage: 'I am thinking',
