@@ -168,7 +168,7 @@ module.exports = async (options) => {
 	});
 
 	gameCollector.on('collect', async (msg) => {
-		if (msg.content.toLowerCase() === options.word.toString()) {
+		if (msg.content.toLowerCase() === options.word.toString().toLowerCase()) {
 			gameCollector.stop();
 			data.delete(options.message.author.id);
 			disbut = new Discord.MessageButton()
@@ -215,7 +215,7 @@ module.exports = async (options) => {
 			if (options.embed.timestamp) {
 				_embed.setTimestamp();
 			}
-			msg.reply({ embeds: [_embed] }).then((m) => m.delete({ timeout: 3000 }));
+			msg.reply({ embeds: [_embed] }).then((m) => setTimeout(() => m.delete(), 3000));
 		}
 	});
 
