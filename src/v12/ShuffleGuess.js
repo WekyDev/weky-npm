@@ -170,7 +170,7 @@ module.exports = async (options) => {
 		errors: ['time'],
 	});
 	gameCollector.on('collect', async (msg) => {
-		if (msg.content.toLowerCase() === options.word.toString()) {
+		if (msg.content.toLowerCase() === options.word.toString().toLowerCase()) {
 			gameCollector.stop();
 			data.delete(options.message.author.id);
 			disbut = new MessageButton()
