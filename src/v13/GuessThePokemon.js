@@ -185,7 +185,7 @@ module.exports = async (options) => {
 	});
 
 	collector.on('collect', async (msg) => {
-		if (msg.content.toLowerCase() === data.name) {
+		if (msg.content.toLowerCase() === String(data.name).toLowerCase()) {
 			const _embed = new Discord.MessageEmbed()
 				.setTitle(options.embed.title)
 				.setDescription(
@@ -233,7 +233,7 @@ module.exports = async (options) => {
 			}
 			msg.reply({
 				embeds: [_embed],
-			}).then((m) => m.delete({ timeout: 3000 }));
+			}).then((m) => setTimeout(() => m.delete(), 3000));
 		}
 	});
 
